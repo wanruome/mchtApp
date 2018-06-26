@@ -1,0 +1,26 @@
+<resources>
+
+    <string name="app_name">BaseAndroidLibrary</string>
+    <!-- pull_refresh_strings配置开始 -->
+
+
+    <!-- Just use standard Pull Down String when pulling up. These can be set for languages which require it -->
+    <string name="pull_to_refresh_form_top_pull_label">下拉刷新…</string>
+    <string name="pull_to_refresh_form_top_release_label">松开刷新数据</string>
+    <string name="pull_to_refresh_form_top_refreshing_label">正在加载...</string>
+    <string name="pull_to_refresh_from_bottom_pull_label">上拉加载更多…</string>
+    <string name="pull_to_refresh_from_bottom_release_label">松开载入更多</string>
+    <string name="pull_to_refresh_from_bottom_refreshing_label">正在加载...</string>
+    <!-- xlistview配置开始 -->
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载...</string>
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    <string name="xlistview_footer_hint_nomoredata">已经全部加载完</string>
+    <!-- xlistview配置结束 -->
+    <string name="upimg_compress_progress_text">图片压缩中，请稍后...</string>
+    <string name="zxing_des">将二维码/条形码放置框内，即开始扫码</string>
+
+</resources>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">商户服务App用户版</string>
+    <string name="loading_waiting_text">数据传送中，请稍后&#8230;</string>
+</resources>

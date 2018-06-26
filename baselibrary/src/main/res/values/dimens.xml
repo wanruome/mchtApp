@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="base_listview_divider_size">1dp</dimen>
+    <dimen name="base_listview_scrollbar_size">3.5dip</dimen>
+    <!-- pulltorefresh属性 -->
+    <dimen name="pulltorefresh_indicator_right_padding">10dp</dimen>
+    <dimen name="pulltorefresh_indicator_internal_padding">4dp</dimen>
+    <dimen name="xlistview_completelinesize">0.5dp</dimen>
+    <dimen name="upimg_submit_line_size">0.5dp</dimen>
+    <!-- MenuTopView属性 -->
+    <dimen name="menutop_height">49dp</dimen>
+    <dimen name="menutop_padding">12dp</dimen>
+    <dimen name="menutop_textsize">20sp</dimen>
+    <dimen name="menutop_textsize_small">16sp</dimen>
+    <dimen name="menutop_bottomline_size">1dip</dimen>
+    <dimen name="zxing_laser_size">6dip</dimen>
+    <dimen name="zxing_laser_step">5dip</dimen>
+    <dimen name="zxing_border_size">1dip</dimen>
+    <dimen name="zxing_corner_strokesize">2dip</dimen>
+    <dimen name="zxing_corner_lenght">12dip</dimen>
+
+</resources>

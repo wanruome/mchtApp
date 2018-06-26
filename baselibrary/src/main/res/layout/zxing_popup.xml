@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/zxing_cratedialog_bgcolor"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/zxing_popupdismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/zxing_cratedialog_color"
+        android:padding="12dip" >
+
+        <ImageView
+            android:id="@+id/zxing_image"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/zxing_imagelogo"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher" />
+    </RelativeLayout>
+
+</LinearLayout>

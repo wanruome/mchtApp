@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/dialogloading_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/popup_single"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dpx012"
+        android:paddingLeft="@dimen/dpx020"
+        android:paddingRight="@dimen/dpx020"
+        android:paddingTop="@dimen/dpx010" >
+
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/common_anim_dialogload_small" />
+
+        <TextView
+            android:id="@+id/dialogloading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dpx012"
+            android:text="@string/loading_waiting_text"
+            android:textColor="@color/paysdk_dialogloading_textcolor"
+            android:textSize="@dimen/dialog_textsize_small" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 此配置请复制到应用目录的Assets目录下的config文件夹里面，可以依据功能对配置经行调节 -->
+<config xmlns:debugconfig="http://www.ruomm.com/debugconfig"
+    xmlns:config="http://www.ruomm.com/config" >
+
+    <debugconfig:HttpAutoDebug value="true" />
+
+    <!-- 配置调试信息是否显示 -->
+
+    <debugconfig:MlogEnale value="true" />
+
+    <!-- 调试信息是否输出到文件 -->
+
+    <debugconfig:MlogOutToFile value="true" />
+
+    <!-- API管理器使用启用，启用可以切换运行环境 -->
+
+    <debugconfig:ApiManagerEnable value="true" />
+      <!-- App应用Crash信息存储位置 -->
+    <!-- <=0:表示不存储,1:表示在存储到缓存,2:存储到应用的Data目录,>=3:存储到存储卡的目录; -->
+
+    <debugconfig:CrashStoreType value="2" />
+
+</config>

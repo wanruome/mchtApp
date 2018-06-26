@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- zxing组件颜色 -->
+
+    <color name="zxing_viewfinder_frame">#ff000000</color>
+    <color name="zxing_viewfinder_mask">#80000000</color>
+    <color name="zxing_viewfinder_des_color">#FFFFFF</color>
+    <color name="zxing_result_view">#b0000000</color>
+    <color name="zxing_possible_result_points">#c0ffff00</color>
+    <color name="zxing_corner_color">#55cb4a</color>
+    <color name="zxing_gallery_errordecode_color">#FFFFFF</color>
+    <color name="zxing_gallery_decoding_color">#FFFFFF</color>
+    <color name="zxing_viewfinder_text_color">#8899a6</color>
+    <color name="zxing_cratedialog_color">#FFFFFF</color>
+    <color name="zxing_cratedialog_bgcolor">#36000000</color>
+    <!-- 全透明色 -->
+    <color name="AllTransparent">#00000000</color>
+    <color name="base_dialog_bgcolor">#36000000</color>
+    <color name="base_BarTint">#ff9A9B9F</color>
+    <color name="xlistview_completelinecolor">#ffA0ADB8</color>
+<!--    <color name="menutop_bottomline_color">#ff9A9B9F</color>
+    <color name="menutop_background_color">#ff9A9B9F</color>
+    <color name="menutop_textcenter_color">#ffffffff</color>
+    <color name="menutop_textsider_color">#ffffffff</color>-->
+    <!-- 颜色复用更改 -->
+    <color name="menutop_bottomline_color">#ff9C0C0C</color>
+    <color name="menutop_background_color">#ff9C0C0C</color>
+    <color name="menutop_textcenter_color">#ffffffff</color>
+    <color name="menutop_textsider_color">#ffffffff</color>
+    <color name="base_listview_divider_color">#ffC0C0C0</color>
+    <color name="upimg_submit_topline_color">#ffC0C0C0</color>
+    <color name="upimg_submit_textcolor">#1DA1F2</color>
+    <color name="upimg_pictureselectdialog_textcolor">#292f33</color>
+    <color name="upimg_compress_progress_textcolor">#ff565656</color>
+    <color name="lineedittext_textcolor">#292f33</color>
+
+</resources>

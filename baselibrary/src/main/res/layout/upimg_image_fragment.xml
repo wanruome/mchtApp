@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <GridView
+            android:id="@+id/upimg_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:horizontalSpacing="8dp"
+            android:numColumns="2"
+            android:scrollbars="none"
+            android:verticalSpacing="8dp" >
+        </GridView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/upimg_submit_line_size"
+                android:background="@color/upimg_submit_topline_color" />
+
+            <Button
+                android:id="@+id/upimg_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/upimg_btn"
+                android:padding="16dp"
+                android:text="完成"
+                android:textColor="@color/upimg_submit_textcolor"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

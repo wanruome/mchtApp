@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <!-- SDK属性 -->
+    <color name="paysdk_textcolor">#333333</color>
+    <color name="paysdk_dialogloading_textcolor">#ff565656</color>
+    <color name="paysdk_dialog_bgcolor">#36000000</color>
+    <color name="paysdk_dialog_textcolor">#333333</color>
+    <color name="paysdk_dialog_line">#1DA1F2</color>
+    <color name="paysdk_dialog_title_color">#1DA1F2</color>
+</resources>

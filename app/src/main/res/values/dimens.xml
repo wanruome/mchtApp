@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SDK属性 -->
+    <dimen name="textsize">16sp</dimen>
+    <dimen name="dialog_textsize">12sp</dimen>
+    <dimen name="dialog_textsize_small">12sp</dimen>
+    <dimen name="dpx010">5dip</dimen>
+    <dimen name="dpx012">6dip</dimen>
+    <dimen name="dpx020">10dip</dimen>
+    <dimen name="dpx024">12dip</dimen>
+    
+</resources>

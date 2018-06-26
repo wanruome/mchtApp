@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PullToRefresh">
+
+        <!-- A drawable to use as the background of the Refreshable View -->
+        <attr name="ptrRefreshableViewBackground" format="reference|color" />
+        <!-- A drawable to use as the background of the Header and Footer Loading Views -->
+        <attr name="ptrHeaderBackground" format="reference|color" />
+        <!-- Text Color of the Header and Footer Loading Views -->
+        <attr name="ptrHeaderTextColor" format="reference|color" />
+        <!-- Text Color of the Header and Footer Loading Views Sub Header -->
+        <attr name="ptrHeaderSubTextColor" format="reference|color" />
+        <!-- Mode of Pull-to-Refresh that should be used -->
+        <attr name="ptrMode">
+            <flag name="disabled" value="0x0" />
+            <flag name="pullFromStart" value="0x1" />
+            <flag name="pullFromEnd" value="0x2" />
+            <flag name="both" value="0x3" />
+            <flag name="manualOnly" value="0x4" />
+            <!-- These last two are depreacted -->
+            <flag name="pullDownFromTop" value="0x1" />
+            <flag name="pullUpFromBottom" value="0x2" />
+        </attr>
+        <!-- Whether the Indicator overlay(s) should be used -->
+        <attr name="ptrShowIndicator" format="reference|boolean" />
+        <!-- Drawable to use as Loading Indicator. Changes both Header and Footer. -->
+        <attr name="ptrDrawable" format="reference" />
+        <!-- Drawable to use as Loading Indicator in the Header View. Overrides value set in ptrDrawable. -->
+        <attr name="ptrDrawableStart" format="reference" />
+        <!-- Drawable to use as Loading Indicator in the Footer View. Overrides value set in ptrDrawable. -->
+        <attr name="ptrDrawableEnd" format="reference" />
+        <!-- Whether Android's built-in Over Scroll should be utilised for Pull-to-Refresh. -->
+        <attr name="ptrOverScroll" format="reference|boolean" />
+        <!-- Base text color, typeface, size, and style for Header and Footer Loading Views -->
+        <attr name="ptrHeaderTextAppearance" format="reference" />
+        <!-- Base text color, typeface, size, and style for Header and Footer Loading Views Sub Header -->
+        <attr name="ptrSubHeaderTextAppearance" format="reference" />
+        <!-- Style of Animation should be used displayed when pulling. -->
+        <attr name="ptrAnimationStyle">
+            <flag name="rotate" value="0x0" />
+            <flag name="flip" value="0x1" />
+        </attr>
+        <!-- Whether the user can scroll while the View is Refreshing -->
+        <attr name="ptrScrollingWhileRefreshingEnabled" format="reference|boolean" />
+        <!-- Whether PullToRefreshListView has it's extras enabled. -->
+        <attr name="ptrListViewExtrasEnabled" format="reference|boolean" />
+        <!-- Whether the Drawable should be continually rotated as you pull -->
+        <attr name="ptrRotateDrawableWhilePulling" format="reference|boolean" />
+        <!-- BELOW HERE ARE DEPRECEATED. DO NOT USE. -->
+        <attr name="ptrAdapterViewBackground" format="reference|color" />
+        <attr name="ptrDrawableTop" format="reference" />
+        <attr name="ptrDrawableBottom" format="reference" />
+    </declare-styleable>
+    <!-- 拖动排序滑动删除的ListView -->
+    <declare-styleable name="DragSortListView">
+        <attr name="collapsed_height" format="dimension" />
+        <attr name="drag_scroll_start" format="float" />
+        <attr name="max_drag_scroll_speed" format="float" />
+        <attr name="float_background_color" format="color" />
+        <attr name="remove_mode">
+            <enum name="clickRemove" value="0" />
+            <enum name="flingRemove" value="1" />
+        </attr>
+        <attr name="track_drag_sort" format="boolean" />
+        <attr name="float_alpha" format="float" />
+        <attr name="slide_shuffle_speed" format="float" />
+        <attr name="remove_animation_duration" format="integer" />
+        <attr name="drop_animation_duration" format="integer" />
+        <attr name="drag_enabled" format="boolean" />
+        <attr name="sort_enabled" format="boolean" />
+        <attr name="remove_enabled" format="boolean" />
+        <attr name="drag_start_mode">
+            <enum name="onDown" value="0" />
+            <enum name="onMove" value="1" />
+            <enum name="onLongPress" value="2" />
+        </attr>
+        <attr name="drag_handle_id" format="integer" />
+        <attr name="fling_handle_id" format="integer" />
+        <attr name="click_remove_id" format="integer" />
+        <attr name="use_default_controller" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="StickyListHeadersListView">
+
+        <!-- View attributes -->
+        <attr name="android:clipToPadding" />
+        <attr name="android:scrollbars" />
+        <attr name="android:overScrollMode" />
+        <attr name="android:padding" />
+        <attr name="android:paddingLeft" />
+        <attr name="android:paddingTop" />
+        <attr name="android:paddingRight" />
+        <attr name="android:paddingBottom" />
+
+        <!-- ListView attributes -->
+        <attr name="android:fadingEdgeLength" />
+        <attr name="android:requiresFadingEdge" />
+        <attr name="android:cacheColorHint" />
+        <attr name="android:choiceMode" />
+        <attr name="android:drawSelectorOnTop" />
+        <attr name="android:fastScrollEnabled" />
+        <attr name="android:fastScrollAlwaysVisible" />
+        <attr name="android:listSelector" />
+        <attr name="android:scrollingCache" />
+        <attr name="android:scrollbarStyle" />
+        <attr name="android:divider" />
+        <attr name="android:dividerHeight" />
+        <attr name="android:transcriptMode" />
+
+        <!-- StickyListHeaders attributes -->
+        <attr name="hasStickyHeaders" format="boolean" />
+        <attr name="isDrawingListUnderStickyHeader" format="boolean" />
+    </declare-styleable>
+    <!-- 侧拉View -->
+    <declare-styleable name="SwipeLayout">
+        <attr name="drag_edge" format="enum">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+            <enum name="top" value="2" />
+            <enum name="bottom" value="3" />
+        </attr>
+        <attr name="show_mode" format="enum">
+            <enum name="lay_down" value="0" />
+            <enum name="pull_out" value="1" />
+        </attr>
+    </declare-styleable>
+    <!-- 自定义MenuTopView的属性 -->
+    <declare-styleable name="MenuTopView">
+        <attr name="imageLeft" format="reference" />
+        <attr name="imageRight" format="reference" />
+        <attr name="imageLeft_percent" format="float" />
+        <attr name="imageRight_percent" format="float" />
+        <attr name="textLeft" format="string" />
+        <attr name="textLeft_Size" format="dimension" />
+        <attr name="textLeft_Color" format="color" />
+        <attr name="textRight" format="string" />
+        <attr name="textRight_Size" format="dimension" />
+        <attr name="textRight_Color" format="color" />
+        <attr name="textCenter" format="string" />
+        <attr name="centerView_Clickable" format="boolean" />
+        <attr name="menuText_isBlod" format="boolean" />
+        <attr name="menuTextSize" format="dimension" />
+        <attr name="menuTextColor" format="color" />
+        <attr name="menuImageSizePercent" format="float" />
+        <attr name="menuPaddingPercent" format="float" />
+        <attr name="menuPaddinghorizontalPercent" format="float" />
+        <attr name="menuPaddinghorizontal" format="dimension" />
+        <attr name="menuButtomLineColor" format="color" />
+        <attr name="menuButtomLineSize" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="FloatView">
+        <attr name="floatview_isEnableFloat" format="boolean" />
+        <attr name="floatview_widthPercent" format="float" />
+        <attr name="floatview_heightPercent" format="float" />
+    </declare-styleable>
+    <!-- 侧滑菜单属性 -->
+    <declare-styleable name="SlidingMenu">
+        <attr name="mode">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+        <attr name="viewAbove" format="reference" />
+        <attr name="viewBehind" format="reference" />
+        <attr name="behindOffset" format="dimension" />
+        <attr name="behindWidth" format="dimension" />
+        <attr name="behindScrollScale" format="float" />
+        <attr name="touchModeAbove">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+        </attr>
+        <attr name="touchModeBehind">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+        </attr>
+        <attr name="shadowDrawable" format="reference" />
+        <attr name="shadowWidth" format="dimension" />
+        <attr name="fadeEnabled" format="boolean" />
+        <attr name="fadeDegree" format="float" />
+        <attr name="selectorEnabled" format="boolean" />
+        <attr name="selectorDrawable" format="reference" />
+    </declare-styleable>
+
+    <!-- 滚轮属性 -->
+    <declare-styleable name="WheelView">
+        <attr name="wheel_textcolor_current" format="color" />
+        <attr name="wheel_textcolor_drak" format="color" />
+        <attr name="wheel_textcolor_little" format="color" />
+        <attr name="wheel_skiplinecolor" format="color" />
+        <attr name="wheel_textsize" format="dimension" />
+        <attr name="wheel_text_lineSpacing" format="float" />
+        <attr name="wheel_text_rowSpacing" format="float" />
+        <attr name="wheel_text_Skew_End" format="float" />
+        <attr name="wheel_text_Skew_Start" format="float" />
+        <attr name="wheel_tag_text" format="string" />
+        <attr name="wheel_tag_size" format="dimension" />
+        <attr name="wheel_tag_percent" format="float" />
+        <attr name="wheel_tag_color" format="string" />
+        <attr name="wheel_flingspeed" format="float" />
+        <attr name="wheel_x_skewing" format="float" />
+        <attr name="wheel_centerX_percent" format="float" />
+        <attr name="wheel_zoom_textsize" format="float" />
+        <attr name="wheel_zoom_width" format="float" />
+        <attr name="wheel_isCyclic" format="boolean" />
+        <attr name="wheel_isAdjustTextSkew" format="boolean" />
+        <attr name="wheel_algin_type" format="integer">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+            <enum name="center" value="2"></enum>
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="FlowGridView">
+        <attr name="flow_column_count" format="integer" />
+        <attr name="flow_dividerHeight" format="dimension" />
+        <attr name="flow_column_offset" format="dimension" />
+        <attr name="flow_dividerColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="StaggeredGridView">
+        <attr name="column_count" format="integer" />
+        <attr name="column_count_portrait" format="integer" />
+        <attr name="column_count_landscape" format="integer" />
+        <attr name="item_margin" format="dimension" />
+        <attr name="grid_paddingLeft" format="dimension" />
+        <attr name="grid_paddingRight" format="dimension" />
+        <attr name="grid_paddingTop" format="dimension" />
+        <attr name="grid_paddingBottom" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="DotTabStripView">
+        <attr name="dotImageMargin" format="dimension" />
+        <attr name="dotImageSize" format="dimension" />
+        <attr name="dotImage" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="Percent_Value">
+        <attr name="perventValue" attr="" format="float" />
+    </declare-styleable>
+    <declare-styleable name="RepeatView">
+        <attr name="RepeatView_orientation" format="integer">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="RepeatView_image" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="SideBar">
+        <attr name="sidebar_textColor" format="color" />
+        <attr name="sidebar_textColor_selected" format="color" />
+        <attr name="sidebar_textSizepercent" format="float" />
+        <attr name="sidebar_textSizepercent_selected" format="float" />
+        <attr name="sidebar_textIsbold" format="boolean" />
+        <attr name="sidebar_textMaxSize" format="dimension" />
+    </declare-styleable>
+    <!-- 自定义MenuTopView的属性 -->
+    <declare-styleable name="TagTextView">
+        <attr name="tagtv_textPadding" format="dimension" />
+        <attr name="tagtv_textColor" format="color" />
+        <attr name="tagtv_textSize" format="dimension" />
+        <attr name="tagtv_lineSpacing" format="float" />
+        <attr name="tagtv_icon" format="reference" />
+        <attr name="tagtv_iconPadding" format="dimension" />
+        <attr name="tagtv_iconWidth" format="dimension" />
+        <attr name="tagtv_iconHeight" format="dimension" />
+        <attr name="tagtv_iconAlginType" format="integer">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="RulerView">
+        <attr name="ruler_valueStart" format="float" />
+        <attr name="ruler_valueEnd" format="float" />
+        <attr name="ruler_valueCurrent" format="float" />
+        <attr name="ruler_valueUnit" format="float" />
+        <attr name="ruler_valueUnitMarkNums" format="integer" />
+        <attr name="ruler_flingSpeed" format="float" />
+        <attr name="ruler_unitWidth" format="dimension" />
+        <attr name="ruler_currentMarkHeight" format="dimension" />
+        <attr name="ruler_currentMarkWidth" format="dimension" />
+        <attr name="ruler_currentMarkColor" format="color" />
+        <attr name="ruler_markTextSize" format="dimension" />
+        <attr name="ruler_shaderColor_drak" format="color" />
+        <attr name="ruler_shaderColor_little" format="color" />
+        <attr name="ruler_markHeight" format="dimension" />
+        <attr name="ruler_markWidth" format="dimension" />
+        <attr name="ruler_smallMarkWidth" format="dimension" />
+        <attr name="ruler_smallMarkHeight" format="dimension" />
+    </declare-styleable>
+
+</resources>
