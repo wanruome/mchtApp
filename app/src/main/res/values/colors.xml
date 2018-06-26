@@ -3,6 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="common_line_little">#ffC0C0C0</color>
+    <color name="common_line_drak">#ffA0A0A0</color>
+    <color name="common_line_focus">#1DA1F2</color>
+    <color name="common_dialogloading_textcolor">#ff565656</color>
+    <color name="common_dialog_bgcolor">#36000000</color>
+    <color name="common_dialog_textcolor">#333333</color>
+    <color name="common_dialog_line">#1DA1F2</color>
+    <color name="common_dialog_title_color">#1DA1F2</color>
     <!-- SDK属性 -->
     <color name="paysdk_textcolor">#333333</color>
     <color name="paysdk_dialogloading_textcolor">#ff565656</color>
@@ -10,4 +19,14 @@
     <color name="paysdk_dialog_textcolor">#333333</color>
     <color name="paysdk_dialog_line">#1DA1F2</color>
     <color name="paysdk_dialog_title_color">#1DA1F2</color>
+    <!-- 盛炬支付字体颜色 -->
+    <color name="statustext_success">#C8C800</color>
+    <color name="statustext_fail">#8A1C1C</color>
+    <color name="text_red">#FF0000</color>
+    <color name="text_focus">#E6A906</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_black">#000000</color>
+    <color name="text_noraml">#333333</color>
+    <color name="text_sub">#666666</color>
+    <color name="text_lable">#999999</color>
 </resources>

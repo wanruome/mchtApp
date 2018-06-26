@@ -31,24 +31,24 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     // https://mvnrepository.com/artifact/com.loopj.android/android-async-http
-    compile 'com.loopj.android:android-async-http:1.4.9'
+    implementation 'com.loopj.android:android-async-http:1.4.9'
     // https://mvnrepository.com/artifact/commons-codec/commons-codec
-    compile 'commons-codec:commons-codec:1.6'
+    implementation 'commons-codec:commons-codec:1.6'
     // https://mvnrepository.com/artifact/com.jakewharton/disklrucache
-    compile 'com.jakewharton:disklrucache:2.0.2'
+    implementation 'com.jakewharton:disklrucache:2.0.2'
     // https://mvnrepository.com/artifact/org.greenrobot/eventbus
-    compile 'org.greenrobot:eventbus:3.1.1'
+    implementation 'org.greenrobot:eventbus:3.1.1'
     // https://mvnrepository.com/artifact/com.alibaba/fastjson
-    compile 'com.alibaba:fastjson:1.2.47'
+    implementation 'com.alibaba:fastjson:1.2.47'
     // https://mvnrepository.com/artifact/de.greenrobot/greendao
-    compile 'de.greenrobot:greendao:2.1.0'
+    implementation 'de.greenrobot:greendao:2.1.0'
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     // https://mvnrepository.com/artifact/com.squareup.okio/okio
-    compile 'com.squareup.okio:okio:1.14.1'
+    implementation 'com.squareup.okio:okio:1.14.1'
     // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     // https://mvnrepository.com/artifact/com.google.zxing/core
-    compile 'com.google.zxing:core:3.3.3'
+    implementation 'com.google.zxing:core:3.3.3'
     implementation files('libs/wanruome-utdid.jar')
 }

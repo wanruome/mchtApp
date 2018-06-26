@@ -1,4 +1,4 @@
-package com.zjsj.mchtapp.ui;
+package com.zjsj.mchtapp.module.main;
 
 import android.os.Bundle;
 
