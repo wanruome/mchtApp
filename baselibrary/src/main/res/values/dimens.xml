@@ -19,5 +19,7 @@
     <dimen name="zxing_border_size">1dip</dimen>
     <dimen name="zxing_corner_strokesize">2dip</dimen>
     <dimen name="zxing_corner_lenght">12dip</dimen>
+    <dimen name="shadow_width">15dp</dimen>
+    <dimen name="slidingmenu_offset">120dp</dimen>
 
 </resources>
