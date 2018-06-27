@@ -15,9 +15,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.ruomm.baseconfig.BaseConfig;
 import com.ruomm.R;
 import com.ruomm.base.tools.DisplayUtil;
+import com.ruomm.baseconfig.BaseConfig;
 
 public class SingleChoiceDialogBase<T> extends BaseDialogUserConfig {
 	/**

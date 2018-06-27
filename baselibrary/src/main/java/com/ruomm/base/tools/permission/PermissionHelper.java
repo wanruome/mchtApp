@@ -13,9 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
-import com.ruomm.base.tools.permission.PermissionBean;
-import com.ruomm.baseconfig.debug.MToast;
-
 import java.util.ArrayList;
 import java.util.List;
 

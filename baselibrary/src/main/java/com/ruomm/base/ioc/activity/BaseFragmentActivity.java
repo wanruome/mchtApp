@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.ruomm.base.tools.SystemBarTintManager;
+import com.jaeger.library.StatusBarUtil;
 import com.ruomm.baseconfig.BaseConfig;
 
 @SuppressLint("NewApi")
@@ -41,10 +41,12 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		mBundle = getIntent().getExtras();
 		boolean isEnableBarInit = BaseConfig.UIBarTint_Enable;
 		if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			setTranslucentStatus(true);
-			SystemBarTintManager tintManager = new SystemBarTintManager(this);
-			tintManager.setStatusBarTintEnabled(true);
-			tintManager.setStatusBarTintColor(BaseConfig.UIBarTint_Color);
+			StatusBarUtil.setTranslucent(this);
+            StatusBarUtil.setLightMode(this);
+//			setTranslucentStatus(true);
+//			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//			tintManager.setStatusBarTintEnabled(true);
+//			tintManager.setStatusBarTintColor(BaseConfig.UIBarTint_Color);
 		}
 	}
 

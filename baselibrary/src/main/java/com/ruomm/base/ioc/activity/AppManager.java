@@ -7,11 +7,11 @@ package com.ruomm.base.ioc.activity;
 
 import java.util.ArrayList;
 
-import com.ruomm.baseconfig.BaseConfig;
-import com.ruomm.baseconfig.DebugConfig;
-
 import android.app.Activity;
 import android.util.Log;
+
+import com.ruomm.baseconfig.BaseConfig;
+import com.ruomm.baseconfig.DebugConfig;
 
 /**
  * <h1>app应用Activity管理辅助类</h1>

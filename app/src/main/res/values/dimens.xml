@@ -1,32 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- SDK属性 -->
-    <dimen name="textsize">16sp</dimen>
-    <dimen name="dialog_textsize">12sp</dimen>
-    <dimen name="dialog_textsize_small">12sp</dimen>
-    <dimen name="dpx010">5dip</dimen>
-    <dimen name="dpx012">6dip</dimen>
-    <dimen name="dpx020">10dip</dimen>
-    <dimen name="dpx024">12dip</dimen>
-    <!-- 通用属性 -->
-    <dimen name="shadow_width">15dp</dimen>
-    <dimen name="slidingmenu_offset">60dp</dimen>
-    <dimen name="padding_btnskip">20dip</dimen>
-    <dimen name="padding_text">12dip</dimen>
-    <dimen name="padding_common">12dip</dimen>
-    <dimen name="padding_common_vertical">16dip</dimen>
-    <dimen name="common_scrollbar_size">3.5dip</dimen>
-    <dimen name="common_line_size">0.5dip</dimen>
-    <dimen name="common_linefocus_size">2dip</dimen>
 
-    <dimen name="line_dpx_1">0.5dip</dimen>
-    <dimen name="line_dpx_2">1dip</dimen>
-    <dimen name="line_dpx_3">1.5dip</dimen>
-    <dimen name="line_dpx_4">2dip</dimen>
-    <!-- Text属性 -->
-    <dimen name="textLittle">12sp</dimen>
-    <dimen name="textSmall">14sp</dimen>
-    <dimen name="textNormal">16sp</dimen>
-    <dimen name="textMiddle">18sp</dimen>
-    <dimen name="textLarge">20sp</dimen>
 </resources>

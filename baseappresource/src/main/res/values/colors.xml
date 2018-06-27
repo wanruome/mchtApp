@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Xmpp组件颜色 -->
+    <color name="xmpp_chatinput_line">#55cb4a</color>
+    <color name="xmpp_chatinput_bg">#EFEFF4</color>
+    <color name="xmpp_chatinput_btntext">#666666</color>
+    <!-- zxing组件颜色 -->
+    <color name="zxing_viewfinder_frame">#ff000000</color>
+    <color name="zxing_viewfinder_mask">#80000000</color>
+    <color name="zxing_viewfinder_des_color">#FFFFFF</color>
+    <color name="zxing_result_view">#b0000000</color>
+    <color name="zxing_possible_result_points">#c0ffff00</color>
+    <color name="zxing_corner_color">#55cb4a</color>
+    <color name="zxing_gallery_errordecode_color">#FFFFFF</color>
+    <color name="zxing_gallery_decoding_color">#FFFFFF</color>
+
+    <!-- WheelView组件颜色 -->
+    <color name="wheel_lineskip">#ffdddddd</color>
+    <color name="wheel_color_drak">#646464</color>
+    <color name="wheel_color_little">#A0A0A0</color>
+    <color name="wheel_color_current">#2774C6</color>
+    <!-- 全透明色 -->
+
+    <color name="AllTransparent">#00000000</color>
+    <!-- listView 的Item点击 -->
+    <color name="listitem_normal">#ffffff</color>
+    <color name="listitem_pressed">#f0f2f3</color>
+    <color name="listitem_pressedup">#f0f2f3</color>
+
+    <!-- 盛炬支付通用颜色 -->
+    <color name="common_line_little">#ffC0C0C0</color>
+    <color name="common_line_drak">#ffA0A0A0</color>
+    <color name="common_line_focus">#1DA1F2</color>
+    <color name="common_dialogloading_textcolor">#ff565656</color>
+    <color name="common_dialog_bgcolor">#36000000</color>
+    <color name="common_dialog_textcolor">#333333</color>
+    <color name="common_dialog_line">#1DA1F2</color>
+    <color name="common_dialog_title_color">#1DA1F2</color>
+
+    <!-- 盛炬背景颜色 -->
+    <color name="bg_transparent">#00000000</color>
+    <color name="bg_white">#FFFFFF</color>
+    <color name="bg_black">#000000</color>
+    <color name="bg_header">#efefef</color>
+    <!-- 盛炬支付字体颜色 -->
+    <color name="statustext_success">#C8C800</color>
+    <color name="statustext_fail">#8A1C1C</color>
+    
+    <color name="text_red">#FF0000</color>
+    <color name="text_focus">#E6A906</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_black">#000000</color>
+    <color name="text_noraml">#333333</color>
+    <color name="text_sub">#666666</color>
+    <color name="text_lable">#999999</color>
+
+    <!-- MenutopView颜色重新设置 -->
+    <color name="menutop_bottomline_color">#ffFC0C0C</color>
+    <color name="menutop_background_color">#ffFC0C0C</color>
+    <color name="menutop_textcenter_color">#ffffffff</color>
+    <color name="menutop_textsider_color">#ffffffff</color>
+    <color name="base_listview_divider_color">#ffC0C0C0</color>
+    <color name="upimg_submit_topline_color">#ffC0C0C0</color>
+    <color name="upimg_submit_textcolor">#1DA1F2</color>
+    <color name="upimg_pictureselectdialog_textcolor">#292f33</color>
+    <color name="upimg_compress_progress_textcolor">#ff565656</color>
+    <color name="lineedittext_textcolor">#292f33</color>
+
+</resources>

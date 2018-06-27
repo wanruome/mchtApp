@@ -6,7 +6,6 @@
 package com.ruomm.baseconfig.http;
 
 import com.ruomm.base.http.config.TextCacheGetListener;
-import com.ruomm.base.tools.StringUtils;
 
 import android.text.TextUtils;
 

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/dialog_title"
+        style="@style/text.Middle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/popdialog_title"
+        android:text="正在更新App"
+        android:textColor="@color/common_dialog_title_color" />
+
+    <View
+        style="@style/lineStyle.FOCUS"
+        android:background="@color/common_dialog_title_color" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/popdialog_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ProgressBar
+            android:id="@+id/dialog_progressbar"
+            style="@style/progressBar_downLoading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:max="1000"
+            android:progress="0" />
+    </LinearLayout>
+
+    <View style="@style/lineStyle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/dialog_cancle"
+            style="@style/text"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/popdialog_btn_left"
+            android:gravity="center"
+            android:text="后台更新" />
+
+        <TextView
+            android:id="@+id/dialog_confirm"
+            style="@style/textSub"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/popdialog_btn_right"
+            android:gravity="center"
+            android:text="取消更新" />
+    </LinearLayout>
+
+</LinearLayout>

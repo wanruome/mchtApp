@@ -1,6 +1,6 @@
 package com.ruomm.base.ioc.activity;
 
-import com.ruomm.base.tools.SystemBarTintManager;
+import com.jaeger.library.StatusBarUtil;
 import com.ruomm.baseconfig.BaseConfig;
 
 import android.annotation.TargetApi;
@@ -34,11 +34,13 @@ public abstract class BaseActivity extends Activity {
 		// 设置沉浸模式是否开启,可以通过在Activity上注解InjectUIStyle来调整
 		boolean isEnableBarInit = BaseConfig.UIBarTint_Enable;
 		if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			setTranslucentStatus(true);
-			SystemBarTintManager tintManager = new SystemBarTintManager(this);
-			tintManager.setStatusBarTintEnabled(true);
-			//			tintManager.setStatusBarTintColor(0xFFFF00);
-			tintManager.setStatusBarTintColor(BaseConfig.UIBarTint_Color);
+			StatusBarUtil.setTranslucent(this,255);
+			StatusBarUtil.setLightMode(this);
+//			setTranslucentStatus(true);
+//			SystemBarTintManager tintManager = new SystemBarTintManager(this);
+//			tintManager.setStatusBarTintEnabled(true);
+//			//			tintManager.setStatusBarTintColor(0xFFFF00);
+//			tintManager.setStatusBarTintColor(BaseConfig.UIBarTint_Color);
 			//			tintManager.setStatusBarTintResource(R.color.holo_red_dark);
 
 		}

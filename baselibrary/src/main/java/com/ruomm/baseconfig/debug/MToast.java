@@ -1,9 +1,9 @@
 package com.ruomm.baseconfig.debug;
 
-import com.ruomm.baseconfig.DebugConfig;
-
 import android.content.Context;
 import android.widget.Toast;
+
+import com.ruomm.baseconfig.DebugConfig;
 
 public class MToast {
 	public static boolean isDebug = DebugConfig.ISDEBUG;

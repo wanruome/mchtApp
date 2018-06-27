@@ -8,7 +8,6 @@ import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.view.slidingmenulib.SlidingMenu;
 import com.zjsj.mchtapp.R;
-import com.zjsj.mchtapp.config.ui.BaseAppActivity;
 
 public class MainActivity extends BaseFragmentActivity{
     @InjectAll
