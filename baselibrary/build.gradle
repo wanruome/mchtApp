@@ -51,7 +51,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.zxing/core
     implementation 'com.google.zxing:core:3.3.3'
     // https://mvnrepository.com/artifact/com.jaeger.statusbarutil/library
-    implementation group: 'com.jaeger.statusbarutil', name: 'library', version: '1.5.1'
+//    implementation group: 'com.jaeger.statusbarutil', name: 'library', version: '1.5.1'
 
     implementation files('libs/wanruome-utdid.jar')
 }

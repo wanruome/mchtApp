@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.jaeger.library.StatusBarUtil;
+import com.ruomm.base.tools.StatusBarUtil;
 import com.ruomm.baseconfig.BaseConfig;
 
 @SuppressLint("NewApi")

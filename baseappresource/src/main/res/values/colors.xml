@@ -32,7 +32,7 @@
     <color name="common_line_little">#ffC0C0C0</color>
     <color name="common_line_drak">#ffA0A0A0</color>
     <color name="common_line_focus">#1DA1F2</color>
-    <color name="common_dialogloading_textcolor">#ff565656</color>
+    <color name="common_dialogloading_textcolor">#ffD0D0D0</color>
     <color name="common_dialog_bgcolor">#36000000</color>
     <color name="common_dialog_textcolor">#333333</color>
     <color name="common_dialog_line">#1DA1F2</color>

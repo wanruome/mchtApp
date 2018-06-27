@@ -22,7 +22,6 @@
         app:textRight_Color="@color/menutop_textsider_color"
         app:textRight_Size="@dimen/menutop_textsize_small"
         >
-
     </com.ruomm.base.view.menutopview.MenuTopView>
     <FrameLayout
         android:id="@+id/container_baseact"

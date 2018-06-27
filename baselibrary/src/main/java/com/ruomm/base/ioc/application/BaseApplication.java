@@ -16,7 +16,6 @@ import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.baseconfig.BaseConfig;
 import com.ruomm.baseconfig.http.HttpDiskLruCache;
 import com.ruomm.baseconfig.http.StringDiskLruCache;
-import com.ruomm.baseconfig.util.BaseConfigParse;
 
 import android.app.Application;
 import android.text.TextUtils;
@@ -63,8 +62,6 @@ public class BaseApplication extends Application {
 
 			isAppProcess = false;
 		}
-		// 解析配置参数
-		BaseConfigParse.parseConfig(app);
 		// StringDiskLruCache存储初始化
 		StringDiskLruCache.initialize(this);
 		// HttpLurCache存储初始化
@@ -118,7 +115,6 @@ public class BaseApplication extends Application {
 	/**
 	 * 取得DaoSession
 	 *
-	 * @param context
 	 * @return
 	 */
 	public static BaseDaoSession getBaseDaoSession() {

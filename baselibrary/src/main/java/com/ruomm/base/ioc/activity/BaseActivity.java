@@ -1,6 +1,6 @@
 package com.ruomm.base.ioc.activity;
 
-import com.jaeger.library.StatusBarUtil;
+import com.ruomm.base.tools.StatusBarUtil;
 import com.ruomm.baseconfig.BaseConfig;
 
 import android.annotation.TargetApi;

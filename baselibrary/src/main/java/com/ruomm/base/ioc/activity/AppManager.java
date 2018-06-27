@@ -32,7 +32,7 @@ public class AppManager {
 	 * @return AppManager的实例，单例模式;
 	 */
 	private static AppManager getInstance() {
-		if (BaseConfig.isAppManagerEnable) {
+		if (DebugConfig.isAppManagerEnable) {
 			if (null == appManager) {
 				appManager = new AppManager();
 			}
@@ -145,7 +145,7 @@ public class AppManager {
 	/**
 	 * 除了指定的Activity实例外结束其他的Activity
 	 *
-	 * @param cls
+	 * @param activity
 	 */
 	public static void finishAllActivityExceptOne(Activity activity) {
 		if (null != getInstance()) {
@@ -162,7 +162,6 @@ public class AppManager {
 	/**
 	 * 退出app应用，会先结束所有的Activity实例，然后退出当前应用
 	 *
-	 * @param mContext
 	 *            应用的Context
 	 */
 	public static void exitApp() {
@@ -277,7 +276,7 @@ public class AppManager {
 	/**
 	 * 结束除了指定类型的Activity外的所有Activity
 	 *
-	 * @param activity
+	 * @param cls
 	 */
 	private void finishAllActExpOne(Class<?> cls) {
 		ArrayList<Activity> tempArrayList = new ArrayList<Activity>();
@@ -316,7 +315,7 @@ public class AppManager {
 	/**
 	 * 结束除了指定的Activity实例外的所有Activity
 	 *
-	 * @param activity
+	 * @param activityClsName
 	 */
 	private void finishAllActExpOne(String activityClsName) {
 		ArrayList<Activity> tempArrayList = new ArrayList<Activity>();
