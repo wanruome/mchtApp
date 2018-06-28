@@ -189,7 +189,8 @@ public abstract  class AppMultiActivity extends FragmentActivity implements Dial
         mFManager = getSupportFragmentManager();
         mBundle = getIntent().getExtras();
         boolean isEnableBarInit = BaseConfig.UIBarTint_Enable;
-        if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        InjectUIStyle injectUIStyle=this.getClass().getAnnotation(InjectUIStyle.class);
+        if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT&&(null==injectUIStyle||injectUIStyle.isEnableBarInit()))  {
             StatusBarUtil.setTranslucent(this,255);
             StatusBarUtil.setLightMode(this);
         }

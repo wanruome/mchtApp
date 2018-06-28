@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.ruomm.base.ioc.annotation.InjectUIStyle;
 import com.ruomm.base.tools.StatusBarUtil;
 import com.ruomm.baseconfig.BaseConfig;
 
@@ -40,7 +41,8 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 		mFManager = getSupportFragmentManager();
 		mBundle = getIntent().getExtras();
 		boolean isEnableBarInit = BaseConfig.UIBarTint_Enable;
-		if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+		InjectUIStyle injectUIStyle=this.getClass().getAnnotation(InjectUIStyle.class);
+		if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT&&(null==injectUIStyle||injectUIStyle.isEnableBarInit())) {
 			StatusBarUtil.setTranslucent(this);
             StatusBarUtil.setLightMode(this);
 //			setTranslucentStatus(true);

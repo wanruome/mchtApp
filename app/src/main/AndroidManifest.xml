@@ -29,7 +29,6 @@
         <activity
             android:name=".module.welcome.WelcomeActivity"
             android:configChanges="keyboardHidden"
-
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="com.zjsj.mchtapp.module.welcome.WelcomeActivity" />
@@ -38,9 +37,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".module.main.MainActivity">
+        <activity
+            android:name=".module.main.MainActivity"
+            android:configChanges="keyboardHidden"
+            android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="mchtapp.mainActivity" />
+                <action android:name="main.MainActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

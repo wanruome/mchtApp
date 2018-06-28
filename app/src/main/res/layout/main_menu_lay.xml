@@ -1,12 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_main_menu"
     android:layout_width="match_parent"
-    android:background="@drawable/background"
+    android:background="@drawable/bg_main"
+    android:orientation="vertical"
     android:layout_height="match_parent" >
-    <TextView
+   <com.ruomm.base.view.percentview.RelativeLayout_PercentHeight
+       android:id="@+id/ly_userinfo"
+       android:background="@mipmap/icon_my_info"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/dpx400">
+       <ImageView
+           android:id="@+id/img_header"
+           android:layout_width="@dimen/dpx160"
+           android:layout_height="@dimen/dpx160"
+           android:src="@mipmap/icon_header"
+           android:scaleType="fitXY"
+           android:layout_centerInParent="true"
+           />
+       <TextView
+           style="@style/textWhite"
+           android:id="@+id/text_name"
+           android:layout_centerHorizontal="true"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+            android:layout_below="@id/img_header"
+           android:text="你好，null"
+           />
+   </com.ruomm.base.view.percentview.RelativeLayout_PercentHeight>
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="侧边栏"
-        />
-</FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dpx080"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="@dimen/dpx120"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <ImageView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/main_menu_set"/>
+                <TextView
+                    style="@style/textSub"
+                    android:paddingLeft="@dimen/dpx024"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="设置"
+                    />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="@dimen/dpx120"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <ImageView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/main_menu_help"/>
+                <TextView
+                    style="@style/textSub"
+                    android:paddingLeft="@dimen/dpx024"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="帮助"
+                    />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="@dimen/dpx120"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <ImageView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/main_menu_feedback"/>
+                <TextView
+                    style="@style/textSub"
+                    android:paddingLeft="@dimen/dpx024"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="意见反馈"
+                    />
+            </LinearLayout>
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="@dimen/dpx120"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
+                <ImageView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/main_menu_about_us"/>
+                <TextView
+                    style="@style/textSub"
+                    android:paddingLeft="@dimen/dpx024"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="关于我们"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            style="@style/lineStyle"
+            android:layout_marginLeft="@dimen/dpx080"
+            android:layout_marginRight="@dimen/dpx080"
+            />
+        <LinearLayout
+            android:paddingLeft="@dimen/padding_common"
+            android:paddingRight="@dimen/padding_common"
+            android:paddingTop="@dimen/padding_common_small"
+            android:paddingBottom="@dimen/padding_common_small"
+            android:id="@+id/menu_exit_app"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/main_menu_logout"/>
+            <TextView
+                android:layout_marginLeft="@dimen/padding_common_small"
+                style="@style/textSub.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="退出"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

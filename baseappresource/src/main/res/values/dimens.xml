@@ -5,13 +5,20 @@
     <dimen name="wheel_height">180dip</dimen>
     <dimen name="wheel_text_size">24dp</dimen>
     <!-- MenuTopView属性 -->
- 
+
+    <!-- MenuTopView属性 -->
+    <dimen name="menutop_height">40dp</dimen>
+    <dimen name="menutop_padding">12dp</dimen>
+    <dimen name="menutop_textsize">20sp</dimen>
+    <dimen name="menutop_textsize_small">16sp</dimen>
+    <dimen name="menutop_bottomline_size">1dip</dimen>
 
     <!-- 通用属性 -->
     <dimen name="shadow_width">15dp</dimen>
-    <dimen name="slidingmenu_offset">60dp</dimen>
+    <dimen name="slidingmenu_offset">120dp</dimen>
     <dimen name="padding_btnskip">20dip</dimen>
     <dimen name="padding_text">12dip</dimen>
+    <dimen name="padding_common_small">6dip</dimen>
     <dimen name="padding_common">12dip</dimen>
     <dimen name="padding_common_vertical">16dip</dimen>
     <dimen name="common_scrollbar_size">3.5dip</dimen>
@@ -23,17 +30,23 @@
     <dimen name="line_dpx_3">1.5dip</dimen>
     <dimen name="line_dpx_4">2dip</dimen>
     <!-- Text属性 -->
-    <dimen name="textLittle">12sp</dimen>
-    <dimen name="textSmall">14sp</dimen>
-    <dimen name="textNormal">16sp</dimen>
-    <dimen name="textMiddle">18sp</dimen>
-    <dimen name="textLarge">20sp</dimen>
+    <dimen name="textLittle">10sp</dimen>
+    <dimen name="textSmall">12sp</dimen>
+    <dimen name="textNormal">14sp</dimen>
+    <dimen name="textMiddle">16sp</dimen>
+    <dimen name="textLarge">18sp</dimen>
     <!-- dp属性 -->
     <dimen name="dpx006">3dip</dimen>
     <dimen name="dpx010">5dip</dimen>
     <dimen name="dpx012">6dip</dimen>
     <dimen name="dpx016">8dip</dimen>
     <dimen name="dpx020">10dip</dimen>
+    <dimen name="dpx024">12dip</dimen>
     <dimen name="dpx032">16dip</dimen>
-
+    <dimen name="dpx040">20dip</dimen>
+    <dimen name="dpx080">40dip</dimen>
+    <dimen name="dpx100">50dip</dimen>
+    <dimen name="dpx120">60dip</dimen>
+    <dimen name="dpx160">80dip</dimen>
+    <dimen name="dpx400">200dip</dimen>
 </resources>

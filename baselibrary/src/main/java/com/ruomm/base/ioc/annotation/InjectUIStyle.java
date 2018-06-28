@@ -22,5 +22,6 @@ public @interface InjectUIStyle {
 	 * @return int
 	 */
 	public int valueUIStyle() default 0;
+	public boolean isEnableBarInit() default true;
 
 }

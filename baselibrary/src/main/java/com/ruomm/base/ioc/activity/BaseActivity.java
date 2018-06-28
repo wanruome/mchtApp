@@ -1,5 +1,6 @@
 package com.ruomm.base.ioc.activity;
 
+import com.ruomm.base.ioc.annotation.InjectUIStyle;
 import com.ruomm.base.tools.StatusBarUtil;
 import com.ruomm.baseconfig.BaseConfig;
 
@@ -33,7 +34,8 @@ public abstract class BaseActivity extends Activity {
 		mBundle = getIntent().getExtras();
 		// 设置沉浸模式是否开启,可以通过在Activity上注解InjectUIStyle来调整
 		boolean isEnableBarInit = BaseConfig.UIBarTint_Enable;
-		if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+		InjectUIStyle injectUIStyle=this.getClass().getAnnotation(InjectUIStyle.class);
+		if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT&&(null==injectUIStyle||injectUIStyle.isEnableBarInit())) {
 			StatusBarUtil.setTranslucent(this,255);
 			StatusBarUtil.setLightMode(this);
 //			setTranslucentStatus(true);

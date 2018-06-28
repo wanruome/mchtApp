@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.ruomm.base.ioc.activity.AppManager;
+import com.ruomm.base.ioc.annotation.InjectUIStyle;
 import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.StatusBarUtil;
@@ -179,8 +180,9 @@ public class AppSimpleActivity extends FragmentActivity implements DialogLoading
         mBundle = getIntent().getExtras();
         mFManager = getSupportFragmentManager();
         boolean isEnableBarInit = BaseConfig.UIBarTint_Enable;
-        if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            StatusBarUtil.setTranslucent(this,255);
+        InjectUIStyle injectUIStyle=this.getClass().getAnnotation(InjectUIStyle.class);
+        if (isEnableBarInit && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT&&(null==injectUIStyle||injectUIStyle.isEnableBarInit())){
+            StatusBarUtil.setTranslucent(this,0);
             StatusBarUtil.setLightMode(this);
         }
     }
