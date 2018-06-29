@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <LinearLayout android:layout_width="match_parent"
-                android:layout_height="@dimen/dpx120"
+                android:layout_height="@dimen/dpx100"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 >
@@ -56,7 +56,7 @@
                     />
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent"
-                android:layout_height="@dimen/dpx120"
+                android:layout_height="@dimen/dpx100"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 >
@@ -72,7 +72,7 @@
                     />
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent"
-                android:layout_height="@dimen/dpx120"
+                android:layout_height="@dimen/dpx100"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 >
@@ -88,7 +88,7 @@
                     />
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent"
-                android:layout_height="@dimen/dpx120"
+                android:layout_height="@dimen/dpx100"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 >
@@ -131,7 +131,7 @@
                 android:src="@mipmap/main_menu_logout"/>
             <TextView
                 android:layout_marginLeft="@dimen/padding_common_small"
-                style="@style/textSub.Small"
+                style="@style/textSub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="退出"

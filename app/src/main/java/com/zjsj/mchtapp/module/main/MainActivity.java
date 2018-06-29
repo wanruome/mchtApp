@@ -10,12 +10,12 @@ import com.ruomm.base.ioc.annotation.InjectUIStyle;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
-import com.ruomm.base.tools.StatusBarUtil;
+import com.ruomm.base.tools.DisplayUtil;
 import com.ruomm.base.view.menutopview.MenuTopListener;
 import com.ruomm.base.view.menutopview.MenuTopView;
+import com.ruomm.base.view.percentview.LinearLayout_PercentHeight;
 import com.ruomm.resource.ui.AppSimpleActivity;
 import com.zjsj.mchtapp.R;
-@InjectUIStyle(isEnableBarInit = true)
 public class MainActivity extends AppSimpleActivity{
     @InjectAll
     Views views = new Views();
@@ -26,6 +26,8 @@ public class MainActivity extends AppSimpleActivity{
         FrameLayout main_content_container;
         @InjectView(id=R.id.mymenutop)
         MenuTopView mymenutop;
+        @InjectView(id=R.id.ly_ylqr)
+        LinearLayout_PercentHeight ly_ylqr;
     }
     @Override
     protected void onCreate(Bundle arg0) {
@@ -37,6 +39,16 @@ public class MainActivity extends AppSimpleActivity{
     }
 
     protected void setMainContentView() {
+        int displayWidth= DisplayUtil.getDispalyWidth(mContext);
+        float height=displayWidth*0.4f;
+        float maxHeight=mContext.getResources().getDimension(R.dimen.dpx320);
+        if(height>maxHeight)
+        {
+            height=maxHeight;
+        }
+        float heightPercent=height/displayWidth;
+
+        float viewFlaot=height/displayWidth;
         views.main_content_container.removeAllViews();
         views.main_content_container.addView(LayoutInflater.from(mContext).inflate(R.layout.main_content_lay, null));
         BaseUtil.initInjectAll(this);
@@ -53,5 +65,7 @@ public class MainActivity extends AppSimpleActivity{
                 }
             }
         });
+
+        views.ly_ylqr.setHeightPercent(heightPercent);
     }
 }
