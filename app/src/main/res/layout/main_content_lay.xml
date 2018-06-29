@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:background="@drawable/bg_main"
@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
     <com.ruomm.base.view.menutopview.MenuTopView
         android:id="@id/mymenutop"
         android:layout_width="match_parent"
@@ -24,25 +29,50 @@
         app:textRight_Size="@dimen/menutop_textsize_small"
         >
     </com.ruomm.base.view.menutopview.MenuTopView>
-    <LinearLayout
-        android:layout_weight="1"
+    <View
         android:layout_width="0dp"
-        android:layout_height="match_parent"></LinearLayout>
+        android:layout_height="20dp"/>
     <LinearLayout
-        style="@style/layoutPaddingStyle"
+        android:layout_marginRight="@dimen/dpx020"
+        android:layout_marginLeft="@dimen/dpx020"
+        android:background="@drawable/main_content_bg"
         android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <ImageView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/main_menu_logout"/>
-        <TextView
-            style="@style/textSub.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="退出"
-            />
+        android:layout_width="match_parent"
+        android:layout_height="1000dp">
+        <com.ruomm.base.view.percentview.LinearLayout_PercentHeight
+            android:id="@+id/ly_ylqr"
+            android:layout_width="match_parent"
+            android:background="@mipmap/main_menu_help"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:src="@mipmap/scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:src="@mipmap/paymentcode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </com.ruomm.base.view.percentview.LinearLayout_PercentHeight>
     </LinearLayout>
-</LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

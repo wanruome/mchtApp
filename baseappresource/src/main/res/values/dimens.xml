@@ -30,11 +30,11 @@
     <dimen name="line_dpx_3">1.5dip</dimen>
     <dimen name="line_dpx_4">2dip</dimen>
     <!-- Text属性 -->
-    <dimen name="textLittle">10sp</dimen>
-    <dimen name="textSmall">12sp</dimen>
-    <dimen name="textNormal">14sp</dimen>
-    <dimen name="textMiddle">16sp</dimen>
-    <dimen name="textLarge">18sp</dimen>
+    <dimen name="textLittle">12sp</dimen>
+    <dimen name="textSmall">14sp</dimen>
+    <dimen name="textNormal">16sp</dimen>
+    <dimen name="textMiddle">18sp</dimen>
+    <dimen name="textLarge">20sp</dimen>
     <!-- dp属性 -->
     <dimen name="dpx006">3dip</dimen>
     <dimen name="dpx010">5dip</dimen>
@@ -48,5 +48,6 @@
     <dimen name="dpx100">50dip</dimen>
     <dimen name="dpx120">60dip</dimen>
     <dimen name="dpx160">80dip</dimen>
+    <dimen name="dpx320">160dip</dimen>
     <dimen name="dpx400">200dip</dimen>
 </resources>
