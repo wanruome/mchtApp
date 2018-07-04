@@ -14,17 +14,28 @@
         <item name="android:paddingRight">@dimen/padding_common</item>
     </style>
 
+    <!--<style name="editTextStyle">-->
+        <!--<item name="android:textColor">@color/text_noraml</item>-->
+        <!--<item name="android:textColorHint">@color/text_lable</item>-->
+        <!--<item name="android:layout_marginTop">@dimen/dpx012</item>-->
+        <!--<item name="android:layout_marginBottom">@dimen/dpx012</item>-->
+        <!--<item name="android:paddingLeft">@dimen/dpx020</item>-->
+        <!--<item name="android:paddingRight">@dimen/dpx020</item>-->
+        <!--<item name="android:layout_width">match_parent</item>-->
+        <!--<item name="android:layout_height">wrap_content</item>-->
+        <!--<item name="android:gravity">center_vertical</item>-->
+        <!--<item name="android:textSize">@dimen/textMiddle</item>-->
+        <!--<item name="android:background">@drawable/bg_edittext</item>-->
+    <!--</style>-->
     <style name="editTextStyle">
-        <item name="android:textColor">@color/text_noraml</item>
+        <item name="android:textColor">@color/text_white_sub</item>
         <item name="android:textColorHint">@color/text_lable</item>
-        <item name="android:layout_marginTop">@dimen/dpx012</item>
-        <item name="android:layout_marginBottom">@dimen/dpx012</item>
-        <item name="android:paddingLeft">@dimen/dpx020</item>
-        <item name="android:paddingRight">@dimen/dpx020</item>
+        <item name="android:paddingLeft">@dimen/dpx010</item>
+        <item name="android:paddingRight">@dimen/dpx010</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textSize">@dimen/textMiddle</item>
+        <item name="android:textSize">@dimen/textNormal</item>
         <item name="android:background">@drawable/bg_edittext</item>
     </style>
 
@@ -33,15 +44,16 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/textMiddle</item>
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:background">@drawable/btn_bg</item>
+        <item name="android:textColor">@color/text_lable</item>
+        <item name="android:background">@drawable/btn_bg_xml</item>
     </style>
 
     <style name="btnStyleNoMargin">
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:textSize">@dimen/textMiddle</item>
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:background">@drawable/btn_bg</item>
+        <item name="android:textColor">@color/text_lable</item>
+        <item name="android:background">@drawable/btn_bg_xml</item>
     </style>
 
     <style name="btnSkipStyle">
@@ -55,6 +67,13 @@
         <item name="android:layout_height">60dp</item>
         <item name="android:textSize">@dimen/textMiddle</item>
         <item name="android:background">@drawable/btn_rand_password</item>
+    </style>
+    <style name="pwdBtnVerify">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/textSmall</item>
+        <item name="android:textColor">@color/text_white_sub</item>
+        <item name="android:background">@drawable/btn_verifycode</item>
     </style>
     <!-- progressBar_ -->
     <style name="progressBar_downLoading" parent="@android:style/Widget.ProgressBar.Horizontal">
@@ -211,6 +230,49 @@
     <style name="textWhite.Large">
         <item name="android:textSize">@dimen/textLarge</item>
         <item name="android:textColor">@color/text_white</item>
+    </style>
+    <style name="textWhiteSub">
+        <item name="android:textSize">@dimen/textNormal</item>
+        <item name="android:textColor">@color/text_white_sub</item>
+    </style>
+
+    <style name="textWhiteSub.Small">
+        <item name="android:textSize">@dimen/textSmall</item>
+        <item name="android:textColor">@color/text_white_sub</item>
+    </style>
+
+    <style name="textWhiteSub.SmallVery">
+        <item name="android:textSize">@dimen/textLittle</item>
+        <item name="android:textColor">@color/text_white_sub</item>
+    </style>
+
+    <style name="textWhiteSub.Middle">
+        <item name="android:textSize">@dimen/textMiddle</item>
+        <item name="android:textColor">@color/text_white_sub</item>
+    </style>
+    <style name="textWhiteLable">
+        <item name="android:textSize">@dimen/textNormal</item>
+        <item name="android:textColor">@color/text_white_lable</item>
+    </style>
+
+    <style name="textWhiteLable.Small">
+        <item name="android:textSize">@dimen/textSmall</item>
+        <item name="android:textColor">@color/text_white_lable</item>
+    </style>
+
+    <style name="textWhiteLable.SmallVery">
+        <item name="android:textSize">@dimen/textLittle</item>
+        <item name="android:textColor">@color/text_white_lable</item>
+    </style>
+
+    <style name="textWhiteLable.Middle">
+        <item name="android:textSize">@dimen/textMiddle</item>
+        <item name="android:textColor">@color/text_white_lable</item>
+    </style>
+
+    <style name="textWhiteLable.Large">
+        <item name="android:textSize">@dimen/textLarge</item>
+        <item name="android:textColor">@color/text_white_lable</item>
     </style>
     <!-- 分割线颜色 -->
     <style name="lineStyle">

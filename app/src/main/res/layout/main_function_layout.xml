@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@mipmap/home_fun_item_bg"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/lv_img_name"
+        android:src="@mipmap/home_fun_qrcodepament"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:padding="@dimen/dpx006"
+        style="@style/textSub.Small"
+        android:id="@+id/lv_text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="二维码"
+        />
+</LinearLayout>

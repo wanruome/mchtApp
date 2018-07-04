@@ -26,4 +26,26 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':baselibrary')
     implementation project(':baseappresource')
+    // https://mvnrepository.com/artifact/com.loopj.android/android-async-http
+    implementation 'com.loopj.android:android-async-http:1.4.9'
+    // https://mvnrepository.com/artifact/commons-codec/commons-codec
+    implementation 'commons-codec:commons-codec:1.6'
+    // https://mvnrepository.com/artifact/com.jakewharton/disklrucache
+    implementation 'com.jakewharton:disklrucache:2.0.2'
+    // https://mvnrepository.com/artifact/org.greenrobot/eventbus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    // https://mvnrepository.com/artifact/com.alibaba/fastjson
+    implementation 'com.alibaba:fastjson:1.2.47'
+    // https://mvnrepository.com/artifact/de.greenrobot/greendao
+    implementation 'de.greenrobot:greendao:2.1.0'
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    // https://mvnrepository.com/artifact/com.squareup.okio/okio
+    implementation 'com.squareup.okio:okio:1.14.1'
+//    // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    // https://mvnrepository.com/artifact/com.google.zxing/core
+    implementation 'com.google.zxing:core:3.3.3'
+    // https://mvnrepository.com/artifact/com.jaeger.statusbarutil/library
+    implementation group: 'com.jaeger.statusbarutil', name: 'library', version: '1.5.1'
 }

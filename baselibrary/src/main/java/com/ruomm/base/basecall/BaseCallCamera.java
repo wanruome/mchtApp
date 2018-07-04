@@ -50,7 +50,6 @@ public class BaseCallCamera {
 	 */
 	public BaseCallCamera(Activity mActivity, File file, int requestCode) {
 		super();
-
 		this.mActivity = mActivity;
 		this.mFragment = null;
 		this.mContext = mActivity;

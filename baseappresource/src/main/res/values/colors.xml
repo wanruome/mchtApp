@@ -50,6 +50,8 @@
     <color name="text_red">#FF0000</color>
     <color name="text_focus">#E6A906</color>
     <color name="text_white">#FFFFFF</color>
+    <color name="text_white_sub">#CCFFFFFF</color>
+    <color name="text_white_lable">#99FFFFFF</color>
     <color name="text_black">#000000</color>
     <color name="text_noraml">#333333</color>
     <color name="text_sub">#666666</color>

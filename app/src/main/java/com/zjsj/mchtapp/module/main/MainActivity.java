@@ -1,21 +1,34 @@
 package com.zjsj.mchtapp.module.main;
 
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import com.ruomm.base.ioc.annotation.InjectUIStyle;
+import android.widget.GridView;
+import android.widget.ImageView;
+
+import com.ruomm.base.ioc.adapter.PagerAdapter_View;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.DisplayUtil;
+import com.ruomm.base.view.dottabstripview.DotTabStripListener;
+import com.ruomm.base.view.dottabstripview.DotTabStripView;
 import com.ruomm.base.view.menutopview.MenuTopListener;
 import com.ruomm.base.view.menutopview.MenuTopView;
+import com.ruomm.base.view.percentview.FrameLayout_PercentHeight;
 import com.ruomm.base.view.percentview.LinearLayout_PercentHeight;
 import com.ruomm.resource.ui.AppSimpleActivity;
+import com.squareup.picasso.Picasso;
 import com.zjsj.mchtapp.R;
+import com.zjsj.mchtapp.module.main.adapter.MainFunctionAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppSimpleActivity{
     @InjectAll
     Views views = new Views();
@@ -28,6 +41,18 @@ public class MainActivity extends AppSimpleActivity{
         MenuTopView mymenutop;
         @InjectView(id=R.id.ly_ylqr)
         LinearLayout_PercentHeight ly_ylqr;
+        @InjectView(id=R.id.img_scan)
+        ImageView img_scan;
+        @InjectView(id=R.id.img_paymentcode)
+        ImageView img_paymentcode;
+        @InjectView(id=R.id.ly_homead)
+        FrameLayout_PercentHeight ly_homead;
+        @InjectView(id=R.id.mViewPager)
+        ViewPager mViewPager;
+        @InjectView(id=R.id.dotTabStripView)
+        DotTabStripView dotTabStripView;
+        @InjectView(id=R.id.mGridView)
+        GridView mGridView;
     }
     @Override
     protected void onCreate(Bundle arg0) {
@@ -40,15 +65,8 @@ public class MainActivity extends AppSimpleActivity{
 
     protected void setMainContentView() {
         int displayWidth= DisplayUtil.getDispalyWidth(mContext);
-        float height=displayWidth*0.4f;
-        float maxHeight=mContext.getResources().getDimension(R.dimen.dpx320);
-        if(height>maxHeight)
-        {
-            height=maxHeight;
-        }
-        float heightPercent=height/displayWidth;
 
-        float viewFlaot=height/displayWidth;
+
         views.main_content_container.removeAllViews();
         views.main_content_container.addView(LayoutInflater.from(mContext).inflate(R.layout.main_content_lay, null));
         BaseUtil.initInjectAll(this);
@@ -65,7 +83,38 @@ public class MainActivity extends AppSimpleActivity{
                 }
             }
         });
-
+        float height=displayWidth*0.4f;
+        float maxHeight=mContext.getResources().getDimension(R.dimen.dpx320);
+        if(height>maxHeight)
+        {
+            height=maxHeight;
+        }
+        float heightPercent=height/displayWidth;
         views.ly_ylqr.setHeightPercent(heightPercent);
+        int imageHeight=(int)(height*0.9f);
+        Picasso.with(mContext).load(R.mipmap.scan).resize(imageHeight,imageHeight).into(views.img_scan);
+        Picasso.with(mContext).load(R.mipmap.paymentcode).resize(imageHeight,imageHeight).into(views.img_paymentcode);
+        views.ly_homead.setHeightPercent(0.45f);
+        int[] hotmeAd=new int[]{R.mipmap.home_ad01,R.mipmap.home_ad02};
+        List<View> lstViewPagerViews=new ArrayList<View>() ;
+        for (int i=0;i<hotmeAd.length;i++) {
+           LayoutInflater layoutInflater=LayoutInflater.from(this);
+            View view= layoutInflater.inflate(R.layout.main_viewpager_ad,null);
+            ImageView vp_img=view.findViewById(R.id.vp_img);
+            // Picasso.with(mContext).load(hotmeAd[i]).transform(new RoundedTransformationBuilder().cornerRadius(10).build()).into(vp_img);
+            vp_img.setImageResource(hotmeAd[i]);
+            lstViewPagerViews.add(view);
+        }
+        PagerAdapter_View pagerAdapter_view=new PagerAdapter_View(lstViewPagerViews);
+        views.mViewPager.setAdapter(pagerAdapter_view);
+        views.dotTabStripView.setDotCount(hotmeAd.length,0);
+        views.dotTabStripView.setListener(new DotTabStripListener() {
+            @Override
+            public void onDotViewSelect(int currentItem) {
+                views.mViewPager.setCurrentItem(currentItem);
+            }
+        });
+        views.dotTabStripView.setCycleTask(3000);
+        views.mGridView.setAdapter(new MainFunctionAdapter(mContext));
     }
 }

@@ -38,6 +38,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".module.login.LoginActivity"
+            android:configChanges="keyboardHidden"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="login.LoginActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".module.main.MainActivity"
             android:configChanges="keyboardHidden"
             android:screenOrientation="portrait" >
