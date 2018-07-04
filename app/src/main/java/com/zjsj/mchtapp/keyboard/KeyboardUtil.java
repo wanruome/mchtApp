@@ -28,7 +28,7 @@ public class KeyboardUtil {
     private static final int HEE_CODE = -13;//哈哈
     private static final int AWKWARD_CODE = -14;//尴尬
 
-    private ViewGroup rootView;
+//    private ViewGroup rootView;
     private EditText ed;
 
 
@@ -39,13 +39,14 @@ public class KeyboardUtil {
         k3 = new Keyboard(activity,R.xml.symbol);
 
 
-        keyboardView = new KeyboardView(activity, null);
+//        keyboardView = new KeyboardView(activity, null);
+        keyboardView = activity.findViewById(R.id.kv_lyt_keyboard);
         keyboardView.setKeyboard(k1);
         keyboardView.setEnabled(true);
         keyboardView.setPreviewEnabled(false);
         keyboardView.setOnKeyboardActionListener(onKeyboardActionListener);
-
-        rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+//
+//        rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
 
     }
 
@@ -147,18 +148,18 @@ public class KeyboardUtil {
 
     public void showKeyboard() {
         if (!isShow) {
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-            layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, RelativeLayout.TRUE);
-            rootView.addView(keyboardView, layoutParams);
+//            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+//            layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, RelativeLayout.TRUE);
+//            rootView.addView(keyboardView, layoutParams);
             isShow = true;
         }
     }
 
     private void hideKeyboard() {
-        if (rootView != null && keyboardView != null && isShow) {
-            isShow = false;
-            rootView.removeView(keyboardView);
-        }
+//        if (rootView != null && keyboardView != null && isShow) {
+//            isShow = false;
+//            rootView.removeView(keyboardView);
+//        }
         mInstance = null;
     }
 
