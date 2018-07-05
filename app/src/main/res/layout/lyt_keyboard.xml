@@ -1,18 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="bottom"
     android:layout_height="match_parent">
-    <android.inputmethodservice.KeyboardView
-        android:id="@+id/kv_lyt_keyboard"
+    <!--<LinearLayout-->
+        <!--android:id="@+id/kv_lyt_outarea"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:orientation="horizontal"-->
+        <!--&gt;-->
+
+    <!--</LinearLayout>-->
+    <RelativeLayout
+        android:background="@color/text_white"
+        android:paddingTop="@dimen/dpx012"
+        android:paddingBottom="@dimen/dpx012"
+        android:paddingLeft="@dimen/dpx024"
+        android:paddingRight="@dimen/dpx024"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="新生支付安全键盘"
+            />
+        <ImageView
+            android:id="@+id/kv_img_hidden"
+            android:paddingLeft="@dimen/dpx012"
+            android:paddingRight="@dimen/dpx012"
+            android:paddingTop="@dimen/dpx012"
+            android:paddingBottom="@dimen/dpx012"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/keyboard_arrow_down"
+            />
+    </RelativeLayout>
+    <FrameLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="#999"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:keyBackground="@color/text_white"
-        android:keyTextColor="#333"
-        android:shadowColor="#00000000"
-        android:keyPreviewHeight="100dp"
-        android:keyPreviewLayout="@layout/lyt_preview"/>
-</RelativeLayout>
+        android:id="@+id/kv_lyt_container"
+        >
+        <android.inputmethodservice.KeyboardView
+            android:id="@+id/kv_lyt_keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/AllTransparent"
+            android:layout_alignParentBottom="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:keyBackground="@drawable/keyboard_keybg"
+            android:keyTextColor="#333"
+            android:shadowColor="#00000000"
+            android:keyPreviewHeight="100dp"
+            android:keyPreviewLayout="@layout/lyt_preview"/>
+    </FrameLayout>
+
+</LinearLayout>
