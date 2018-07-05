@@ -19,18 +19,24 @@ public class KeyboardUtil {
     private Keyboard k1;// 字母键盘
     private Keyboard k2;// 数字键盘
     private Keyboard k3;// 符号键盘
-    private boolean isNum = true;// 是否数据键盘
     private boolean isUpper = false;// 是否大写
-    private boolean isSymbol = false;// 是否符号
+    // 字母键盘
+    private static final int BOARD_LETTER=-11;
+    // 数字键盘
+    private static final int BOARD_NUMBER=-12;
+    // 符号键盘
+    private static final int BOARD_SYMBOL=-13;
+    private static final int BOARD_SHIFT=-14;
+    private static final int ACTION_DELETE=-15;
+    private static final int ACTION_DONE=-16;
+    private static final int ACTION_LETF=-17;
+    private static final int ACTION_RIGHT=-18;
+    //€
+    private static final int MONEY_RMB=-21;
+    private static final int MONEY_OY=-22;
 
-    private static final int SYMBOL_CODE = -7;//符号键盘
-    private static final int ELLIPSES_CODE = -8;//省略号
-    private static final int CHINESE_HORIZONTAL_LINE_CODE = -9;//中文横线
-    private static final int SMILING_FACE_CODE = -10;//笑脸
-    private static final int LEFT_CODE = -11;//中文横线
-    private static final int RIGHT_CODE = -12;//中文横线
-    private static final int HEE_CODE = -13;//哈哈
-    private static final int AWKWARD_CODE = -14;//尴尬
+    private static final int MONEY_YB=-23;
+
 
     private ViewGroup rootView;
     private View keyboradContainer;
@@ -42,9 +48,9 @@ public class KeyboardUtil {
 
     private KeyboardUtil(Activity activity, EditText edit) {
         this.ed = edit;
-        k1 = new Keyboard(activity, R.xml.letter);
-        k2 = new Keyboard(activity,R.xml.number);
-        k3 = new Keyboard(activity,R.xml.symbol);
+        k1 = new Keyboard(activity, R.xml.key_letter);
+        k2 = new Keyboard(activity,R.xml.key_number);
+        k3 = new Keyboard(activity,R.xml.key_symbol);
         mLayoutInflater=LayoutInflater.from(activity);
 
 //        keyboardView = new KeyboardView(activity, null);
@@ -56,7 +62,7 @@ public class KeyboardUtil {
            keyboradContainer.setPadding(0,0,0,height);
         }
         keyboardView = keyboradContainer.findViewById(R.id.kv_lyt_keyboard);
-        keyboardView.setKeyboard(k1);
+        keyboardView.setKeyboard(k3);
         keyboardView.setEnabled(true);
         keyboardView.setPreviewEnabled(false);
         keyboardView.setOnKeyboardActionListener(onKeyboardActionListener);
@@ -97,50 +103,35 @@ public class KeyboardUtil {
             int start = ed.getSelectionStart();
             if (primaryCode == Keyboard.KEYCODE_CANCEL) {// 完成
                 hideKeyboard();
-            } else if (primaryCode == Keyboard.KEYCODE_DELETE) {// 回退
+            } else if (primaryCode == ACTION_DELETE) {// 回退
                 if (editable != null && editable.length() > 0) {
                     if (start > 0) {
                         editable.delete(start - 1, start);
                     }
                 }
-            } else if (primaryCode == Keyboard.KEYCODE_SHIFT) {// 大小写切换
+            } else if (primaryCode == BOARD_LETTER) {// 大小写切换
+
+                keyboardView.setKeyboard(k1);
+            }
+            else if(primaryCode==BOARD_SHIFT)
+            {
                 isUpper = !isUpper;
                 k1.setShifted(isUpper);
                 keyboardView.invalidateAllKeys();
-            } else if (primaryCode == SYMBOL_CODE) {// 符号键盘
-                if (isSymbol) {
-                    isSymbol = false;
-                    keyboardView.setKeyboard(k2);
-                } else {
-                    isSymbol = true;
-                    keyboardView.setKeyboard(k3);
-                }
-            } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE) {// 数字键盘切换
-                if (isNum) {
-                    isNum = false;
-                    keyboardView.setKeyboard(k1);
-                } else {
-                    isNum = true;
-                    keyboardView.setKeyboard(k2);
-                }
-            } else if (primaryCode == LEFT_CODE) { //向左
+            }
+            else if (primaryCode == BOARD_NUMBER) {// 符号键盘
+                keyboardView.setKeyboard(k2);
+            }
+            else if (primaryCode == BOARD_SYMBOL) {// 符号键盘
+                keyboardView.setKeyboard(k3);
+            } else if (primaryCode == ACTION_LETF) { //向左
                 if (start > 0) {
                     ed.setSelection(start - 1);
                 }
-            } else if (primaryCode == RIGHT_CODE) { // 向右
+            } else if (primaryCode == ACTION_RIGHT) { // 向右
                 if (start < ed.length()) {
                     ed.setSelection(start + 1);
                 }
-            } else if (primaryCode == ELLIPSES_CODE) { //省略号
-                editable.insert(start, "...");
-            } else if (primaryCode == CHINESE_HORIZONTAL_LINE_CODE) {
-                editable.insert(start, "——");
-            } else if (primaryCode == SMILING_FACE_CODE) {
-                editable.insert(start, "^_^");
-            } else if (primaryCode == HEE_CODE) {
-                editable.insert(start, "^o^");
-            } else if (primaryCode == AWKWARD_CODE) {
-                editable.insert(start, ">_<");
             } else {
                 String str = Character.toString((char) primaryCode);
                 if (isWord(str)) {
