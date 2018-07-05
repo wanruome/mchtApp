@@ -1,21 +1,22 @@
 package com.zjsj.mchtapp.module.login;
 
-import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
+import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.ui.AppMultiActivity;
-import com.ruomm.resource.ui.AppSimpleActivity;
 import com.zjsj.mchtapp.R;
-import com.zjsj.mchtapp.keyboard.KeyBoradDialog;
-import com.zjsj.mchtapp.keyboard.KeyboardUtil;
+import com.zjsj.mchtapp.util.keyboard.KeyboardUtil;
 
 public class LoginActivity extends AppMultiActivity {
     @InjectAll
@@ -51,12 +52,20 @@ public class LoginActivity extends AppMultiActivity {
                 KeyboardUtil.shared(LoginActivity.this,views.edt_pwd).showKeyboard();
             }
         });
-        views.btn_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KeyBoradDialog keyBoradDialog=new KeyBoradDialog(mContext);
-                keyBoradDialog.show();
-            }
-        });
+//       ViewGroup viewGroup= (ViewGroup) findViewById(android.R.id.content);
+//       int i=viewGroup.getChildCount();
+//        MLog.i(i);
+//        ViewGroup rootView = (ViewGroup) ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+//
+//        View view= LayoutInflater.from(this).inflate(R.layout.main_menu_lay,null);
+//        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+//        layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, RelativeLayout.TRUE);
+//        viewGroup.addView(view,layoutParams);
+//        views.btn_submit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
     }
 }

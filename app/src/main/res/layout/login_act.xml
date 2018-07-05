@@ -164,30 +164,5 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-        <android.inputmethodservice.KeyboardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/kv_lyt_keyboard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#999"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:keyBackground="@color/text_white"
-            android:keyTextColor="#333"
-            android:shadowColor="#00000000"
-            android:keyPreviewHeight="100dp"
-            android:keyPreviewLayout="@layout/lyt_preview"/>
-
-
     </LinearLayout>
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:orientation="vertical"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_weight="3"-->
-        <!--&gt;-->
-
-    <!--</LinearLayout>-->
-
 </LinearLayout>
