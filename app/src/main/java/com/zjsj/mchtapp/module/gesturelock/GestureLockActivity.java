@@ -12,6 +12,8 @@ import com.ruomm.resource.ui.AppMultiActivity;
 import com.ruomm.resource.ui.AppSimpleActivity;
 import com.zjsj.mchtapp.R;
 
+import java.util.List;
+
 public class GestureLockActivity extends AppMultiActivity{
     @InjectView(id=R.id.gesture_lock)
     private GestureLock gestureView;
@@ -21,6 +23,7 @@ public class GestureLockActivity extends AppMultiActivity{
         setInitContentView(R.layout.gesturelock_act);
         gestureView = (GestureLock) findViewById(R.id.gesture_lock);
         gestureView.setAdapter(new GestureLock.GestureLockAdapter() {
+
             @Override
             public int getDepth() {
                 return 3;
@@ -28,12 +31,13 @@ public class GestureLockActivity extends AppMultiActivity{
 
             @Override
             public int[] getCorrectGestures() {
-                return new int[]{0, 3, 6, 7, 8, 5, 2, 1, 4};
+//                return null;
+                return new int[]{1, 2, 3, 4, 5, 6, 7, 8};
             }
 
             @Override
             public int getUnmatchedBoundary() {
-                return 300;
+                return 5;
             }
 
             @Override
@@ -51,13 +55,12 @@ public class GestureLockActivity extends AppMultiActivity{
 //                }
             }
         });
-
         gestureView.setOnGestureEventListener(new GestureLock.OnGestureEventListener(){
 
             @Override
-            public void onGestureEvent(boolean matched) {
+            public void onGestureResult(boolean matched, List<Integer> gesturesResultLst) {
                 Toast.makeText(GestureLockActivity.this, "Match:" + matched, Toast.LENGTH_SHORT).show();
-                gestureView.clear();
+//                gestureView.clear();
             }
 
             @Override

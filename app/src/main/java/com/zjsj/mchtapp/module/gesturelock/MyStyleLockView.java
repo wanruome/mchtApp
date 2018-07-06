@@ -143,7 +143,10 @@ public class MyStyleLockView extends GestureLockView {
     @Override
     protected void doArrowDraw(Canvas canvas){
         mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(COLOR_ERROR);
+        if(getLockerState()==LockerState.LOCKER_STATE_ERROR){
+            mPaint.setColor(COLOR_ERROR);
+        }
+
         canvas.drawPath(arrow, mPaint);
     }
 }

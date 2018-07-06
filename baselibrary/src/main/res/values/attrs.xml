@@ -286,6 +286,12 @@
         <attr name="line_width" format="dimension"/>
         <attr name="line_normal_color" format="color"/>
         <attr name="line_error_color" format="color" />
+        <attr name="gesture_can_repeat" format="boolean" />
+        <attr name="gesture_max_count" format="integer" />
+        <attr name="gesture_error_show_arrow" format="boolean" />
+        <attr name="gesture_normal_show_arrow" format="boolean" />
+        <attr name="gesture_normal_show_path" format="boolean" />
+        <attr name="gesture_error_show_path" format="boolean" />
     </declare-styleable>
 
 

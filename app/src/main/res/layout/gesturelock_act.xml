@@ -6,8 +6,14 @@
     <com.ruomm.base.view.gesturelock.GestureLock
         android:id="@+id/gesture_lock"
         GestureLock:line_width="10dp"
-        GestureLock:line_normal_color="@android:color/darker_gray"
+        GestureLock:line_normal_color="@color/text_white_sub"
         GestureLock:line_error_color="@color/text_red"
+        GestureLock:gesture_error_show_arrow="true"
+        GestureLock:gesture_error_show_path="true"
+        GestureLock:gesture_normal_show_arrow="true"
+        GestureLock:gesture_normal_show_path="true"
+        GestureLock:gesture_can_repeat="true"
+        GestureLock:gesture_max_count="10"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </RelativeLayout>

@@ -6,6 +6,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Abstract class for user to customize the GestureLock block style
  */
@@ -24,7 +27,8 @@ public abstract class GestureLockView extends View {
 
     private LockerState mState = LockerState.LOCKER_STATE_NORMAL;
 
-    private int errorArrow = -1;
+//    private int errorArrow = -1;
+    private List<Integer> errorArrowList=new ArrayList<Integer>();
 
     public GestureLockView(Context context){
         this(context, null);
@@ -58,15 +62,29 @@ public abstract class GestureLockView extends View {
         return mState;
     }
 
-    public void setArrow(int arrow){
-        errorArrow = arrow;
-
+//    public void setArrow(int arrow){
+//        errorArrow = arrow;
+//
+//        invalidate();
+//    }
+    public void addArrow(int arrow)
+    {
+        errorArrowList.add(arrow);
         invalidate();
     }
-
-    public int getArrow(){
-        return errorArrow;
+    public void clearArrow()
+    {
+        errorArrowList.clear();
+        invalidate();
     }
+//    public List<Integer> getArrowList()
+//    {
+//        return errorArrowList;
+//    }
+
+//    public int getArrow(){
+//        return errorArrow;
+//    }
 
     /**
      * override this method to do GestureLock block drawing work
@@ -95,13 +113,13 @@ public abstract class GestureLockView extends View {
 
         doDraw(mState, canvas);
 
-        if(errorArrow != -1){
-
-            canvas.save();
-            canvas.rotate(errorArrow, mCenterX, mCenterY);
-            doArrowDraw(canvas);
-
-            canvas.restore();
+        if(errorArrowList.size()>0){
+            for (int arrow:errorArrowList){
+                canvas.save();
+                canvas.rotate(arrow, mCenterX, mCenterY);
+                doArrowDraw(canvas);
+                canvas.restore();
+            }
         }
 
     }
