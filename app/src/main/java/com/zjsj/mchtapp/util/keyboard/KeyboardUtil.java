@@ -63,7 +63,7 @@ public class KeyboardUtil {
     private boolean isNumberRandom=true;
     private boolean isShow = false;
     private boolean isFirstShow=true;
-    private List<String> encryptLst=new ArrayList<>();
+    private List<String> encryptLst=null;
     private String encryptStr=null;
     private KeyboardSafeInterface keyboardSafeInterface=null;
     public KeyboardUtil(Activity activity, EditText edit) {
@@ -151,6 +151,20 @@ public class KeyboardUtil {
     public KeyboardUtil setSafeInterFace(KeyboardSafeInterface keyboardSafeInterface)
     {
         this.keyboardSafeInterface=keyboardSafeInterface;
+        if(null==this.keyboardSafeInterface)
+        {
+            encryptLst=null;
+            encryptStr=null;
+        }
+        else if(this.keyboardSafeInterface.isEncryptByChar())
+        {
+            encryptLst=new ArrayList<>();
+            encryptStr=null;
+        }
+        else{
+            encryptLst=null;
+            encryptStr=null;
+        }
         return this;
     }
     public KeyboardUtil bulider(KEYMODE keymode)
@@ -496,7 +510,13 @@ public class KeyboardUtil {
         }
     }
 
-
+    public String getEncryptStr(){
+        return this.encryptStr;
+    }
+    public List<String> getEncryptLst()
+    {
+        return this.encryptLst;
+    }
     public void showKeyboard() {
         if (!isShow) {
 
