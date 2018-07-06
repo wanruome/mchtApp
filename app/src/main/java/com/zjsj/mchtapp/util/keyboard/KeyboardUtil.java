@@ -1,6 +1,5 @@
 package com.zjsj.mchtapp.util.keyboard;
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
@@ -14,9 +13,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.ruomm.base.tools.DisplayUtil;
+import com.ruomm.base.tools.StringUtils;
 import com.ruomm.baseconfig.debug.MLog;
 import com.zjsj.mchtapp.R;
-import com.zjsj.mchtapp.module.login.LoginActivity;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -62,7 +61,11 @@ public class KeyboardUtil {
     private boolean isNumberEnable=true;
     private boolean isSymbolEnable=true;
     private boolean isNumberRandom=true;
+    private boolean isShow = false;
     private boolean isFirstShow=true;
+    private List<String> encryptLst=new ArrayList<>();
+    private String encryptStr=null;
+    private KeyboardSafeInterface keyboardSafeInterface=null;
     public KeyboardUtil(Activity activity, EditText edit) {
         this.mEditText = edit;
         mActivity=activity;
@@ -143,6 +146,11 @@ public class KeyboardUtil {
     }
     public KeyboardUtil setNumberRandom(boolean isNumberRandom){
         this.isNumberRandom=isNumberRandom;
+        return this;
+    }
+    public KeyboardUtil setSafeInterFace(KeyboardSafeInterface keyboardSafeInterface)
+    {
+        this.keyboardSafeInterface=keyboardSafeInterface;
         return this;
     }
     public KeyboardUtil bulider(KEYMODE keymode)
@@ -317,14 +325,15 @@ public class KeyboardUtil {
 
         @Override
         public void onKey(int primaryCode, int[] keyCodes) {
-            Editable editable = mEditText.getText();
+//            Editable editable = mEditText.getText();
             int start = mEditText.getSelectionStart();
             if (primaryCode ==ACTION_DONE) {// 完成
                 hideKeyboard();
             } else if (primaryCode == ACTION_DELETE) {// 回退
+                Editable editable = mEditText.getText();
                 if (editable != null && editable.length() > 0) {
                     if (start > 0) {
-                        editable.delete(start - 1, start);
+                        editTextDelete(start);
                     }
                 }
             } else if (primaryCode == BOARD_LETTER) {
@@ -358,15 +367,15 @@ public class KeyboardUtil {
             }
             else if(primaryCode==MONEY_RMB)
             {
-                editable.insert(start,"¥");
+                editTextInsert(start,"¥");
             }
             else if(primaryCode==MONEY_OY)
             {
-                editable.insert(start,"€");
+                editTextInsert(start,"€");
             }
             else if(primaryCode==MONEY_YB)
             {
-                editable.insert(start,"£");
+                editTextInsert(start,"£");
             }
             else {
                 String str = Character.toString((char) primaryCode);
@@ -377,13 +386,116 @@ public class KeyboardUtil {
 //                        str = str.toLowerCase();
 //                    }
 //                }
-                editable.insert(start, str);
+                editTextInsert(start, str);
 
             }
         }
     };
+    private void editTextInsert(int start,String str)
+    {
+        if(null!=keyboardSafeInterface) {
+            if(keyboardSafeInterface.isEncryptByChar()) {
+                try {
+                    Editable editable = mEditText.getText();
+                    if (editable.length() != encryptLst.size()) {
+                        mEditText.setText(null);
+                        encryptLst.clear();
+                        return;
+                    }
+                    editable.insert(start, keyboardSafeInterface.getShowStr(str));
+                    encryptLst.add(start, keyboardSafeInterface.getEncryptStr(str));
+                    MLog.i(encryptLst);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mEditText.setText(null);
+                    encryptLst.clear();
+                }
+            }
+            else{
+                try {
+                    String data=keyboardSafeInterface.getDecryptStr(encryptStr);
+                    StringBuilder sbTemp=StringUtils.isEmpty(data)?new StringBuilder():new StringBuilder(data) ;
+                    Editable editable = mEditText.getText();
+                    if(editable.length()!= sbTemp.length())
+                    {
+                        mEditText.setText(null);
+                        encryptStr=null;
+                        return;
+                    }
+                    sbTemp.insert(start,str);
+                    editable.insert(start, keyboardSafeInterface.getShowStr(str));
+                    encryptStr=keyboardSafeInterface.getEncryptStr(sbTemp.toString());
+                    MLog.i(encryptStr);
+                }catch (Exception e)
+                {
+                    Editable editable = mEditText.getText();
+                    mEditText.setText(null);
+                    encryptLst.clear();
+                    e.printStackTrace();
+                }
 
-    private boolean isShow = false;
+
+            }
+        }
+        else{
+            Editable editable = mEditText.getText();
+            editable.insert(start, str);
+        }
+
+    }
+    private void editTextDelete(int start)
+    {
+        if(null!=keyboardSafeInterface) {
+            if(keyboardSafeInterface.isEncryptByChar()) {
+                try {
+                    Editable editable = mEditText.getText();
+                    if (editable.length() != encryptLst.size()) {
+                        mEditText.setText(null);
+                        encryptLst.clear();
+                        return;
+                    }
+                    editable.delete(start - 1, start);
+                    encryptLst.remove(start - 1);
+                    MLog.i(encryptLst);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Editable editable = mEditText.getText();
+                    mEditText.setText(null);
+                    encryptLst.clear();
+                }
+            }
+            else
+            {
+                try {
+                    String data=keyboardSafeInterface.getDecryptStr(encryptStr);
+                    StringBuilder sbTemp=StringUtils.isEmpty(data)?new StringBuilder():new StringBuilder(data) ;
+                    Editable editable = mEditText.getText();
+                    if(editable.length()!= sbTemp.length())
+                    {
+                        mEditText.setText(null);
+                        encryptStr=null;
+                        return;
+                    }
+                    editable.delete(start - 1, start);
+                    sbTemp.delete(start-1,start);
+                    encryptStr=keyboardSafeInterface.getEncryptStr(sbTemp.toString());
+                    MLog.i(encryptStr);
+                }catch (Exception e)
+                {
+                    Editable editable = mEditText.getText();
+                    mEditText.setText(null);
+                    encryptLst.clear();
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        else {
+            Editable editable = mEditText.getText();
+            editable.delete(start - 1, start);
+        }
+    }
+
 
     public void showKeyboard() {
         if (!isShow) {
