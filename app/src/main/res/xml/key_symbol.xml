@@ -40,13 +40,13 @@
         <Key android:codes="96" android:horizontalGap="1.8%p" android:keyLabel="`" android:keyEdgeFlags="right" />
     </Row>
     <Row  android:rowEdgeFlags="bottom">
-        <Key android:codes="-11" android:horizontalGap="1.8%p" android:keyLabel="ABC" android:keyEdgeFlags="left" android:keyWidth="12.9%p" />
-        <Key android:codes="-12" android:horizontalGap="1.8%p" android:keyLabel="123" android:keyWidth="12.9%p" />
+        <Key android:codes="-11" android:horizontalGap="1.8%p" android:keyIcon="@drawable/keyboard_letter_normal" android:keyEdgeFlags="left" android:keyWidth="12.9%p" />
+        <Key android:codes="-12" android:horizontalGap="1.8%p" android:keyIcon="@drawable/keyboard_number_normal" android:keyWidth="12.9%p" />
         <Key android:codes="60" android:horizontalGap="1.8%p" android:keyLabel="&#060;" />
         <Key android:codes="62" android:horizontalGap="1.8%p" android:keyLabel="&#062;"/>
         <Key android:codes="-22" android:horizontalGap="1.8%p" android:keyLabel="€"/>
         <Key android:codes="-23" android:horizontalGap="1.8%p" android:keyLabel="£"/>
         <Key android:codes="-21" android:horizontalGap="1.8%p" android:keyLabel="¥"/>
-        <Key android:codes="-15" android:horizontalGap="1.8%p" android:keyLabel="del" android:keyEdgeFlags="right" android:keyWidth="17.8%p"  />
+        <Key android:codes="-15" android:horizontalGap="1.8%p"  android:keyIcon="@drawable/keyboard_delete" android:keyEdgeFlags="right" android:keyWidth="17.8%p"  />
     </Row>
 </Keyboard>

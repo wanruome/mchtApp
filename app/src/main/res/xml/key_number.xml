@@ -19,9 +19,9 @@
         <Key android:codes="57" android:horizontalGap="1.8%p" android:keyLabel="9" android:keyEdgeFlags="right" />
     </Row>
     <Row android:rowEdgeFlags="bottom">
-        <Key android:codes="-11" android:horizontalGap="1.8%p" android:keyLabel="ABC" android:keyEdgeFlags="left"  android:keyWidth="12.9%p"/>
-        <Key android:codes="-13" android:horizontalGap="1.8%p" android:keyLabel="符号" android:keyWidth="12.9%p"/>
+        <Key android:codes="-11" android:horizontalGap="1.8%p" android:keyIcon="@drawable/keyboard_letter_normal" android:keyEdgeFlags="left"  android:keyWidth="12.9%p"/>
+        <Key android:codes="-13" android:horizontalGap="1.8%p" android:keyIcon="@drawable/keyboard_symbol_normal"  android:keyWidth="12.9%p"/>
         <Key android:codes="48" android:horizontalGap="5.133333%p" android:keyLabel="0" android:keyWidth="30.933333%p"/>
-        <Key android:codes="-15" android:horizontalGap="1.8%p" android:keyLabel="del" android:keyEdgeFlags="right"/>
+        <Key android:codes="-15" android:horizontalGap="1.8%p"  android:keyIcon="@drawable/keyboard_delete" android:keyEdgeFlags="right"/>
     </Row>
 </Keyboard>

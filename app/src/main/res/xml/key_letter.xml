@@ -30,11 +30,11 @@
             android:keyEdgeFlags="right" android:keyLabel="l"/>
     </Row>
     <Row>
-        <Key android:codes="-14" android:horizontalGap="1.8%p" android:keyLabel="Shift" android:keyEdgeFlags="left"
-            android:keyWidth="12%p"/>
+        <Key android:codes="-14" android:horizontalGap="1.8%p" android:keyIcon="@drawable/keyboard_shift_little" android:keyEdgeFlags="left"
+            android:keyWidth="12%p" android:isModifier="true" android:isSticky="true"/>
         <Key android:codes="122" android:horizontalGap="1.8%p" android:keyLabel="z" />
         <Key android:codes="120" android:horizontalGap="1.8%p" android:keyLabel="x" />
-        <Key android:codes="33" android:horizontalGap="1.8%p" android:keyLabel="c" />
+        <Key android:codes="99" android:horizontalGap="1.8%p" android:keyLabel="c" />
         <Key android:codes="118" android:horizontalGap="1.8%p" android:keyLabel="v" />
         <Key android:codes="98" android:horizontalGap="1.8%p" android:keyLabel="b" />
         <Key android:codes="110" android:horizontalGap="1.8%p" android:keyLabel="n" />
@@ -43,9 +43,9 @@
             android:keyIcon="@drawable/keyboard_delete" android:keyWidth="13.8%p"/>
     </Row>
     <Row android:rowEdgeFlags="bottom">
-        <Key android:codes="-12" android:horizontalGap="1.8%p" android:keyLabel="123" android:keyEdgeFlags="left"  android:keyWidth="12.9%p"/>
-        <Key android:codes="-13" android:horizontalGap="1.8%p" android:keyLabel="符号" android:keyEdgeFlags="right" android:keyWidth="12.9%p"/>
-        <Key android:codes="32" android:horizontalGap="1.8%p" android:keyLabel="空格" android:keyWidth="39.2%p"/>
+        <Key android:codes="-12" android:horizontalGap="1.8%p" android:keyIcon="@drawable/keyboard_number_normal" android:keyEdgeFlags="left"  android:keyWidth="12.9%p" />
+        <Key android:codes="-13" android:horizontalGap="1.8%p" android:keyIcon="@drawable/keyboard_symbol_normal" android:keyEdgeFlags="right" android:keyWidth="12.9%p"/>
+        <Key android:codes="32" android:horizontalGap="1.8%p" android:keyIcon="@drawable/keyboard_space" android:keyWidth="39.2%p"/>
         <Key android:codes="-16" android:horizontalGap="1.8%p" android:keyLabel="完成" android:keyEdgeFlags="right" android:keyWidth="25.8%p"/>
     </Row>
 </Keyboard>

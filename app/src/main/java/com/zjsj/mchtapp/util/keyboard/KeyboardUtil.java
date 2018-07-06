@@ -1,5 +1,6 @@
 package com.zjsj.mchtapp.util.keyboard;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
@@ -13,13 +14,19 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.ruomm.base.tools.DisplayUtil;
+import com.ruomm.baseconfig.debug.MLog;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.module.login.LoginActivity;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class KeyboardUtil {
-
+    public static enum  KEYMODE{
+        LETTER_UPPER,LETTER_LOWER,NUMBER,SYMBOL
+    };
     private Keyboard k1;// 字母键盘
     private Keyboard k2;// 数字键盘
     private Keyboard k3;// 符号键盘
@@ -51,9 +58,11 @@ public class KeyboardUtil {
     private LayoutInflater  mLayoutInflater;
     private EditText mEditText;
     private Activity mActivity;
-
-
-
+    private boolean isLetterEnable=true;
+    private boolean isNumberEnable=true;
+    private boolean isSymbolEnable=true;
+    private boolean isNumberRandom=true;
+    private boolean isFirstShow=true;
     public KeyboardUtil(Activity activity, EditText edit) {
         this.mEditText = edit;
         mActivity=activity;
@@ -61,15 +70,8 @@ public class KeyboardUtil {
         k2 = new Keyboard(activity,R.xml.key_number);
         k3 = new Keyboard(activity,R.xml.key_symbol);
         mLayoutInflater=LayoutInflater.from(activity);
-//        keyboardView = new KeyboardView(activity, null);
         rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content));
         keyboradContainer=mLayoutInflater.inflate(R.layout.lyt_keyboard,null);
-
-//        int height= DisplayUtil.getNavigationBarHeight(activity);
-//        if(height>0)
-//        {
-//           keyboradContainer.setPadding(0,0,0,height);
-//        }
         kv_img_hidden=keyboradContainer.findViewById(R.id.kv_img_hidden);
         kv_lyt_container=keyboradContainer.findViewById(R.id.kv_lyt_container);
         keyboardView = keyboradContainer.findViewById(R.id.kv_lyt_keyboard);
@@ -77,25 +79,163 @@ public class KeyboardUtil {
         if(height>0)
         {
             kv_lyt_container.setPadding(0,mActivity.getResources().getDimensionPixelSize(R.dimen.dpx006),0,height);
-            kv_lyt_container.setPadding(0,mActivity.getResources().getDimensionPixelSize(R.dimen.dpx006),0,mActivity.getResources().getDimensionPixelSize(R.dimen.dpx032));
         }
         else {
-            kv_lyt_container.setPadding(0,mActivity.getResources().getDimensionPixelSize(R.dimen.dpx006),0,mActivity.getResources().getDimensionPixelSize(R.dimen.dpx080));
+            kv_lyt_container.setPadding(0,mActivity.getResources().getDimensionPixelSize(R.dimen.dpx006),0,mActivity.getResources().getDimensionPixelSize(R.dimen.dpx032));
         }
-        keyboardView.setKeyboard(k1);
+
         keyboardView.setEnabled(true);
         keyboardView.setPreviewEnabled(false);
         keyboardView.setOnKeyboardActionListener(onKeyboardActionListener);
         kv_img_hidden.setOnClickListener(kvOnClickListener);
         mEditText.setOnTouchListener(kvOnTouchListener);
         mEditText.setOnFocusChangeListener(kvOnFocusChangeListener);
+        mEditText.setLongClickable(false);
+        mEditText.setTextIsSelectable(false);
     }
-    private View.OnClickListener kvOnClickListener=new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            hideKeyboard();
+        //    Keyboard.Key k1Number=k1.getKeys().get(28);
+        //    Keyboard.Key k1Symbol=k1.getKeys().get(29);
+        //    Keyboard.Key k2Leeter=k2.getKeys().get(9);
+        //    Keyboard.Key k2Symbol=k2.getKeys().get(10);
+        //    Keyboard.Key k3Leeter=k3.getKeys().get(30);
+        //    Keyboard.Key k3Number=k3.getKeys().get(31);
+    public KeyboardUtil setLetterEnable(boolean isLetterEnable){
+        this.isLetterEnable=isLetterEnable;
+        Keyboard.Key k2Leeter=k2.getKeys().get(9);
+        Keyboard.Key k3Leeter=k3.getKeys().get(30);
+        if( this.isLetterEnable) {
+            k2Leeter.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_letter_normal);
+            k3Leeter.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_letter_normal);
         }
-    };
+        else{
+            k2Leeter.icon= mActivity.getResources().getDrawable(R.drawable.keyboard_letter_disable);
+            k3Leeter.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_letter_disable);
+        }
+        return this;
+    }
+    public KeyboardUtil setNumberEnable(boolean isNumberEnable){
+        this.isNumberEnable=isNumberEnable;
+        Keyboard.Key k1Number=k1.getKeys().get(28);
+        Keyboard.Key k3Number=k3.getKeys().get(31);
+        if(this.isNumberEnable) {
+            k1Number.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_number_normal);
+            k3Number.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_number_normal);
+        }
+        else{
+            k1Number.icon= mActivity.getResources().getDrawable(R.drawable.keyboard_number_disable);
+            k3Number.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_number_disable);
+        }
+        return this;
+    }
+    public KeyboardUtil setSymbolEnable(boolean isSymbolEnable){
+        this.isSymbolEnable=isSymbolEnable;
+        Keyboard.Key k1Symbol=k1.getKeys().get(29);
+        Keyboard.Key k2Symbol=k2.getKeys().get(10);
+        if( this.isSymbolEnable) {
+            k1Symbol.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_symbol_normal);
+            k2Symbol.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_symbol_normal);
+        }
+        else{
+            k1Symbol.icon= mActivity.getResources().getDrawable(R.drawable.keyboard_symbol_disable);
+            k2Symbol.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_symbol_disable);
+        }
+        return this;
+    }
+    public KeyboardUtil setNumberRandom(boolean isNumberRandom){
+        this.isNumberRandom=isNumberRandom;
+        return this;
+    }
+    public KeyboardUtil bulider(KEYMODE keymode)
+    {
+        KEYMODE keymodeReal=getBuliderMode(keymode);
+        if(null==keymodeReal) {
+            setKeyboardLetter(isUpper);
+        }
+        else if(keymodeReal==KEYMODE.LETTER_LOWER){
+            setKeyboardLetter(false);
+        }
+        else if(keymodeReal==KEYMODE.LETTER_UPPER){
+            setKeyboardLetter(true);
+        }
+        else if(keymodeReal==KEYMODE.SYMBOL)
+        {
+            setKeyboardSymbol();
+        }
+        else
+        {
+            setKeyboardNumber();
+        }
+        return this;
+    }
+   private KEYMODE getBuliderMode(KEYMODE keymode){
+        if(null==keymode) {
+            if(isLetterEnable)
+            {
+                return KEYMODE.LETTER_LOWER;
+            }
+            else if(isNumberEnable)
+            {
+                return KEYMODE.NUMBER;
+            }
+            else if(isSymbolEnable){
+                return KEYMODE.SYMBOL;
+            }
+            else {
+                return null;
+            }
+        }
+        else if(keymode==KEYMODE.LETTER_LOWER||keymode==KEYMODE.LETTER_UPPER){
+            if(isLetterEnable)
+            {
+                return keymode;
+            }
+            else if(isNumberEnable)
+            {
+                return KEYMODE.NUMBER;
+            }
+            else if(isSymbolEnable){
+                return KEYMODE.SYMBOL;
+            }
+            else {
+                return null;
+            }
+        }
+        else if(keymode==KEYMODE.SYMBOL)
+        {
+            if(isSymbolEnable)
+            {
+                return keymode;
+            }
+            else if(isLetterEnable)
+            {
+                return KEYMODE.LETTER_LOWER;
+            }
+            else if(isNumberEnable)
+            {
+                return KEYMODE.NUMBER;
+            }
+            else {
+                return null;
+            }
+        }
+        else
+        {
+            if(isNumberEnable)
+            {
+                return keymode;
+            }
+            else if(isLetterEnable)
+            {
+                return KEYMODE.LETTER_LOWER;
+            }
+            else if(isSymbolEnable)
+            {
+                return KEYMODE.SYMBOL;
+            }
+            return null;
+        }
+
+    }
     private View.OnFocusChangeListener kvOnFocusChangeListener=new View.OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
@@ -113,6 +253,12 @@ public class KeyboardUtil {
                 return false;
             }
             int eventAction=event.getAction();
+//            if(eventAction==MotionEvent.ACTION_DOWN)
+//            {
+//                int temp = mEditText.getOffsetForPosition(event.getX(),event.getY());
+//                mEditText.setSelection(temp);
+//                mEditText.requestFocus();
+//            }
             if(eventAction==MotionEvent.ACTION_UP) {
 
                 int sdk_int = android.os.Build.VERSION.SDK_INT;
@@ -181,21 +327,26 @@ public class KeyboardUtil {
                         editable.delete(start - 1, start);
                     }
                 }
-            } else if (primaryCode == BOARD_LETTER) {// 大小写切换
-
-                keyboardView.setKeyboard(k1);
+            } else if (primaryCode == BOARD_LETTER) {
+                if(isLetterEnable) {
+                    setKeyboardLetter(isUpper);
+                }
             }
+            // 大小写切换
             else if(primaryCode==BOARD_SHIFT)
             {
-                isUpper = !isUpper;
-                k1.setShifted(isUpper);
-                keyboardView.invalidateAllKeys();
+                changeLetterState(!isUpper);
+
             }
             else if (primaryCode == BOARD_NUMBER) {// 符号键盘
-                keyboardView.setKeyboard(k2);
+                if(isNumberEnable) {
+                   setKeyboardNumber();
+                }
             }
             else if (primaryCode == BOARD_SYMBOL) {// 符号键盘
-                keyboardView.setKeyboard(k3);
+                if(isSymbolEnable) {
+                  setKeyboardSymbol();
+                }
             } else if (primaryCode == ACTION_LETF) { //向左
                 if (start > 0) {
                     mEditText.setSelection(start - 1);
@@ -219,13 +370,13 @@ public class KeyboardUtil {
             }
             else {
                 String str = Character.toString((char) primaryCode);
-                if (isWord(str)) {
-                    if (isUpper) {
-                        str = str.toUpperCase();
-                    } else {
-                        str = str.toLowerCase();
-                    }
-                }
+//                if (isWord(str)) {
+//                    if (isUpper) {
+//                        str = str.toUpperCase();
+//                    } else {
+//                        str = str.toLowerCase();
+//                    }
+//                }
                 editable.insert(start, str);
 
             }
@@ -236,9 +387,16 @@ public class KeyboardUtil {
 
     public void showKeyboard() {
         if (!isShow) {
+
             rootView.addView(keyboradContainer);
             isShow = true;
             DisplayUtil.closeSoftInputView(mActivity);
+            if(!isFirstShow&&isNumberRandom&&keyboardView.getKeyboard()==k2)
+            {
+                setBoardNumberRandom();
+                keyboardView.invalidateAllKeys();
+            }
+            isFirstShow=false;
         }
     }
 
@@ -262,6 +420,93 @@ public class KeyboardUtil {
 
     private boolean isWord(String str) {
         return str.matches("[a-zA-Z]");
+    }
+    private void setKeyboardLetter(boolean upperStatus){
+        changeLetterState(upperStatus);
+        keyboardView.setKeyboard(k1);
+    }
+    private void setKeyboardNumber()
+    {
+        if(isNumberRandom)
+        {
+            setBoardNumberRandom();
+        }
+        keyboardView.setKeyboard(k2);
+    }
+    private void setKeyboardSymbol(){
+        keyboardView.setKeyboard(k3);
+    }
+    private void setBoardNumberRandom()
+    {
+        Random random = new Random();
+        List<Integer> lst = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            lst.add(i);
+        }
+        List<Integer> lstResult = new ArrayList<>();
+        for (int i = 10; i > 0; i--) {
+            int index = random.nextInt(i);
+            Integer value = lst.get(index);
+            lst.remove(value);
+            lstResult.add(value);
+        }
+        List<Keyboard.Key> k2Keys=k2.getKeys();
+        List<Keyboard.Key> k2NumberKeys=new ArrayList<>();
+        for(Keyboard.Key tmp:k2Keys)
+        {
+            int keyCode=tmp.codes[0];
+            if(keyCode>=48&&keyCode<=57)
+            {
+                k2NumberKeys.add(tmp);
+            }
+        }
+        for(int i=0;i<10;i++)
+        {
+            int value=lstResult.get(i);
+            Keyboard.Key key=k2NumberKeys.get(i);
+            key.label=value+"";
+            key.codes[0]=value+48;
+        }
+    }
+    private View.OnClickListener kvOnClickListener=new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            hideKeyboard();
+        }
+    };
+    private void changeLetterState(boolean upperStatus) {
+        if(isUpper==upperStatus)
+        {
+            return;
+        }
+        isUpper=upperStatus;
+        List<Keyboard.Key> keys = k1.getKeys();
+        if (isUpper) {
+            for (Keyboard.Key key : keys) {
+                int keyCode = key.codes[0];
+                if (keyCode >= 97 & keyCode <= 122) {
+                    key.codes[0] = keyCode - 32;
+                }
+                else if (key.codes[0] == BOARD_SHIFT) {
+                    key.label = null;
+                    key.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_shift_big);
+                }
+            }
+        }
+        else{
+            for (Keyboard.Key key : keys) {
+                int keyCode = key.codes[0];
+                if (keyCode >= 65 & keyCode <= 90) {
+                    key.codes[0] = keyCode + 32;
+                }
+                else if (key.codes[0] == BOARD_SHIFT) {
+                    key.label = null;
+                    key.icon = mActivity.getResources().getDrawable(R.drawable.keyboard_shift_little);
+                }
+            }
+        }
+        k1.setShifted(isUpper);
+        keyboardView.invalidateAllKeys();
     }
 //
 //    private static KeyboardUtil mInstance;

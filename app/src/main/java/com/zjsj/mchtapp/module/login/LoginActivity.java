@@ -49,6 +49,6 @@ public class LoginActivity extends AppMultiActivity {
         super.onCreate(arg0);
         hideMenuTopView();
         setInitContentView(R.layout.login_act);
-//        keyboardUtil=new KeyboardUtil(this,views.edt_pwd);
+        keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSymbolEnable(false).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
     }
 }
