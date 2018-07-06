@@ -80,7 +80,8 @@ public class WelcomeActivity extends AppSimpleActivity {
                 super.run();
                 SystemClock.sleep(3000);
                 if(!WelcomeActivity.this.isFinishing()){
-                    Intent intent=new Intent("login.LoginActivity");
+//                    Intent intent=new Intent("login.LoginActivity");
+                    Intent intent=new Intent("gesturelock.GestureLockActivity");
                     startActivity(intent);
                     WelcomeActivity.this.finish();
                 }
