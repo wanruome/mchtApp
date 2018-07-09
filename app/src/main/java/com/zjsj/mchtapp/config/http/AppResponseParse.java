@@ -4,16 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ruomm.base.http.config.ResponseParse;
 import com.ruomm.base.tools.StringUtils;
-import com.zjsj.mchtapp.dal.response.base.ResultBase;
+import com.zjsj.mchtapp.dal.response.base.ResultDto;
 
 public class AppResponseParse implements ResponseParse {
     @Override
     public Object parseResponseText(String resourceString, Class<?> cls) {
 
-        ResultBase resultBase=null;
+        ResultDto resultBase=null;
         try{
             JSONObject jsonObject=JSON.parseObject(resourceString);
-            resultBase=new ResultBase();
+            resultBase=new ResultDto();
             resultBase.code=jsonObject.getString("code");
             resultBase.msg=jsonObject.getString("msg");
 

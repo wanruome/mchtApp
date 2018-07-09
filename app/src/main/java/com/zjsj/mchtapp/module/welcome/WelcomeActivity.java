@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.ruomm.base.http.config.impl.TextHttpCallBack;
 import com.ruomm.base.http.okhttp.TextOKHttp;
+import com.ruomm.base.ioc.iocutil.BaseServiceUtil;
 import com.ruomm.base.tools.Base64;
 import com.ruomm.base.tools.RSAUtils;
 import com.ruomm.base.tools.TelePhoneUtil;
@@ -18,6 +19,7 @@ import com.ruomm.resource.ui.AppSimpleActivity;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.dal.response.KeyPairDto;
+import com.zjsj.mchtapp.module.keypair.KeyPairService;
 
 import java.security.KeyPair;
 import java.util.HashMap;
@@ -71,7 +73,8 @@ public class WelcomeActivity extends AppSimpleActivity {
             if(isGrant)
             {
 //                gotoMainActivity();
-                getPublicKey();
+//                getPublicKey();
+                BaseServiceUtil.startService(mContext, KeyPairService.class,1);
             }
         }
     };
@@ -120,7 +123,7 @@ public class WelcomeActivity extends AppSimpleActivity {
         map.put("keyType", ApiConfig.TRANSMIT_KEYTYPE);
         map.put("rasPublicKey", Base64.encode(keyPair.getPublic().getEncoded()));
         map.put("timeStamp", System.currentTimeMillis() + "");
-        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/keypair/getPublicKeyByUuid").setRequestBodyText(map).doHttp(KeyPairDto.class, new TextHttpCallBack() {
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"/app/keypair/getKeyPairForStore").setRequestBodyText(map).doHttp(KeyPairDto.class, new TextHttpCallBack() {
             @Override
             public void httpCallBack(Object resultObject, String resultString, int status) {
                 MLog.i(resultString);

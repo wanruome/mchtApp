@@ -26,6 +26,12 @@
         android:roundIcon="@mipmap/icon_app_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+        <service android:name=".module.keypair.KeyPairService">
+            <intent-filter>
+                <action android:name="keypair.KeyPairService"/>
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".module.welcome.WelcomeActivity"
             android:configChanges="keyboardHidden"

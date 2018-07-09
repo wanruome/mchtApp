@@ -65,4 +65,50 @@ public class BaseServiceUtil {
 		Intent intent = new Intent(mContext, srvcls);
 		mContext.stopService(intent);
 	}
+	/**
+	* 启动Service
+	 *
+			 * @param mContext
+	 * @param serviceName
+	 *            需要启动的Services
+	 * @param optType
+	 *            启动service类型参数，可以依据此在onStart时候执行不同的业务逻辑
+	 */
+	public static void startService(Context mContext, String serviceName, int optType) {
+		Intent intent = new Intent(serviceName);
+		intent.putExtra(OptType, optType);
+		mContext.startService(intent);
+	}
+
+	/**
+	 * 启动Service
+	 *
+	 * @param mContext
+	 * @param serviceName
+	 *            需要启动的Services
+	 * @param optType
+	 *            启动service类型参数，可以依据此在onStart时候执行不同的业务逻辑
+	 * @param data
+	 *            启动时候传入的Bundle参数
+	 */
+	public static void startService(Context mContext, String serviceName, int optType, Bundle data) {
+		Intent intent = new Intent(serviceName);
+		intent.putExtra(OptType, optType);
+		if (null != data) {
+			intent.putExtras(data);
+		}
+		mContext.startService(intent);
+	}
+
+	/**
+	 * 停止Service
+	 *
+	 * @param mContext
+	 * @param serviceName
+	 *            需要停止的Services
+	 */
+	public static void stopService(Context mContext, String serviceName) {
+		Intent intent = new Intent(serviceName);
+		mContext.stopService(intent);
+	}
 }

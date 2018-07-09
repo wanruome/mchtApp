@@ -56,6 +56,10 @@ public class AppStoreSafeProperty {
 			editor.commit();
 		}
 		else {
+			String realValue=mAppStoreSafeInterface.encryptStr(value);
+			if(TextUtils.isEmpty(realValue)){
+				return;
+			}
 			SharedPreferences properties = mContext.getSharedPreferences(nameProperty, PropertyMODE);
 			SharedPreferences.Editor editor = properties.edit();
 			editor.putString(key,mAppStoreSafeInterface.encryptStr(value));

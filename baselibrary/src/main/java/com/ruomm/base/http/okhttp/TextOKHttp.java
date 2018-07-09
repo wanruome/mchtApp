@@ -652,6 +652,7 @@ public final class TextOKHttp {
 				parseResponse(response);
 			}
 			catch (Exception e) {
+				e.printStackTrace();
 				if (isDebug) {
 					Log.i(debugTag, "请求结果@" + "status:" + HttpConfig.Fail + ";msg:失败");
 				}
