@@ -6,11 +6,12 @@
 package com.ruomm.base.http.okhttp;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 
 import com.ruomm.base.http.HttpConfig;
 import com.ruomm.base.http.config.DataHttpListener;
 import com.ruomm.base.http.config.ResponseData;
+import com.ruomm.base.http.config.ResponseParse;
 import com.ruomm.base.http.config.TextCacheGetListener;
 import com.ruomm.base.http.config.TextCacheSaveListener;
 import com.ruomm.base.tools.Base64;
@@ -54,7 +55,7 @@ public final class DataOKHttp {
 	// 下载请求的请求Body体，可以自己设置请求的RequestBody;
 	private RequestBody mRequestBody;
 	// 下载请求的参数列表，String类型的自动构建RequestBody
-	private HashMap<String, String> mRequestHashMap;
+	private Map<String, String> mRequestHashMap;
 	// 异步请求回调所需的handler
 	private Handler UIHandler = null;
 	// 异步请求回调到JsonOkHttp线程的Looper
@@ -74,6 +75,7 @@ public final class DataOKHttp {
 	private TextCacheSaveListener cacheSaveListener;
 
 	private OkHttpClient okHttpClient=null;
+	private ResponseParse responseParse;
 	public DataOKHttp setOkHttpClient(OkHttpClient okHttpClient) {
 		this.okHttpClient = okHttpClient;
 		return this;
@@ -100,7 +102,7 @@ public final class DataOKHttp {
 		if (HttpConfig.debug_autonewhttp) {
 			setDebug();
 		}
-
+		this.responseParse=OkHttpConfig.getResponseParse();
 	}
 
 	/**
@@ -199,7 +201,11 @@ public final class DataOKHttp {
 		this.Url = url;
 		return this;
 	}
-
+	//设置解析接口
+	public DataOKHttp setResponseParse(ResponseParse responseParse) {
+		this.responseParse = responseParse;
+		return this;
+	}
 	/**
 	 * 请求参数设置
 	 *
@@ -207,7 +213,7 @@ public final class DataOKHttp {
 	 *            请求参数集合
 	 * @return
 	 */
-	public DataOKHttp setRequestParams(HashMap<String, String> hashMap) {
+	public DataOKHttp setRequestParams(Map<String, String> hashMap) {
 		this.mRequestHashMap = hashMap;
 		return this;
 	}
@@ -221,6 +227,16 @@ public final class DataOKHttp {
 	 */
 	public DataOKHttp setRequestBody(RequestBody mRequestBody) {
 		this.mRequestBody = mRequestBody;
+		return this;
+	}
+
+	/**
+	 * 设置JSON请求或者文本请求
+	 * @param bodyParameters
+	 * @return
+	 */
+	public DataOKHttp setRequestBodyText(Object bodyParameters){
+		this.mRequestBody=OkHttpConfig.getOkHttpRequestByText(bodyParameters);
 		return this;
 	}
 
@@ -436,7 +452,14 @@ public final class DataOKHttp {
 		}
 		else {
 			// 对象解析开始
-			Object object = HttpConfig.parseResponseData(responseData, cls);
+			Object object =null;
+			if(null==responseParse){
+				object = HttpConfig.parseResponseData(responseData, cls);
+			}
+			else{
+				object=responseParse.parseResponseText(HttpConfig.byteToString(responseData),cls);
+			}
+
 			// 回调开始
 			if (null == object) {
 				if (isDebug) {
@@ -654,7 +677,13 @@ public final class DataOKHttp {
 		if (TextUtils.isEmpty(cacheString)) {
 			return false;
 		}
-		Object object = HttpConfig.parseResponseText( cacheString, cls);
+		Object object =null;
+		if(null==responseParse){
+			object = HttpConfig.parseResponseText( cacheString, cls);
+		}
+		else{
+			object=responseParse.parseResponseText(cacheString,cls);
+		}
 		if (null == object) {
 			if (isDebug) {
 				Log.i(debugTag, "缓存结果@" + "没有从缓存中读取到结果");

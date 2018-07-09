@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class EncryptUtils {
 
-	public static String EncodingMD5(String data) {
+	public static String encodingMD5(String data) {
 		String resultData = "";
 		if (null == data || data.length() == 0) {
 			return resultData;
@@ -101,7 +101,7 @@ public class EncryptUtils {
 	// }
 	// return resultData;
 	// }
-	public static String EncodingSHA1(String data) {
+	public static String encodingSHA1(String data) {
 		String resultData = "";
 		if (null == data || data.length() == 0) {
 			return resultData;
@@ -144,7 +144,7 @@ public class EncryptUtils {
 		return resultData;
 	}
 
-	public static String EncodingSHA(String data) {
+	public static String encodingSHA(String data) {
 		String resultData = "";
 		if (null == data || data.length() == 0) {
 			return resultData;

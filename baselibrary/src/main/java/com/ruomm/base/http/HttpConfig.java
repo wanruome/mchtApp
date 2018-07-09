@@ -125,7 +125,8 @@ public class HttpConfig {
 		}
 	}
 
-	private static String byteToString(byte[] resourceByte) {
+
+	public static String byteToString(byte[] resourceByte) {
 		String temp = null;
 		try {
 			temp = new String(resourceByte);

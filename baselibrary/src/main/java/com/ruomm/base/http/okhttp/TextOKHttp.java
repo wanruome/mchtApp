@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import com.ruomm.base.http.HttpConfig;
+import com.ruomm.base.http.config.ResponseParse;
 import com.ruomm.base.http.config.ResponseText;
 import com.ruomm.base.http.config.TextCacheGetListener;
 import com.ruomm.base.http.config.TextCacheSaveListener;
@@ -71,6 +72,7 @@ public final class TextOKHttp {
 	// 网络请求结束后存储请求结果到缓存数据
 	private TextCacheSaveListener cacheSaveListener;
 	private OkHttpClient okHttpClient=null;
+	private ResponseParse responseParse;
     public TextOKHttp setOkHttpClient(OkHttpClient okHttpClient) {
         this.okHttpClient = okHttpClient;
         return this;
@@ -97,6 +99,7 @@ public final class TextOKHttp {
 		if (HttpConfig.debug_autonewhttp) {
 			setDebug();
 		}
+		this.responseParse=OkHttpConfig.getResponseParse();
 
 	}
 
@@ -196,6 +199,11 @@ public final class TextOKHttp {
 		this.Url = url;
 		return this;
 	}
+	//设置解析接口
+	public TextOKHttp setResponseParse(ResponseParse responseParse) {
+		this.responseParse = responseParse;
+		return this;
+	}
 
 	/**
 	 * 请求参数设置
@@ -231,6 +239,15 @@ public final class TextOKHttp {
 	public TextOKHttp setMode(boolean isPost, boolean isAjax) {
 		this.isPost = isPost;
 		this.isAjax = isAjax;
+		return this;
+	}
+	/**
+	 * 设置JSON请求或者文本请求
+	 * @param bodyParameters
+	 * @return
+	 */
+	public TextOKHttp setRequestBodyText(Object bodyParameters){
+		this.mRequestBody=OkHttpConfig.getOkHttpRequestByText(bodyParameters);
 		return this;
 	}
 
@@ -432,7 +449,15 @@ public final class TextOKHttp {
 		}
 		else {
 			// 对象解析开始
-			Object object = HttpConfig.parseResponseText( responseString, cls);
+			Object object =null;
+			if(null==responseParse)
+			{
+				object = HttpConfig.parseResponseText( responseString, cls);
+			}
+			else
+			{
+				object=responseParse.parseResponseText(responseString,cls);
+			}
 			// 回调开始
 			if (null == object) {
 				if (isDebug) {
@@ -650,7 +675,13 @@ public final class TextOKHttp {
 		if (TextUtils.isEmpty(cacheString)) {
 			return false;
 		}
-		Object object = HttpConfig.parseResponseText( cacheString, cls);
+		Object object =null;
+		if(null==responseParse){
+			object = HttpConfig.parseResponseText( cacheString, cls);
+		}
+		else{
+			object=responseParse.parseResponseText(cacheString,cls);
+		}
 		if (null == object) {
 			if (isDebug) {
 				Log.i(debugTag, "缓存结果@" + "没有从缓存中读取到结果");

@@ -153,7 +153,7 @@ public class DownLoadSyncService extends BaseService {
 
 	private String getDownPath(DownLoadValue mDownLoadValue) {
 		return FileUtils.getFolderName(mDownLoadValue.fileSucess) + File.separator
-				+ EncryptUtils.EncodingMD5(mDownLoadValue.url + mDownLoadValue.fileSucess);
+				+ EncryptUtils.encodingMD5(mDownLoadValue.url + mDownLoadValue.fileSucess);
 	}
 
 	private void startDownLoad() {

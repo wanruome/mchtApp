@@ -79,4 +79,10 @@ public class BaseConfig {
 	 * 默认的单选ListView的Dialog宽度
 	 */
 	public static final float Dialoag_WidthPercent = 0.75f;
+	public static final int OkHttp_Connect_Time=15;
+	public static final int OkHttp_Write_Time=30;
+	public static final int OkHttp_Read_Time=30;
+	public static final String OkHttp_SSL_Path="httpconfig/newpay.esicash.crt";
+	public static final boolean OkHttp_SSL_Safe=true;
+	public static final String Http_ResponseParse="com.zjsj.mchtapp.config.http.AppResponseParse";
 }

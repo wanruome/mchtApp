@@ -201,7 +201,7 @@ public class UpImgHelper {
 				drr.add(pathImg);
 				continue;
 			}
-			String pathScale = path_compress + File.separator + EncryptUtils.EncodingMD5(pathImg) + ".jpg";
+			String pathScale = path_compress + File.separator + EncryptUtils.encodingMD5(pathImg) + ".jpg";
 			if (ImageUtils.isImage(pathScale, 6)) {
 				drr.add(pathImg);
 				continue;
@@ -224,7 +224,7 @@ public class UpImgHelper {
 			}
 			return;
 		}
-		String pathScale = path_compress + File.separator + EncryptUtils.EncodingMD5(pathImg) + ".jpg";
+		String pathScale = path_compress + File.separator + EncryptUtils.encodingMD5(pathImg) + ".jpg";
 		if (ImageUtils.isImage(pathScale, 6)) {
 			drr.add(pathImg);
 			return;
@@ -239,7 +239,7 @@ public class UpImgHelper {
 		if (TextUtils.isEmpty(path_compress)) {
 			return new File(imagePath).getPath();
 		}
-		File file = new File(path_compress + File.separator + EncryptUtils.EncodingMD5(imagePath) + ".jpg");
+		File file = new File(path_compress + File.separator + EncryptUtils.encodingMD5(imagePath) + ".jpg");
 		if (null == file || !file.exists()) {
 			file = null;
 			return new File(imagePath).getPath();
@@ -250,7 +250,7 @@ public class UpImgHelper {
 	}
 
 	public String getImageCompressPath(String imagePath) {
-		File file = new File(path_compress + File.separator + EncryptUtils.EncodingMD5(imagePath) + ".jpg");
+		File file = new File(path_compress + File.separator + EncryptUtils.encodingMD5(imagePath) + ".jpg");
 		if (null == file || !file.exists()) {
 			file = null;
 		}
@@ -264,7 +264,7 @@ public class UpImgHelper {
 		if (TextUtils.isEmpty(path_compress)) {
 			return new File(imagePath);
 		}
-		File file = new File(path_compress + File.separator + EncryptUtils.EncodingMD5(imagePath) + ".jpg");
+		File file = new File(path_compress + File.separator + EncryptUtils.encodingMD5(imagePath) + ".jpg");
 		if (null == file || !file.exists()) {
 			file = null;
 			return new File(imagePath);
@@ -275,7 +275,7 @@ public class UpImgHelper {
 	}
 
 	public File getImageCompressFile(String imagePath) {
-		File file = new File(path_compress + File.separator + EncryptUtils.EncodingMD5(imagePath) + ".jpg");
+		File file = new File(path_compress + File.separator + EncryptUtils.encodingMD5(imagePath) + ".jpg");
 		if (null == file || !file.exists()) {
 			file = null;
 		}
@@ -411,7 +411,7 @@ public class UpImgHelper {
 
 	private void saveCropUpImage(Bitmap mBitmap) {
 		for (String pathImg : drr) {
-			String pathCrop = path_compress + File.separator + EncryptUtils.EncodingMD5(pathImg) + ".jpg";
+			String pathCrop = path_compress + File.separator + EncryptUtils.encodingMD5(pathImg) + ".jpg";
 			FileUtils.saveBitmap(mBitmap, new File(pathCrop));
 			break;
 		}

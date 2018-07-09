@@ -491,7 +491,7 @@ public class AsyncHttpConfig {
 
 			}
 		}
-		String keyString = EncryptUtils.EncodingMD5(basestring.toString());
+		String keyString = EncryptUtils.encodingMD5(basestring.toString());
 		if (TextUtils.isEmpty(keyString)) {
 			return "";
 		}

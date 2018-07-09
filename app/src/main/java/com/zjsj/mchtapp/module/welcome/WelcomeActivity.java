@@ -5,29 +5,38 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 
-import com.ruomm.base.ioc.extend.Thread_CanStop;
+import com.ruomm.base.http.config.impl.TextHttpCallBack;
+import com.ruomm.base.http.okhttp.TextOKHttp;
+import com.ruomm.base.tools.Base64;
+import com.ruomm.base.tools.RSAUtils;
+import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.base.tools.permission.PermissionBean;
 import com.ruomm.base.tools.permission.PermissionHelper;
 import com.ruomm.base.tools.permission.PermissionHelperCallBack;
 import com.ruomm.baseconfig.debug.MLog;
-import com.ruomm.resource.ui.AppMultiActivity;
 import com.ruomm.resource.ui.AppSimpleActivity;
 import com.zjsj.mchtapp.R;
+import com.zjsj.mchtapp.config.http.ApiConfig;
+import com.zjsj.mchtapp.dal.response.KeyPairDto;
 
+import java.security.KeyPair;
+import java.util.HashMap;
 import java.util.List;
-import java.util.jar.Manifest;
+import java.util.Map;
 
 public class WelcomeActivity extends AppSimpleActivity {
 //    @InjectView(id=R.id.view_img)
 //    ImageView view_img;
     PermissionHelper permissionHelper=null;
     boolean isGrant=false;
+    String uuid=null;
+    KeyPair keyPair=RSAUtils.generateRSAKeyPair();
 //    boolean isFinish=false;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setInitContentView(R.layout.welcome_act);
-//        showProgressDialog(null);
+        uuid= TelePhoneUtil.getUtdid(this);
 
     }
 
@@ -61,7 +70,8 @@ public class WelcomeActivity extends AppSimpleActivity {
             isGrant=isAllGranted;
             if(isGrant)
             {
-                gotoMainActivity();
+//                gotoMainActivity();
+                getPublicKey();
             }
         }
     };
@@ -87,5 +97,34 @@ public class WelcomeActivity extends AppSimpleActivity {
                 }
             }
         }.start();
+    }
+    private void getPublicKey()
+    {
+//        new DataOKHttp().setUrl().setRequestBody()
+        Map<String,String> map=new HashMap<>();
+        map.put("uuid", ApiConfig.getAppUUID(this));
+        map.put("keyType", ApiConfig.TRANSMIT_KEYTYPE);
+        map.put("rasPublicKey", Base64.encode(keyPair.getPublic().getEncoded()));
+        map.put("timeStamp", System.currentTimeMillis() + "");
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/keypair/getPublicKeyByUuid").setRequestBodyText(map).doHttp(KeyPairDto.class, new TextHttpCallBack() {
+            @Override
+            public void httpCallBack(Object resultObject, String resultString, int status) {
+                MLog.i(resultString);
+            }
+        });
+    }
+    private void getKeyPairForStore()
+    {
+        Map<String,String> map=new HashMap<>();
+        map.put("uuid", ApiConfig.getAppUUID(this));
+        map.put("keyType", ApiConfig.TRANSMIT_KEYTYPE);
+        map.put("rasPublicKey", Base64.encode(keyPair.getPublic().getEncoded()));
+        map.put("timeStamp", System.currentTimeMillis() + "");
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/keypair/getPublicKeyByUuid").setRequestBodyText(map).doHttp(KeyPairDto.class, new TextHttpCallBack() {
+            @Override
+            public void httpCallBack(Object resultObject, String resultString, int status) {
+                MLog.i(resultString);
+            }
+        });
     }
 }

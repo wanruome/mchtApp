@@ -46,11 +46,12 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     // https://mvnrepository.com/artifact/com.squareup.okio/okio
     implementation 'com.squareup.okio:okio:1.14.1'
-//    // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
+    //    // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
     // https://mvnrepository.com/artifact/com.google.zxing/core
     implementation 'com.google.zxing:core:3.3.3'
     // https://mvnrepository.com/artifact/com.jaeger.statusbarutil/library
-    implementation group: 'com.jaeger.statusbarutil', name: 'library', version: '1.5.1'
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation files('libs/wanruome-utdid.jar')
+    implementation files('libs/bcprov-jdk15-1.46.jar')
 }

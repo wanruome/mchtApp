@@ -29,14 +29,14 @@ public final class EncodingHandler {
 			ErrorCorrectionLevel mErrorCorrectionLevel) {
 		if (null == mErrorCorrectionLevel) {
 			File fileqrCode = FileUtils.createFileInContext(mContext, "cache" + File.separator + "zxing_"
-					+ EncryptUtils.EncodingMD5(zxing_contentString) + ".png");
+					+ EncryptUtils.encodingMD5(zxing_contentString) + ".png");
 			return fileqrCode;
 		}
 		else {
 			File fileqrCode = FileUtils.createFileInContext(
 					mContext,
 					"cache" + File.separator + "zxing" + String.valueOf(mErrorCorrectionLevel) + "_"
-							+ EncryptUtils.EncodingMD5(zxing_contentString) + ".png");
+							+ EncryptUtils.encodingMD5(zxing_contentString) + ".png");
 			return fileqrCode;
 		}
 	}

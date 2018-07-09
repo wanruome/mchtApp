@@ -4,6 +4,9 @@ import java.io.File;
 
 import com.ruomm.base.tools.FileUtils;
 import com.ruomm.baseconfig.DebugConfig;
+import com.wanruome.utdid.device.Device;
+import com.wanruome.utdid.device.DeviceInfo;
+import com.wanruome.utdid.device.UTUtdid;
 
 import android.util.Log;
 

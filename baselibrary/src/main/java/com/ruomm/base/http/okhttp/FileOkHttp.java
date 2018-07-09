@@ -130,6 +130,15 @@ public final class FileOkHttp {
 		this.mRequestBody = mRequestBody;
 		return this;
 	}
+	/**
+	 * 设置JSON请求或者文本请求
+	 * @param bodyParameters
+	 * @return
+	 */
+	public FileOkHttp setRequestBodyText(Object bodyParameters){
+		this.mRequestBody=OkHttpConfig.getOkHttpRequestByText(bodyParameters);
+		return this;
+	}
 
 	/**
 	 * 调试模式设置

@@ -1,7 +1,6 @@
 package com.ruomm.base.tools;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,6 +11,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPublicKeySpec;
@@ -20,46 +20,13 @@ import java.util.ArrayList;
 
 import javax.crypto.Cipher;
 
-import com.ruomm.baseconfig.debug.MLog;
-
-import android.annotation.SuppressLint;
-import android.text.TextUtils;
-
 /**
  * @author Mr.Zheng
  * @date 2014年8月22日 下午1:44:23
  */
 public final class RSAUtils {
+	private final static String Default_CharsetName = "UTF-8";
 	private static String RSA = "RSA";
-
-	// public static void createKeyPairs() throws Exception {
-	//
-	// // create the keys
-	// KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA", "BC");
-	// generator.initialize(512, new SecureRandom());
-	// KeyPair pair = generator.generateKeyPair();
-	// PublicKey pubKey = pair.getPublic();
-	// PrivateKey privKey = pair.getPrivate();
-	// byte[] pk = pubKey.getEncoded();
-	// byte[] privk = privKey.getEncoded();
-	// String strpk = new String(Base64.encode(pk));
-	// String strprivk = new String(Base64.encode(privk));
-	//
-	// System.out.println("公钥:" + Arrays.toString(pk));
-	// System.out.println("私钥:" + Arrays.toString(privk));
-	// System.out.println("公钥Base64编码:" + strpk);
-	// System.out.println("私钥Base64编码:" + strprivk);
-	//
-	// X509EncodedKeySpec pubX509 = new X509EncodedKeySpec(Base64.decode(strpk));
-	// PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(Base64.decode(strprivk));
-	//
-	// KeyFactory keyf = KeyFactory.getInstance("RSA", "BC");
-	// PublicKey pubkey2 = keyf.generatePublic(pubX509);
-	// PrivateKey privkey2 = keyf.generatePrivate(priPKCS8);
-	//
-	// System.out.println(pubKey.equals(pubkey2));
-	// System.out.println(privKey.equals(privkey2));
-	// }
 
 	/**
 	 * 随机生成RSA密钥对(默认密钥长度为1024)
@@ -78,7 +45,6 @@ public final class RSAUtils {
 	 *            一般1024
 	 * @return
 	 */
-	@SuppressLint("TrulyRandom")
 	public static KeyPair generateRSAKeyPair(int keyLength) {
 		KeyPair mKeyPair = null;
 		try {
@@ -87,41 +53,10 @@ public final class RSAUtils {
 			mKeyPair = kpg.genKeyPair();
 		}
 		catch (final Exception e) {
+			e.printStackTrace();
 			mKeyPair = null;
 		}
 		return mKeyPair;
-	}
-
-	public static void generateRSAKeyPair(String keyStoreDir) {
-		generateRSAKeyPair(keyStoreDir, "public_key.pem", "private_Key.pem", 1024);
-	}
-
-	public static void generateRSAKeyPair(String keyStoreDir, int keyLength) {
-		generateRSAKeyPair(keyStoreDir, "public_key.pem", "private_Key.pem", keyLength);
-	}
-
-	public static void generateRSAKeyPair(String keyStoreDir, String publicStoreName, String privateStoreName,
-			int keyLength) {
-		KeyPair keyPair = generateRSAKeyPair(keyLength);
-		if (null == keyPair) {
-			return;
-		}
-		else {
-			String namePublic = TextUtils.isEmpty(publicStoreName) ? "public_key.pem" : publicStoreName;
-			String namePrivate = TextUtils.isEmpty(privateStoreName) ? "private_Key.pem" : privateStoreName;
-			PublicKey pubKey = keyPair.getPublic();
-			PrivateKey privKey = keyPair.getPrivate();
-			byte[] pk = pubKey.getEncoded();
-			byte[] privk = privKey.getEncoded();
-			String strpk = new String(Base64.encode(pk));
-			String strprivk = new String(Base64.encode(privk));
-			File publucKeyFile = FileUtils.createFile(keyStoreDir + File.separator + namePublic);
-			File privateKeyFile = FileUtils.createFile(keyStoreDir + File.separator + namePrivate);
-			String strpkStore = formatKey(strpk, "PUBLIC KEY");
-			String strprivkStore = formatKey(strprivk, "PRIVATE KEY");
-			FileUtils.writeFile(publucKeyFile, strpkStore, false);
-			FileUtils.writeFile(privateKeyFile, strprivkStore, false);
-		}
 	}
 
 	private static String formatKey(String strkey, String tag) {
@@ -139,7 +74,6 @@ public final class RSAUtils {
 			strBuf.append("\r\n");
 		}
 		strBuf.append("-----END " + tag + "-----");
-		MLog.i(strBuf.toString());
 		return new String(strBuf);
 	}
 
@@ -240,6 +174,41 @@ public final class RSAUtils {
 	}
 
 	/**
+	 * 用公钥加密
+	 */
+	public static byte[] encryptByPublicKey(byte[] sourceData, byte[] keyBytes) {
+		PublicKey key = getPublicKey(keyBytes);
+		return encryptData(sourceData, key);
+	}
+
+	/**
+	 * 用私钥解密
+	 */
+	public static byte[] decryptDataByPrivateKey(byte[] encryptedData, byte[] keyBytes) {
+		PrivateKey key = getPrivateKey(keyBytes);
+		return decryptData(encryptedData, key);
+
+	}
+
+	/**
+	 * 用私钥加密
+	 */
+	public static byte[] encryptDataByPrivateKey(byte[] sourceData, byte[] keyBytes) {
+		PrivateKey key = getPrivateKey(keyBytes);
+		return encryptData(sourceData, key);
+
+	}
+
+	/**
+	 * 用公钥解密
+	 */
+	public static byte[] decryptDataByPublicKey(byte[] encryptedData, byte[] keyBytes) {
+		PublicKey key = getPublicKey(keyBytes);
+		return decryptData(encryptedData, key);
+
+	}
+
+	/**
 	 * 用公钥加密 <br>
 	 * 按照密钥长度值(keyLength/8)减去11分割数据源经行分段加密
 	 *
@@ -300,7 +269,6 @@ public final class RSAUtils {
 	 *            密钥长度，取值为keyLength/8
 	 * @return 解密后的byte型数据
 	 */
-	@SuppressLint("NewApi")
 	private static byte[] decryptDataBig(byte[] encryptedData, PrivateKey privateKey, int keyLength) {
 		if (null == encryptedData || keyLength < 512 || encryptedData.length % (keyLength / 8) != 0) {
 			return null;
@@ -470,7 +438,6 @@ public final class RSAUtils {
 	 *            私钥
 	 * @return 解密后的byte型数据
 	 */
-	@SuppressLint("NewApi")
 	public static byte[] decryptDataBig(byte[] encryptedData, PrivateKey privateKey) {
 		int keyLength = calPrivateKeyLength(privateKey);
 		return decryptDataBig(encryptedData, privateKey, keyLength);
@@ -703,7 +670,7 @@ public final class RSAUtils {
 	/**
 	 * 从文件中加载私钥
 	 *
-	 * @param keyFileName
+	 * @param in
 	 *            私钥文件名
 	 * @return 是否成功
 	 * @throws Exception
@@ -747,6 +714,79 @@ public final class RSAUtils {
 			return null;
 		}
 
+	}
+
+	public static String getSignData(String data, PrivateKey privateKey) {
+		return getSignData(data, privateKey, null, null);
+	}
+
+	public static boolean verifySignData(String data, String signData, PublicKey publicKey) {
+		return verifySignData(data, signData, publicKey, null, null);
+	}
+
+	/**
+	 * 签名可用的方法 MD2withRSA MD5andSHA1withRSA MD5withRSA NONEwithDSA NONEwithECDSA NONEwithRSA
+	 * SHA1withDSA SHA1withECDSA SHA1withRSA SHA224withDSA SHA224withECDSA SHA224withRSA
+	 * SHA256withDSA SHA256withECDSA SHA256withRSA SHA384withECDSA SHA384withRSA SHA512withECDSA
+	 * SHA512withRSA
+	 */
+	public static String sign(String data, PrivateKey privateKey) {
+		try {
+			Signature signature = Signature.getInstance("MD5withRSA");
+			signature.initSign(privateKey);
+			signature.update(data.getBytes("UTF-8"));
+			String sign = Base64.encode(signature.sign());
+			return sign;
+
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	// RSA私钥签名
+	public static String getSignData(String data, PrivateKey privateKey, String signMethod, String charsetName) {
+		// 设置签名加密方式
+		String sign = null;
+		try {
+
+			String charset = (null == charsetName || charsetName.length() <= 0) ? Default_CharsetName : charsetName;
+			String sgMthd = (null == signMethod || signMethod.length() <= 0) ? "MD5withRSA" : signMethod;
+			Signature signature = Signature.getInstance(sgMthd);
+			signature.initSign(privateKey);// 设置私钥
+			// 签名和加密一样 要以同样的charset字符集得到字节
+			signature.update(data.getBytes(charset));
+			// 得到base64编码的签名后的字段
+			sign = Base64.encode(signature.sign());
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			sign = null;
+		}
+		return sign;
+	}
+
+	public static boolean verifySignData(String data, String signData, PublicKey publicKey, String signMethod,
+										 String charsetName) {
+		boolean isPassed = false;
+		try {
+			String charset = (null == charsetName || charsetName.length() <= 0) ? Default_CharsetName : charsetName;
+			String sgMthd = (null == signMethod || signMethod.length() <= 0) ? "MD5withRSA" : signMethod;
+			Signature signature = Signature.getInstance(sgMthd);
+			signature.initVerify(publicKey);
+			signature.update(data.getBytes(charset));
+			// 验签结果
+			isPassed = signature.verify(Base64.decode(signData));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			isPassed = false;
+		}
+		return isPassed;
 	}
 
 }

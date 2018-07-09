@@ -5,19 +5,38 @@
  */
 package com.ruomm.base.http.okhttp;
 
-import java.net.URLEncoder;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
+import com.alibaba.fastjson.JSON;
+import com.ruomm.base.http.config.ResponseParse;
+import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.tools.EncryptUtils;
+import com.ruomm.baseconfig.BaseConfig;
 
 import android.text.TextUtils;
 import android.util.Log;
+
+import org.bouncycastle.jce.provider.symmetric.ARC4;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
 import okhttp3.FormBody;
 import okhttp3.FormBody.Builder;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -30,28 +49,141 @@ import okhttp3.RequestBody;
 class OkHttpConfig {
 	private static OkHttpClient mOkHttpClient;
 
-	public static OkHttpClient getOkHttpClient() {
-		// if (BaseConfig.HttpEnable_OKHttp) {
-		if (null == mOkHttpClient) {
+//	public static OkHttpClient getOkHttpClient() {
+//		// if (BaseConfig.HttpEnable_OKHttp) {
+//		if (null == mOkHttpClient) {
+//			mOkHttpClient = new OkHttpClient();
+//			mOkHttpClient.newBuilder().connectTimeout(BaseConfig.OkHttp_Connect_Time, TimeUnit.SECONDS).writeTimeout(BaseConfig.OkHttp_Write_Time, TimeUnit.SECONDS)
+//			.readTimeout(BaseConfig.OkHttp_Read_Time, TimeUnit.SECONDS);
+//		}
+//		return mOkHttpClient;
+//	}
+	public static OkHttpClient getOkHttpClient(){
+		if(null!= mOkHttpClient){
+			return mOkHttpClient;
+		}
+		if(BaseConfig.OkHttp_SSL_Safe&&!TextUtils.isEmpty(BaseConfig.OkHttp_SSL_Path)){
+			return getSafeOkHttpClient();
+		}
+		else{
+			return getUnSafeOkHttpClient();
+		}
+	}
+	private static OkHttpClient getUnSafeOkHttpClient(){
+		try {
+			// Create a trust manager that does not validate certificate chains
+			final TrustManager[] trustAllCerts = new TrustManager[] {
+					new X509TrustManager() {
+						@Override
+						public void checkClientTrusted(X509Certificate[] certs, String authType) {
+						}
 
-			mOkHttpClient = new OkHttpClient();
-			mOkHttpClient.newBuilder().connectTimeout(30, TimeUnit.SECONDS).writeTimeout(10, TimeUnit.SECONDS)
-			.readTimeout(10, TimeUnit.SECONDS);
+						@Override
+						public void checkServerTrusted(X509Certificate[] certs, String authType) {
+						}
+
+						@Override
+						public X509Certificate[] getAcceptedIssuers() {
+							return new X509Certificate[]{};
+						}
+					}
+			};
+			// Install the all-trusting trust manager
+			final SSLContext sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			// Create an ssl socket factory with our all-trusting manager
+			final javax.net.ssl.SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+			// Create a trust manager that does not validate certificate chains
+			OkHttpClient.Builder builder = new OkHttpClient.Builder();
+			builder.hostnameVerifier(new NullHostNameVerifier());
+			builder.sslSocketFactory(sslSocketFactory);
+			builder.connectTimeout(BaseConfig.OkHttp_Connect_Time, TimeUnit.SECONDS);
+			builder.writeTimeout(BaseConfig.OkHttp_Write_Time,TimeUnit.SECONDS);
+			builder.readTimeout(BaseConfig.OkHttp_Read_Time, TimeUnit.SECONDS);
+			//            builder.retryOnConnectionFailure(false);
+			//            builder.followRedirects(false);
+			//            builder.followSslRedirects(false);
+			mOkHttpClient = builder.build();
+			return mOkHttpClient;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+	private static OkHttpClient getSafeOkHttpClient(){
+		InputStream in=null;
+		try{
+			CertificateFactory cf = CertificateFactory.getInstance("X.509");
 			//
-			//
-			// mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
-			// mOkHttpClient.setWriteTimeout(10, TimeUnit.SECONDS);
-			// mOkHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
+			in = BaseApplication.getApplication().getAssets().open(BaseConfig.OkHttp_SSL_Path);  //从assets文件读取证书
+			Certificate ca = cf.generateCertificate(in);
+
+			KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+//                keystore.load(null, null);
+			keystore.load(null,null);
+			keystore.setCertificateEntry("ca", ca);
+			String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+			TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+			tmf.init(keystore);
+			// Install the all-trusting trust manager
+			final SSLContext sslContext = SSLContext.getInstance("TLS");
+			sslContext.init(null, tmf.getTrustManagers(), null);
+			// Create an ssl socket factory with our all-trusting manager
+			final javax.net.ssl.SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+			// Create a trust manager that does not validate certificate chains
+			OkHttpClient.Builder builder = new OkHttpClient.Builder();
+			builder.hostnameVerifier(new NullHostNameVerifier());
+			builder.sslSocketFactory(sslSocketFactory);
+			builder.connectTimeout(BaseConfig.OkHttp_Connect_Time, TimeUnit.SECONDS);
+			builder.writeTimeout(BaseConfig.OkHttp_Write_Time,TimeUnit.SECONDS);
+			builder.readTimeout(BaseConfig.OkHttp_Read_Time, TimeUnit.SECONDS);
+			//            builder.retryOnConnectionFailure(false);
+			//            builder.followRedirects(false);
+			//            builder.followSslRedirects(false);
+			mOkHttpClient = builder.build();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			mOkHttpClient=null;
+		}
+		finally {
+			try{
+				if(null!=in)
+				{
+					in.close();
+				}
+			}
+			catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 		return mOkHttpClient;
-		// }
-		// else {
-		// mOkHttpClient = null;
-		// return null;
-		// }
+	}
+	private static ResponseParse responseParse=null;
+
+	public  static ResponseParse getResponseParse()
+	{
+		if(TextUtils.isEmpty(BaseConfig.Http_ResponseParse))
+		{
+			return null;
+		}
+        if (null == responseParse) {
+            try {
+                Class<?> onwClass = OkHttpConfig.class.getClassLoader().loadClass(BaseConfig.Http_ResponseParse);
+                Constructor<?> constructor = onwClass.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                Object object = constructor.newInstance();
+				responseParse = (ResponseParse) object;
+
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return responseParse;
 	}
 
-	public static void logRequestParam(boolean isDebug, String debugTag, HashMap<String, String> params) {
+	public static void logRequestParam(boolean isDebug, String debugTag,Map<String, String> params) {
 		if (!isDebug || null == params || params.size() <= 0) {
 			return;
 		}
@@ -62,7 +194,7 @@ class OkHttpConfig {
 		}
 	}
 
-	public static String getKeyString(String url, String tag, HashMap<String, String> params) {
+	public static String getKeyString(String url, String tag,Map<String, String> params) {
 
 		// 遍历排序后的字典，将所有参数按"key=value"格式拼接在一起
 		StringBuilder basestring = new StringBuilder();
@@ -80,7 +212,7 @@ class OkHttpConfig {
 				}
 			}
 		}
-		String keyString = EncryptUtils.EncodingMD5(basestring.toString());
+		String keyString = EncryptUtils.encodingMD5(basestring.toString());
 		if (TextUtils.isEmpty(keyString)) {
 			return "";
 		}
@@ -129,8 +261,24 @@ class OkHttpConfig {
 	// }
 	// return sign.toString();
 	// }
+	public static RequestBody getOkHttpRequestByText(Object bodyParameters) {
+		RequestBody requestBody = null;
 
-	public static Request getOkHttpRequest(String url, HashMap<String, String> hashMap, boolean isPost) {
+		String stringBody = "";
+		if (bodyParameters != null) {
+
+			if (bodyParameters instanceof String) {
+				stringBody = (String) bodyParameters;
+				requestBody = RequestBody.create(MediaType.parse("text/plain;charset=utf-8"), stringBody);
+			}
+			else {
+				stringBody = JSON.toJSONString(bodyParameters);
+				requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), stringBody);
+			}
+		}
+		return requestBody;
+	}
+	public static Request getOkHttpRequest(String url, Map<String, String> hashMap, boolean isPost) {
 		if (isPost) {
 			return getOkHttpRequestPost(url, hashMap);
 		}
@@ -172,7 +320,7 @@ class OkHttpConfig {
 		}
 	}
 
-	private static Request getOkHttpRequestPost(String url, HashMap<String, String> hashMap) {
+	private static Request getOkHttpRequestPost(String url, Map<String, String> hashMap) {
 		try {
 			RequestBody body = attachFormRequestForamtBody(hashMap);
 			return new Request.Builder().url(url).header("Connection","close").post(body).build();
@@ -183,7 +331,7 @@ class OkHttpConfig {
 
 	}
 
-	private static Request getOkHttpRequestGet(String url, HashMap<String, String> hashMap) {
+	private static Request getOkHttpRequestGet(String url, Map<String, String> hashMap) {
 		try {
 			String realUrl = attachFormRequestUrl(url, hashMap);
 			return new Request.Builder().url(realUrl).get().build();
@@ -195,7 +343,7 @@ class OkHttpConfig {
 	}
 
 	// 获取真实的Get请求路径
-	private static String attachFormRequestUrl(String url, HashMap<String, String> hashMap) {
+	private static String attachFormRequestUrl(String url, Map<String, String> hashMap) {
 		if (null == hashMap || hashMap.size() <= 0) {
 			return url;
 		}
@@ -203,7 +351,7 @@ class OkHttpConfig {
 	}
 
 	// 构建Post请求参数
-	private static RequestBody attachFormRequestForamtBody(HashMap<String, String> hashMap) {
+	private static RequestBody attachFormRequestForamtBody(Map<String, String> hashMap) {
 
 		Builder mBuilder = new FormBody.Builder();
 		Set<String> sets = hashMap.keySet();
@@ -221,7 +369,7 @@ class OkHttpConfig {
 	}
 
 	// 构建Get请求参数
-	private static String attachFormRequestFormatString(HashMap<String, String> hashMap) {
+	private static String attachFormRequestFormatString(Map<String, String> hashMap) {
 		StringBuilder buf = new StringBuilder();
 		Set<String> sets = hashMap.keySet();
 		int sizeSets = sets.size();
