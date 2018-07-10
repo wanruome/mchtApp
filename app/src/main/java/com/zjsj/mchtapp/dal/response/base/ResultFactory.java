@@ -19,6 +19,61 @@ public class ResultFactory {
     public static String ERR_REPAYMENT = "e420";
     public static String ERR_UNKNOWN = "e499";
     public static String SUCESS_CODE = "0000";
+    public static boolean isTrueResult(Object resultObject,int status)
+    {
+
+        if(status!= HttpConfig.Success){
+            return false;
+        }
+        if(null==resultObject||!(resultObject instanceof ResultDto))
+        {
+            return false;
+        }
+        ResultDto result=(ResultDto) resultObject;
+        if(SUCESS_CODE.equals(result.code))
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public static String getErrorTip(Object resultObject,int status){
+        if(status!= HttpConfig.Success)
+        {
+            return "网络连接错误";
+        }
+        if(null==resultObject||!(resultObject instanceof ResultDto))
+        {
+                return "请求解析错误"; }
+        ResultDto result=(ResultDto) resultObject;
+        if(SUCESS_CODE.equals(result.code))
+            {
+                return null;
+            }
+        else{
+                String msg=result.msg;
+                if(StringUtils.isEmpty(msg))
+                {
+                    return "请求失败";
+                }
+                else{
+                    return result.msg;
+                }
+            }
+    }
+
+    public static <T> T  getResult(Object resultObject,int status){
+        if(status!= HttpConfig.Success)
+        {
+            return null;
+        }
+        if(null==resultObject||!(resultObject instanceof ResultDto)){
+            return null;
+        }
+        ResultDto result=(ResultDto) resultObject;
+        return (T) result.data;
+    }
     public static boolean isTrueResult(ResponseText responseText)
     {
         if(null==responseText)

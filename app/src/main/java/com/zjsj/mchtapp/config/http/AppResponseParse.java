@@ -23,6 +23,10 @@ public class AppResponseParse implements ResponseParse {
                 {
                     resultBase.data=null;
                 }
+                else if(cls.getName().equals(String.class.getName()))
+                {
+                    resultBase.data=data;
+                }
                 else{
                     resultBase.data=JSON.parseObject(data,cls);
                 }

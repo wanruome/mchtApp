@@ -44,14 +44,12 @@ public class AppStoreSafeImpl implements AppStoreSafeInterface {
         if(null==ApiConfig.STORE_KEYPAIR) {
             return null;
         }
-       byte[] dataEnt = RSAUtils.encryptDataBig(value.getBytes(), ApiConfig.STORE_KEYPAIR.getPublic());
-       return Base64.encode(dataEnt);
+        return ApiConfig.encryptByApp(value);
     }
     private String decryptSafeData(String value) {
         if(null==ApiConfig.STORE_KEYPAIR) {
             return null;
         }
-        byte[] dataEnt = RSAUtils.decryptDataBig(Base64.decode(value),ApiConfig.STORE_KEYPAIR.getPrivate(),1024);
-        return new String(dataEnt);
+        return ApiConfig.decryptByApp(value);
     }
 }

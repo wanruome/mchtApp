@@ -3,6 +3,7 @@ package com.zjsj.mchtapp.config.http;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.iocutil.BaseServiceUtil;
 import com.ruomm.base.tools.Base64;
 import com.ruomm.base.tools.DesUtil;
@@ -10,30 +11,26 @@ import com.ruomm.base.tools.EncryptUtils;
 import com.ruomm.base.tools.RSAUtils;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.TelePhoneUtil;
+import com.zjsj.mchtapp.config.LoginUserConfig;
 import com.zjsj.mchtapp.module.keypair.KeyPairService;
 
 import java.security.KeyPair;
 import java.security.PublicKey;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ApiConfig {
-//    public static String BASE_URL = "http://localhost:8080/mchtAppUserApi/";
-
-     public static String BASE_URL = "http://192.168.3.10:8080/mchtAppUserApi/";
-//     public static final String BASE_URL = "http://192.168.100.66:9080/mchtAppUserApi/";
-     private static  String uuid=null;
+     public static final String BASE_URL = "http://192.168.100.66:9080/mchtAppUserApi/";
      public static final String TRANSMIT_KEYTYPE="RSA";
-//     public static String TRANSMIT_PUBLICKEY=null;
      public static String TRANSMIT_DESKEY=null;
      public static PublicKey TRANSMIT_RSAKEY=null;
      public static KeyPair STORE_KEYPAIR=null;
-//     public static final String STORE_KEYTYPE="RSA";
-//     public static String STORE_PUBLICKEY=null;
-//     public static String STORE_PRIVATEKEY=null;
-     public static String getAppUUID(Context context)
+     private static  String uuid=null;
+     public static String getAppUUID()
      {
           if(TextUtils.isEmpty(uuid))
           {
-               uuid= TelePhoneUtil.getUtdid(context);
+               uuid= TelePhoneUtil.getUtdid(BaseApplication.getApplication());
           }
           return uuid;
      }
@@ -94,6 +91,15 @@ public class ApiConfig {
                return;
           }
      }
+     public static String getPassWordEncrypt(boolean isWithMD5)
+     {
+          if(!isWithMD5){
+               return TRANSMIT_KEYTYPE;
+          }
+          else{
+               return TRANSMIT_KEYTYPE+"MD5";
+          }
+     }
      public static String getPassWord(String pwdStr, String pwdEncrypt) {
           if (pwdEncrypt.equals("NONE")) {
                return pwdStr;
@@ -119,4 +125,66 @@ public class ApiConfig {
                return null;
           }
      }
+     public static String encryptByApp(String data)
+     {
+          if(StringUtils.isEmpty(data))
+          {
+               return data;
+          }
+          byte[] dataEnt = RSAUtils.encryptDataBig(data.getBytes(), ApiConfig.STORE_KEYPAIR.getPublic());
+          return Base64.encode(dataEnt);
+     }
+
+     public static String decryptByApp(String data){
+          if(StringUtils.isEmpty(data))
+          {
+               return data;
+          }
+          byte[] dataEnt = RSAUtils.decryptDataBig(Base64.decode(data),ApiConfig.STORE_KEYPAIR.getPrivate(),1024);
+          return new String(dataEnt);
+     }
+     public static String getPublicKeyString(){
+          if("RSA".equals(TRANSMIT_KEYTYPE))
+          {
+               return  Base64.encode(TRANSMIT_RSAKEY.getEncoded());
+          }
+          else if("3DES".equals(TRANSMIT_KEYTYPE))
+          {
+              return TRANSMIT_DESKEY;
+          }
+          else{
+               return "";
+          }
+
+     }
+     public static Map<String, String> createRequestMap(boolean isLogin) {
+          Map<String, String> requestMap = new HashMap<>();
+          if (isLogin) {
+               requestMap.put("appId", LoginUserConfig.getLoginUserInfo().appId);
+               requestMap.put("userId", LoginUserConfig.getLoginUserInfo().userId);
+               requestMap.put("tokenId", LoginUserConfig.getLoginUserInfo().tokenId);
+               requestMap.put("uuid", getAppUUID());
+               requestMap.put("timeStamp", System.currentTimeMillis() + "");
+          }
+          else {
+               requestMap.put("appId","1000");
+               requestMap.put("uuid", getAppUUID());
+               requestMap.put("uuidEncrypt", ApiConfig.getPassWordEncrypt(false));
+               requestMap.put("timeStamp", System.currentTimeMillis() + "");
+          }
+          return requestMap;
+     }
+     public static void  signRequestMap(Map<String, String> maps){
+          String value = SignTools.getKeyString(maps);
+          if(maps.containsKey("userId"))
+          {
+               value= value+ "token=" + LoginUserConfig.getLoginUserInfo().token;
+          }
+          else {
+               value= value+ "token=" + ApiConfig.getPublicKeyString();
+          }
+          String signInfo=EncryptUtils.encodingMD5(value);
+          maps.put("signInfo",signInfo);
+     }
+
 }

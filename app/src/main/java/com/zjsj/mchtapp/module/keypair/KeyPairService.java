@@ -3,6 +3,7 @@ package com.zjsj.mchtapp.module.keypair;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.os.health.UidHealthStats;
 import android.support.annotation.Nullable;
 
@@ -48,16 +49,20 @@ public class KeyPairService extends BaseService {
         }
     }
 
-    private String uuid=ApiConfig.getAppUUID(this);
+    private String uuid=ApiConfig.getAppUUID();
     class DownLoadThread extends Thread_CanStop{
         @Override
         public void run() {
             super.run();
             isOnRequest=true;
-            getPublicKeyByUuid();
-            final KeyPairEvent keyPairEvent=new KeyPairEvent();
-            keyPairEvent.isKeyPairOk=ApiConfig.isKeyPairOk();
-            EventBus.getDefault().post(keyPairEvent);
+            while (ApiConfig.isKeyPairOk()){
+                getPublicKeyByUuid();
+                //失败了的话30秒后重新发起
+                SystemClock.sleep(1000l*60);
+            }
+//            final KeyPairEvent keyPairEvent=new KeyPairEvent();
+//            keyPairEvent.isKeyPairOk=ApiConfig.isKeyPairOk();
+//            EventBus.getDefault().post(keyPairEvent);
             Handler mHandler= new Handler(getMainLooper());
             mHandler.post(new Runnable() {
                 @Override
@@ -70,7 +75,7 @@ public class KeyPairService extends BaseService {
         }
     }
     private void getPublicKeyByUuid(){
-        KeyPair keyPair= RSAUtils.generateRSAKeyPair();
+        final KeyPair keyPair= RSAUtils.generateRSAKeyPair();
         Map<String,String> map=new HashMap<>();
         map.put("uuid", uuid);
         map.put("keyType", ApiConfig.TRANSMIT_KEYTYPE);
@@ -80,12 +85,12 @@ public class KeyPairService extends BaseService {
                 new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/keypair/getPublicKeyByUuid").setRequestBodyText(map).doHttpSync(KeyPairDto.class, new TextHttpCallBack() {
                     @Override
                     public void httpCallBack(Object resultObject, String resultString, int status) {
-                        MLog.i(resultString);
+                       MLog.i(resultString);
                     }
                 });
         if(null==ResultFactory.getErrorTip(responseText)){
             KeyPairDto keyPairDto=ResultFactory.getResult(responseText);
-            String pubKeyStr=Base64.encode(RSAUtils.decryptDataBig(Base64.decode(keyPairDto.publicKey),keyPair.getPrivate()));
+            String pubKeyStr=new String(RSAUtils.decryptDataBig(Base64.decode(keyPairDto.publicKey),keyPair.getPrivate()));
             ApiConfig.loadTransmitKey(pubKeyStr);
         }
     }

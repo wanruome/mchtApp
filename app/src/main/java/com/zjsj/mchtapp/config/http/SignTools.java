@@ -13,10 +13,21 @@ import java.util.TreeMap;
 import com.alibaba.fastjson.JSONObject;
 import com.ruomm.base.tools.EncryptUtils;
 import com.ruomm.base.tools.StringUtils;
+import com.zjsj.mchtapp.config.LoginUserConfig;
 
 public class SignTools {
 	public static final String REQUEST_FIELD_SIGN_INFO = "signInfo";
-
+	public static String getSignString(Map<String, String> maps){
+		String value = getKeyString(maps);
+		if(maps.containsKey("userId"))
+		{
+			value= value+ "token=" + LoginUserConfig.getLoginUserInfo().token;
+		}
+		else {
+			value= value+ "token=" + ApiConfig.getPublicKeyString();
+		}
+		return EncryptUtils.encodingMD5(value);
+	}
 	public static String getSignString(Map<String, String> maps, String token) {
 		String value = getKeyString(maps) + "token=" + token;
 		return EncryptUtils.encodingMD5(value);
