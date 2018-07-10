@@ -1,4 +1,4 @@
-package com.zjsj.mchtapp.module.login;
+package com.zjsj.mchtapp.module.userinfo;
 
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -13,7 +13,6 @@ import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.extend.Thread_CanStop;
-import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.tools.regextool.RegexCallBack;
@@ -22,52 +21,49 @@ import com.ruomm.base.tools.regextool.RegexUtil;
 import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
-import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.keyboard.KeyboardSafeImpl;
+import com.zjsj.mchtapp.core.PassWordService;
 import com.zjsj.mchtapp.dal.response.MsgSendDto;
-import com.zjsj.mchtapp.dal.response.UserInfoDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
 import com.zjsj.mchtapp.util.keyboard.KeyboardUtil;
 
 import java.util.Map;
 
-public class LoginActivity extends AppMultiActivity {
-
+public class RegisterActivity extends AppMultiActivity {
     @InjectAll
     Views views=new Views();
     class Views{
-        @InjectView(id=R.id.edt_name)
+        @InjectView(id= R.id.edt_name)
         EditText edt_name;
         @InjectView(id=R.id.edt_pwd)
         EditText edt_pwd;
+        @InjectView(id=R.id.edt_pwd_repeat)
+        EditText edt_pwd_repeat;
+        @InjectView(id=R.id.edt_nickname)
+        EditText edt_nickname;
         @InjectView(id=R.id.ly_verifyCode)
         LinearLayout ly_verifyCode;
         @InjectView(id=R.id.edt_verifyCode)
         EditText edt_verifyCode;
         @InjectView(id=R.id.btn_verifyCode)
         Button btn_verifyCode;
-        @InjectView(id=R.id.text_findpwd)
-        TextView text_findpwd;
         @InjectView(id=R.id.btn_submit)
         Button btn_submit;
-        @InjectView(id=R.id.ly_fast_register)
-        LinearLayout ly_fast_register;
     }
     private KeyboardUtil keyboardUtil;
+    private KeyboardUtil keyboardUtilRepeat;
     private VerifyCodeThread verifyCodeThread=null;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         hideMenuTopView();
-        setInitContentView(R.layout.login_act);
-        views.ly_verifyCode.setVisibility(View.GONE);
+        setInitContentView(R.layout.userinfo_register_act);
         keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
+        keyboardUtilRepeat=new KeyboardUtil(this,views.edt_pwd_repeat).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
         views.btn_submit.setOnClickListener(myOnClickListener);
         views.btn_verifyCode.setOnClickListener(myOnClickListener);
-        views.ly_fast_register.setOnClickListener(myOnClickListener);
-        views.text_findpwd.setOnClickListener(myOnClickListener);
     }
     private View.OnClickListener myOnClickListener=new View.OnClickListener() {
         @Override
@@ -78,12 +74,12 @@ public class LoginActivity extends AppMultiActivity {
             }
             else if(vID==R.id.btn_verifyCode)
             {
-               if(null==verifyCodeThread)
-               {
+                if(null==verifyCodeThread)
+                {
 //                   verifyCodeThread=new VerifyCodeThread();
 //                   verifyCodeThread.start();
-                   doSendMsgVerifyCode();
-               }
+                    doSendMsgVerifyCode();
+                }
             }
         }
     };
@@ -93,26 +89,34 @@ public class LoginActivity extends AppMultiActivity {
             public void errorRegex(TextView v, String value, String errorInfo) {
                 ToastUtil.makeFailToastThr(mContext,errorInfo);
             }
-        }).doRegex(views.edt_name,RegexUtil.MOBILE_NUM,"手机号不正确").doRegexSize(views.edt_pwd,1,32,"请输入正确的密码").builder();
+        }).doRegex(views.edt_name, RegexUtil.MOBILE_NUM,"手机号不正确")
+                .doRegexSize(views.edt_pwd,6,16,"密码长度为6-16位")
+                .doRegexSize(views.edt_pwd_repeat,6,16,"确认密码长度为6-16位")
+                .doRegexSize(views.edt_verifyCode,4,10,"请填写验证码").builder();
         if(!flag)
         {
             return;
         }
-        String verifyCode=null;
-        if(views.ly_verifyCode.getVisibility()==View.VISIBLE)
+        String verifyCode= views.edt_verifyCode.getText().toString();
+        String pwdLocalEncrypt=keyboardUtil.getEncryptStr();
+        String pwdParse= ApiConfig.decryptByApp(pwdLocalEncrypt);
+        String pwdLocalEncryptRepeat=keyboardUtilRepeat.getEncryptStr();
+        String pwdParseRepeat= ApiConfig.decryptByApp(pwdLocalEncryptRepeat);
+
+        if(null==pwdParse||null==pwdParseRepeat||!pwdParse.equals(pwdParseRepeat))
         {
-            verifyCode=views.edt_verifyCode.getText().toString();
-            if(StringUtils.isEmpty(verifyCode))
-            {
-                ToastUtil.makeFailToastThr(mContext,"请填写验证码");
-                return;
-            }
+            ToastUtil.makeFailToastThr(mContext,"密码和确认密码不一致");
+            return;
         }
+        if(!PassWordService.isPwdRuleOk(pwdParse)){
+            ToastUtil.makeFailToastThr(mContext,PassWordService.parsePwdRuleToString());
+            return;
+        }
+
         showLoading();
         String account=views.edt_name.getText().toString();
-        String pwdLocalEncrypt=keyboardUtil.getEncryptStr();
-        String pwdParse=ApiConfig.decryptByApp(pwdLocalEncrypt);
         String pwd=ApiConfig.getPassWord(pwdParse,ApiConfig.TRANSMIT_KEYTYPE);
+        String nickName=views.edt_nickname.getText().toString();
         Map<String,String> map=ApiConfig.createRequestMap(false);
         map.put("account", account);
         map.put("accountType", "1");
@@ -121,12 +125,13 @@ public class LoginActivity extends AppMultiActivity {
         map.put("pwd",  ApiConfig.getPassWord(pwdParse, ApiConfig.getPassWordEncrypt(true)));
         map.put("termType", "1");
         map.put("msgVerifyCode",verifyCode);
+        map.put("nickName",nickName);
         ApiConfig.signRequestMap(map);
-        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doLogin").setRequestBodyText(map).doHttp(UserInfoDto.class, new TextHttpCallBack() {
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doRegister").setRequestBodyText(map).doHttp(String.class, new TextHttpCallBack() {
             @Override
             public void httpCallBack(Object resultObject, String resultString, int status) {
                 MLog.i(resultString);
-                String errTip=ResultFactory.getErrorTip(resultObject,status);
+                String errTip= ResultFactory.getErrorTip(resultObject,status);
                 ResultDto resultDto=(ResultDto)resultObject;
                 if(null!=resultDto&&ResultFactory.ERR_NEED_VERIFYCODE.equals(resultDto.code)){
 
@@ -137,14 +142,7 @@ public class LoginActivity extends AppMultiActivity {
                     ToastUtil.makeFailToastThr(mContext,errTip);
                 }
                 else {
-                    UserInfoDto userInfoDto = ResultFactory.getResult(resultObject, status);
-                    if (null != userInfoDto) {
-                        AppStoreUtil.safeSaveBean(mContext, null, userInfoDto);
-                        LoginUserFactory.doLogin(userInfoDto);
-                        ToastUtil.makeOkToastThr(mContext, "登录成功");
-                    } else {
-                        ToastUtil.makeFailToastThr(mContext, "登录失败");
-                    }
+                    ToastUtil.makeOkToastThr(mContext, "注册成功");
                 }
                 dismissLoading();
             }
@@ -153,26 +151,26 @@ public class LoginActivity extends AppMultiActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-       if(null!=verifyCodeThread)
-       {
-           verifyCodeThread.stopTask();
-       }
+        if(null!=verifyCodeThread)
+        {
+            verifyCodeThread.stopTask();
+        }
     }
     private void doSendMsgVerifyCode()
     {
-       boolean flag= RegexText.with(new RegexCallBack() {
+        boolean flag= RegexText.with(new RegexCallBack() {
             @Override
             public void errorRegex(TextView v, String value, String errorInfo) {
                 ToastUtil.makeFailToastThr(mContext,errorInfo);
             }
         }).doRegex(views.edt_name,RegexUtil.MOBILE_NUM,"手机号不正确").builder();
-       if(!flag)
-       {
-           return;
-       }
+        if(!flag)
+        {
+            return;
+        }
         showLoading();
         Map<String, String> map = ApiConfig.createRequestMap(false);
-        map.put("msgFunction", "3");
+        map.put("msgFunction", "1");
         map.put("msgAddr", views.edt_name.getText().toString());
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/msg/doMsgSend").setRequestBodyText(map).doHttp(MsgSendDto.class, new TextHttpCallBack() {
@@ -193,7 +191,7 @@ public class LoginActivity extends AppMultiActivity {
             }
         });
     }
-    class VerifyCodeThread extends Thread_CanStop{
+    class VerifyCodeThread extends Thread_CanStop {
         @Override
         public void run() {
             super.run();
@@ -202,7 +200,7 @@ public class LoginActivity extends AppMultiActivity {
             long timeRemain=timeOut- SystemClock.elapsedRealtime();
             while(timeRemain>0&&!isStopTask()){
                 final long timeRemind=timeOut- SystemClock.elapsedRealtime();
-                LoginActivity.this.runOnUiThread(new Runnable() {
+                RegisterActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         views.btn_verifyCode.setText(timeRemind/1000+"秒后获取");
@@ -213,7 +211,7 @@ public class LoginActivity extends AppMultiActivity {
             }
             if(!isStopTask())
             {
-                LoginActivity.this.runOnUiThread(new Runnable() {
+                RegisterActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         views.btn_verifyCode.setText("获取验证码");
@@ -223,6 +221,4 @@ public class LoginActivity extends AppMultiActivity {
             verifyCodeThread=null;
         }
     }
-
-
 }

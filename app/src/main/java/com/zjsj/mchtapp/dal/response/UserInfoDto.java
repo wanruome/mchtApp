@@ -3,9 +3,9 @@
  * 	@author wanruome
  * 	@create 2018年6月21日 下午2:40:00
  */
-package com.zjsj.mchtapp.dal.store;
+package com.zjsj.mchtapp.dal.response;
 
-public class LoginUserInfo {
+public class UserInfoDto {
 	public String tokenId;
 	public String token;
 	public String validTime;
@@ -16,7 +16,10 @@ public class LoginUserInfo {
 	public String email;
 	public String name;
 	public String mobile;
-
-
-
+	public String nickName;
+	public String headImg;
+	public String idCardNo;
+	public String dCardName;
+	public String idCardNoSet;
+	public String idCardNameSet;
 }

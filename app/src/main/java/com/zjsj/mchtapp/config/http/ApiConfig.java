@@ -11,7 +11,7 @@ import com.ruomm.base.tools.EncryptUtils;
 import com.ruomm.base.tools.RSAUtils;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.TelePhoneUtil;
-import com.zjsj.mchtapp.config.LoginUserConfig;
+import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.module.keypair.KeyPairService;
 
 import java.security.KeyPair;
@@ -21,12 +21,18 @@ import java.util.Map;
 
 public class ApiConfig {
 //     public static final String BASE_URL = "http://192.168.100.66:9080/mchtAppUserApi/";
-public static final String BASE_URL = "http://192.168.3.10:8080/mchtAppUserApi/";
+     public static final String BASE_URL = "http://192.168.3.10:8080/mchtAppUserApi/";
      public static final String TRANSMIT_KEYTYPE="RSA";
      public static String TRANSMIT_DESKEY=null;
      public static PublicKey TRANSMIT_RSAKEY=null;
      public static KeyPair STORE_KEYPAIR=null;
      private static  String uuid=null;
+     public static final int PWD_MIN_LENGTH=6;
+     public static final int PWD_MAT_LENGTH=16;
+     public static final int PWD_MIN_RULE=2;
+     public static final int PAYPWD_MIN_LENGTH=6;
+     public static final int VERIFYCODE_COUNTDOWN=60*1000;
+     public static final int VERIFYCODE_THREADSLEEP=333;
      public static String getAppUUID()
      {
           if(TextUtils.isEmpty(uuid))
@@ -161,9 +167,9 @@ public static final String BASE_URL = "http://192.168.3.10:8080/mchtAppUserApi/"
      public static Map<String, String> createRequestMap(boolean isLogin) {
           Map<String, String> requestMap = new HashMap<>();
           if (isLogin) {
-               requestMap.put("appId", LoginUserConfig.getLoginUserInfo().appId);
-               requestMap.put("userId", LoginUserConfig.getLoginUserInfo().userId);
-               requestMap.put("tokenId", LoginUserConfig.getLoginUserInfo().tokenId);
+               requestMap.put("appId", LoginUserFactory.getLoginUserInfo().appId);
+               requestMap.put("userId", LoginUserFactory.getLoginUserInfo().userId);
+               requestMap.put("tokenId", LoginUserFactory.getLoginUserInfo().tokenId);
                requestMap.put("uuid", getAppUUID());
                requestMap.put("timeStamp", System.currentTimeMillis() + "");
           }
@@ -179,7 +185,7 @@ public static final String BASE_URL = "http://192.168.3.10:8080/mchtAppUserApi/"
           String value = SignTools.getKeyString(maps);
           if(maps.containsKey("userId"))
           {
-               value= value+ "token=" + LoginUserConfig.getLoginUserInfo().token;
+               value= value+ "token=" + LoginUserFactory.getLoginUserInfo().token;
           }
           else {
                value= value+ "token=" + ApiConfig.getPublicKeyString();

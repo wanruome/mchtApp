@@ -13,7 +13,7 @@ import java.util.TreeMap;
 import com.alibaba.fastjson.JSONObject;
 import com.ruomm.base.tools.EncryptUtils;
 import com.ruomm.base.tools.StringUtils;
-import com.zjsj.mchtapp.config.LoginUserConfig;
+import com.zjsj.mchtapp.config.LoginUserFactory;
 
 public class SignTools {
 	public static final String REQUEST_FIELD_SIGN_INFO = "signInfo";
@@ -21,7 +21,7 @@ public class SignTools {
 		String value = getKeyString(maps);
 		if(maps.containsKey("userId"))
 		{
-			value= value+ "token=" + LoginUserConfig.getLoginUserInfo().token;
+			value= value+ "token=" + LoginUserFactory.getLoginUserInfo().token;
 		}
 		else {
 			value= value+ "token=" + ApiConfig.getPublicKeyString();
