@@ -109,26 +109,6 @@
                 android:maxLength="16"/>
         </LinearLayout>
         <LinearLayout
-            android:paddingBottom="@dimen/dpx016"
-            android:paddingTop="@dimen/dpx016"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                style="@style/textWhiteSub"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="昵称："
-                />
-            <EditText
-                android:id="@+id/edt_nickname"
-                style="@style/editTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLength="16"/>
-        </LinearLayout>
-        <LinearLayout
             android:id="@+id/ly_verifyCode"
             android:paddingBottom="@dimen/dpx016"
             android:paddingTop="@dimen/dpx016"
@@ -168,7 +148,7 @@
             style="@style/btnStyleNoMargin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="注册"
+            android:text="找回密码"
             />
     </LinearLayout>
 </LinearLayout>

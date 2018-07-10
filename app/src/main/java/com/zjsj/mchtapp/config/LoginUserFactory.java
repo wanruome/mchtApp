@@ -5,6 +5,10 @@ import com.zjsj.mchtapp.dal.response.UserInfoDto;
 public class LoginUserFactory {
 
     private static UserInfoDto mLoginUserInfo=null;
+    public static boolean isLogin()
+    {
+        return null==mLoginUserInfo?false:true;
+    }
     public static UserInfoDto getLoginUserInfo(){
         if(null==mLoginUserInfo)
         {

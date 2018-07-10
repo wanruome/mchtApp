@@ -108,7 +108,7 @@ public class WelcomeActivity extends AppSimpleActivity {
             return;
         }
 //        Intent intent=new Intent("fingerprint.FingerPrintActivity");
-        Intent intent=new Intent("userinfo.RegisterActivity");
+        Intent intent=new Intent("main.MainActivity");
         startActivity(intent);
         finish();
     }

@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zjsj.mchtapp">
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -37,7 +38,7 @@
             android:configChanges="keyboardHidden"
             android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="com.zjsj.mchtapp.module.welcome.WelcomeActivity" />
+                <action android:name="welcome.WelcomeActivity" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -53,11 +54,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".module.login.LoginActivity"
+            android:name=".module.userinfo.LoginActivity"
             android:configChanges="keyboardHidden"
             android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="login.LoginActivity" />
+                <action android:name="userinfo.LoginActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -67,6 +68,15 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="userinfo.RegisterActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".module.userinfo.FindPwdActivity"
+            android:configChanges="keyboardHidden"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="userinfo.FindPwdActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

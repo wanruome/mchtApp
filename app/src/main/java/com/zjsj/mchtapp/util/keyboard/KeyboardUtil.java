@@ -3,6 +3,7 @@ import android.app.Activity;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -423,6 +424,7 @@ public class KeyboardUtil {
                 return;
             }
         }
+        vibratorOnKeyPress();
         if(null!=keyboardSafeInterface) {
             if(keyboardSafeInterface.isEncryptByChar()) {
                 try {
@@ -472,6 +474,7 @@ public class KeyboardUtil {
     }
     private void editTextDelete(int start)
     {
+        vibratorOnKeyPress();
         if(null!=keyboardSafeInterface) {
             if(keyboardSafeInterface.isEncryptByChar()) {
                 try {
@@ -652,6 +655,15 @@ public class KeyboardUtil {
         }
         k1.setShifted(isUpper);
         keyboardView.invalidateAllKeys();
+    }
+    private void vibratorOnKeyPress(){
+        Vibrator vibrator = (Vibrator)mActivity.getSystemService(mActivity.VIBRATOR_SERVICE);
+        vibrator.vibrate(50);
+//        Vibrator vibrator = (Vibrator)mActivity.getSystemService(mActivity.VIBRATOR_SERVICE);
+//        long[] patter = {1000, 1000, 2000, 50};
+//        vibrator.vibrate(patter, 0);
+//        Vibrator vibrator = (Vibrator)mActivity.getSystemService(mActivity.VIBRATOR_SERVICE);
+//        vibrator.vibrate(50);
     }
     private int getEditTextMaxLength(EditText et) {
         int length = 0;

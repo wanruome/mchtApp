@@ -18,7 +18,7 @@ import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.tools.regextool.RegexCallBack;
 import com.ruomm.base.tools.regextool.RegexText;
 import com.ruomm.base.tools.regextool.RegexUtil;
-import com.ruomm.baseconfig.debug.MLog;
+import com.ruomm.base.view.menutopview.MenuTopListener;
 import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.http.ApiConfig;
@@ -58,19 +58,29 @@ public class RegisterActivity extends AppMultiActivity {
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
-        hideMenuTopView();
+        mymenutop.setMenuClickListener(myMenutopListener);
+        mymenutop.setCenterText("用户注册");
         setInitContentView(R.layout.userinfo_register_act);
         keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
         keyboardUtilRepeat=new KeyboardUtil(this,views.edt_pwd_repeat).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
         views.btn_submit.setOnClickListener(myOnClickListener);
         views.btn_verifyCode.setOnClickListener(myOnClickListener);
     }
+    private MenuTopListener myMenutopListener=new MenuTopListener() {
+        @Override
+        public void onMenuTopClick(View v, int vID) {
+            if(vID==R.id.menutop_left)
+            {
+                finish();
+            }
+        }
+    };
     private View.OnClickListener myOnClickListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int vID=v.getId();
             if(vID==R.id.btn_submit){
-                doLogin();
+                doHttpTask();
             }
             else if(vID==R.id.btn_verifyCode)
             {
@@ -83,7 +93,7 @@ public class RegisterActivity extends AppMultiActivity {
             }
         }
     };
-    private void doLogin(){
+    private void doHttpTask(){
         boolean flag= RegexText.with(new RegexCallBack() {
             @Override
             public void errorRegex(TextView v, String value, String errorInfo) {
@@ -130,7 +140,7 @@ public class RegisterActivity extends AppMultiActivity {
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doRegister").setRequestBodyText(map).doHttp(String.class, new TextHttpCallBack() {
             @Override
             public void httpCallBack(Object resultObject, String resultString, int status) {
-                MLog.i(resultString);
+
                 String errTip= ResultFactory.getErrorTip(resultObject,status);
                 ResultDto resultDto=(ResultDto)resultObject;
                 if(null!=resultDto&&ResultFactory.ERR_NEED_VERIFYCODE.equals(resultDto.code)){
@@ -143,8 +153,10 @@ public class RegisterActivity extends AppMultiActivity {
                 }
                 else {
                     ToastUtil.makeOkToastThr(mContext, "注册成功");
+                    finish();
                 }
                 dismissLoading();
+
             }
         });
     }

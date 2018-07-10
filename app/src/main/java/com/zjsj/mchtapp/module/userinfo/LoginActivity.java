@@ -1,7 +1,9 @@
-package com.zjsj.mchtapp.module.login;
+package com.zjsj.mchtapp.module.userinfo;
 
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,17 +21,21 @@ import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.tools.regextool.RegexCallBack;
 import com.ruomm.base.tools.regextool.RegexText;
 import com.ruomm.base.tools.regextool.RegexUtil;
-import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
+import com.zjsj.mchtapp.config.IntentFactory;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.keyboard.KeyboardSafeImpl;
+import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.response.MsgSendDto;
 import com.zjsj.mchtapp.dal.response.UserInfoDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
+import com.zjsj.mchtapp.dal.store.LastLoginUserInfo;
 import com.zjsj.mchtapp.util.keyboard.KeyboardUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
@@ -57,12 +63,14 @@ public class LoginActivity extends AppMultiActivity {
     }
     private KeyboardUtil keyboardUtil;
     private VerifyCodeThread verifyCodeThread=null;
+    private LastLoginUserInfo lastLoginUserInfo=null;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         hideMenuTopView();
         setInitContentView(R.layout.login_act);
         views.ly_verifyCode.setVisibility(View.GONE);
+        updateUiByLastLoginUserInfo();
         keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
         views.btn_submit.setOnClickListener(myOnClickListener);
         views.btn_verifyCode.setOnClickListener(myOnClickListener);
@@ -74,7 +82,7 @@ public class LoginActivity extends AppMultiActivity {
         public void onClick(View v) {
             int vID=v.getId();
             if(vID==R.id.btn_submit){
-                doLogin();
+                doHttpTask();
             }
             else if(vID==R.id.btn_verifyCode)
             {
@@ -85,15 +93,67 @@ public class LoginActivity extends AppMultiActivity {
                    doSendMsgVerifyCode();
                }
             }
+            else if(vID==R.id.text_findpwd)
+            {
+                startActivity(IntentFactory.getFindPwdActivityIntent());
+            }
+            else if(vID==R.id.ly_fast_register)
+            {
+                startActivity(IntentFactory.getRegisterActivityIntent());
+            }
         }
     };
-    private void doLogin(){
+    private void updateUiByLastLoginUserInfo()
+    {
+        lastLoginUserInfo=AppStoreUtil.safeGetBean(mContext,null,LastLoginUserInfo.class);
+        if(null!=lastLoginUserInfo&&RegexUtil.doRegex(lastLoginUserInfo.account,RegexUtil.MOBILE_NUM))
+        {
+            views.edt_name.setText(lastLoginUserInfo.account.substring(0,3)+"****"+lastLoginUserInfo.account.substring(7));
+            views.edt_name.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    views.edt_name.removeTextChangedListener(this);
+                    if(null!=lastLoginUserInfo)
+                    {
+                        views.edt_name.setText(null);
+                        lastLoginUserInfo=null;
+                    }
+
+                }
+            });
+        }
+        else {
+            lastLoginUserInfo=null;
+        }
+    }
+    private void doHttpTask(){
+        String account=null;
+        if(null!=lastLoginUserInfo){
+            account=lastLoginUserInfo.account;
+        }
+        else {
+            account=views.edt_name.getText().toString();
+        }
+        if(!RegexUtil.doRegex(account,RegexUtil.MOBILE_NUM))
+        {
+            ToastUtil.makeFailToastThr(mContext,"手机号不正确");
+        }
         boolean flag= RegexText.with(new RegexCallBack() {
             @Override
             public void errorRegex(TextView v, String value, String errorInfo) {
                 ToastUtil.makeFailToastThr(mContext,errorInfo);
             }
-        }).doRegex(views.edt_name,RegexUtil.MOBILE_NUM,"手机号不正确").doRegexSize(views.edt_pwd,1,32,"请输入正确的密码").builder();
+        }).doRegexSize(views.edt_pwd,1,32,"请输入正确的密码").builder();
         if(!flag)
         {
             return;
@@ -109,7 +169,6 @@ public class LoginActivity extends AppMultiActivity {
             }
         }
         showLoading();
-        String account=views.edt_name.getText().toString();
         String pwdLocalEncrypt=keyboardUtil.getEncryptStr();
         String pwdParse=ApiConfig.decryptByApp(pwdLocalEncrypt);
         String pwd=ApiConfig.getPassWord(pwdParse,ApiConfig.TRANSMIT_KEYTYPE);
@@ -122,10 +181,9 @@ public class LoginActivity extends AppMultiActivity {
         map.put("termType", "1");
         map.put("msgVerifyCode",verifyCode);
         ApiConfig.signRequestMap(map);
-        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doLogin").setRequestBodyText(map).doHttp(UserInfoDto.class, new TextHttpCallBack() {
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doHttpTask").setRequestBodyText(map).doHttp(UserInfoDto.class, new TextHttpCallBack() {
             @Override
             public void httpCallBack(Object resultObject, String resultString, int status) {
-                MLog.i(resultString);
                 String errTip=ResultFactory.getErrorTip(resultObject,status);
                 ResultDto resultDto=(ResultDto)resultObject;
                 if(null!=resultDto&&ResultFactory.ERR_NEED_VERIFYCODE.equals(resultDto.code)){
@@ -139,9 +197,17 @@ public class LoginActivity extends AppMultiActivity {
                 else {
                     UserInfoDto userInfoDto = ResultFactory.getResult(resultObject, status);
                     if (null != userInfoDto) {
+                        LastLoginUserInfo lastLoginUserInfo=new LastLoginUserInfo();
+                        lastLoginUserInfo.account=userInfoDto.mobile;
+                        lastLoginUserInfo.accountType="1";
+                        AppStoreUtil.safeSaveBean(mContext,null,lastLoginUserInfo);
                         AppStoreUtil.safeSaveBean(mContext, null, userInfoDto);
                         LoginUserFactory.doLogin(userInfoDto);
                         ToastUtil.makeOkToastThr(mContext, "登录成功");
+                        LoginEvent loginEvent=new LoginEvent();
+                        loginEvent.loninStatus=true;
+                        EventBus.getDefault().post(loginEvent);
+                        finish();
                     } else {
                         ToastUtil.makeFailToastThr(mContext, "登录失败");
                     }
