@@ -1,28 +1,21 @@
 package com.ruomm.base.ioc.iocutil;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.text.TextUtils;
-import android.util.Log;
+import java.io.File;
 
 import com.alibaba.fastjson.JSON;
 import com.ruomm.base.ioc.annotation.util.InjectUtil;
 import com.ruomm.base.tools.FileUtils;
 
-import java.io.File;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 /**
  * 对象化SharedPreferences存储类
  *
  * @author Ruby
  */
-public class AppStoreSafeProperty {
-	private static final String TAG=AppStoreSafeProperty.class.getSimpleName();
-	private static AppStoreSafeInterface mAppStoreSafeInterface=null;
-	public static void setAppStoreSafeInterface(AppStoreSafeInterface appStoreSafeInterface)
-	{
-		mAppStoreSafeInterface=appStoreSafeInterface;
-	}
+class AppStoreUnSafe {
 	/**
 	 * String内容写入SharedPreferences存储中
 	 *
@@ -43,12 +36,6 @@ public class AppStoreSafeProperty {
 		if (TextUtils.isEmpty(key)) {
 			return;
 		}
-		if(null==mAppStoreSafeInterface)
-		{
-			Log.i(TAG,"请先设置安全接口解密方式");
-			return;
-		}
-
 		if (null == value) {
 			SharedPreferences properties = mContext.getSharedPreferences(nameProperty, PropertyMODE);
 			SharedPreferences.Editor editor = properties.edit();
@@ -56,13 +43,9 @@ public class AppStoreSafeProperty {
 			editor.commit();
 		}
 		else {
-			String realValue=mAppStoreSafeInterface.encryptStr(value);
-			if(TextUtils.isEmpty(realValue)){
-				return;
-			}
 			SharedPreferences properties = mContext.getSharedPreferences(nameProperty, PropertyMODE);
 			SharedPreferences.Editor editor = properties.edit();
-			editor.putString(key,mAppStoreSafeInterface.encryptStr(value));
+			editor.putString(key, value);
 			editor.commit();
 		}
 	}
@@ -83,15 +66,10 @@ public class AppStoreSafeProperty {
 		if (TextUtils.isEmpty(nameProperty)) {
 			return null;
 		}
-		if(null==mAppStoreSafeInterface)
-		{
-			Log.i(TAG,"请先设置安全接口解密方式");
-			return null;
-		}
 		if (!TextUtils.isEmpty(key)) {
 			SharedPreferences properties = mContext.getSharedPreferences(nameProperty, PropertyMODE);
 			String value = properties.getString(key, null);
-			return mAppStoreSafeInterface.decryptStr(value);
+			return value;
 
 		}
 		return null;

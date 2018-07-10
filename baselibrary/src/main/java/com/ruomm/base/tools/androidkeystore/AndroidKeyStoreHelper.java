@@ -1,27 +1,21 @@
 package com.ruomm.base.tools.androidkeystore;
 
-import android.annotation.TargetApi;
-import android.content.Context;
 import android.os.Build;
-import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
-import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.Base64;
 import com.ruomm.base.tools.DesUtil;
 import com.ruomm.base.tools.RSAUtils;
+import com.ruomm.base.tools.StringUtils;
 
 import org.bouncycastle.jce.provider.symmetric.ARC4;
-import org.json.JSONObject;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -43,12 +37,15 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.security.auth.x500.X500Principal;
 
-public class KeyStoreHelper {
-    public static final int DEFAULT_KEY_SIZE = 2048;
-    private static final String TAG=KeyStoreHelper.class.getSimpleName();
+public class AndroidKeyStoreHelper {
+    public static final int DEFAULT_KEY_SIZE = 1024;
+    private static final String TAG=AndroidKeyStoreHelper.class.getSimpleName();
     private static final String desKeyStr="GdaXf5FF38IvUpL4UUzqIEr0Kf3aGc4v";
     KeyStore keyStore=null;
     public void initKeyStore() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M||null!=keyStore){
+            return;
+        }
         try {
             keyStore = KeyStore.getInstance("AndroidKeyStore");
             keyStore.load(null);
@@ -62,71 +59,43 @@ public class KeyStoreHelper {
             e.printStackTrace();
         }
     }
-    public void createSecretKey(String alias) {
-        if (hasAlias(alias)) {
-            return;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            try {
 
-                KeyGenerator keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,
-                        "AndroidKeyStore");
-                try {
-                    //AES算法用于加密与解密，具体参考KeyGenParameterSpec类注释
-                    keyGenerator.init(new KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_ENCRYPT |
-                            KeyProperties.PURPOSE_DECRYPT).setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).build());
-                } catch (InvalidAlgorithmParameterException e) {
-                    e.printStackTrace();
-                }
-                SecretKey key = keyGenerator.generateKey();
-                Log.d(TAG, "SecretKey:" + key);
-
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (NoSuchProviderException e) {
-                e.printStackTrace();
+    private boolean hasAlias(String alias) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            String data=AppStoreUtil.getString(BaseApplication.getApplication(),alias);
+            if(StringUtils.isEmpty(data))
+            {
+                return false;
+            }
+            else {
+                return true;
             }
         }
+        else {
+            try {
+                initKeyStore();
+                return keyStore != null && keyStore.containsAlias(alias);
+            } catch (KeyStoreException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
     }
 
-    public SecretKey getSecretKey(String alias) {
-        try {
-            SecretKey secretKey = (SecretKey) keyStore.getKey(alias, null);
-            Log.d(TAG, "SecretKey:" + secretKey);
-            return secretKey;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableEntryException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    private boolean hasAlias(String alias) {
-        try {
-            return keyStore != null && keyStore.containsAlias(alias);
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public void createKeyPair(Context mContext,String alias) {
+    public void createKeyPair(String alias) {
         if (hasAlias(alias)) {
             return;
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             try{
                 //使用别名来检索的key 。这是一个key 的key !
-                KeyPair keyPair=RSAUtils.generateRSAKeyPair();
+                KeyPair keyPair=RSAUtils.generateRSAKeyPair(DEFAULT_KEY_SIZE);
                 String pubKeyStr= Base64.encode(keyPair.getPublic().getEncoded());
                 String priKeyStr= Base64.encode(keyPair.getPrivate().getEncoded());
                 KeyPairStore keyPairStore=new KeyPairStore();
                 keyPairStore.privateKey=priKeyStr;
                 keyPairStore.publicKey=pubKeyStr;
-                AppStoreUtil.saveString(mContext,alias, DesUtil.encryptString(JSON.toJSONString(keyPairStore),desKeyStr));
+                AppStoreUtil.saveString(BaseApplication.getApplication(),alias, DesUtil.encryptString(JSON.toJSONString(keyPairStore),desKeyStr));
             }
             catch (Exception e)
             {
@@ -170,37 +139,38 @@ public class KeyStoreHelper {
 
     }
     public KeyPair getTargetKeyPair(String alias) {
-        try {
-            KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(alias, null);
-            PublicKey publicKey = entry.getCertificate().getPublicKey();
-            PrivateKey privateKey = entry.getPrivateKey();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            createKeyPair(alias);
+            String data=AppStoreUtil.getString(BaseApplication.getApplication(),alias);
+            String dataDecypt=DesUtil.decryptString(data,desKeyStr);
+            KeyPairStore keyPairStore=JSON.parseObject(dataDecypt,KeyPairStore.class);
+            PublicKey publicKey=RSAUtils.loadPublicKey(keyPairStore.publicKey);
+            PrivateKey privateKey=RSAUtils.loadPrivateKey(keyPairStore.privateKey);
             Log.d(TAG, "getTargetKeyPair>>privateKey:" + privateKey + ",publicKey:" + publicKey);
-            Log.d(TAG,publicKey.toString());
-            Log.d(TAG,privateKey.toString());
-            return new KeyPair(publicKey, privateKey);
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableEntryException e) {
-            e.printStackTrace();
+            Log.d(TAG, publicKey.toString());
+            Log.d(TAG, privateKey.toString());
+            return new KeyPair(publicKey,privateKey);
         }
-        return null;
-    }
-    public void printAliases() {
-        try {
-            Enumeration<String> aliases = keyStore.aliases();
-            while (aliases != null && aliases.hasMoreElements()) {
-                String alias = aliases.nextElement();
-                Log.d(TAG, "aliases:" + alias);
+        else {
+            createKeyPair(alias);
+            try {
+                KeyStore.PrivateKeyEntry entry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(alias, null);
+                PublicKey publicKey = entry.getCertificate().getPublicKey();
+                PrivateKey privateKey = entry.getPrivateKey();
+                Log.d(TAG, "getTargetKeyPair>>privateKey:" + privateKey + ",publicKey:" + publicKey);
+                Log.d(TAG, publicKey.toString());
+                Log.d(TAG, privateKey.toString());
+                return new KeyPair(publicKey, privateKey);
+            } catch (KeyStoreException e) {
+                e.printStackTrace();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (UnrecoverableKeyException e) {
+                e.printStackTrace();
+            } catch (UnrecoverableEntryException e) {
+                e.printStackTrace();
             }
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
+            return null;
         }
     }
-
-
-
 }

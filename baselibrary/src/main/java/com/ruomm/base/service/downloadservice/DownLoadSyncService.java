@@ -16,6 +16,7 @@ import com.ruomm.base.http.config.ResponseFile;
 import com.ruomm.base.http.okhttp.FileOkHttp;
 import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.extend.BaseService;
+import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.EncryptUtils;
 import com.ruomm.base.tools.FileUtils;
@@ -267,7 +268,8 @@ public class DownLoadSyncService extends BaseService {
 				mDownLoadSaveValue.url = mDownLoadValue.url;
 				mDownLoadSaveValue.fileSucess = mDownLoadValue.fileSucess;
 				String saveTag = mDownLoadValue.saveTag;
-				BaseApplication.getApplication().setBean(saveTag, mDownLoadSaveValue);
+//				BaseApplication.getApplication().setBean(saveTag, mDownLoadSaveValue);
+				AppStoreUtil.saveBean(BaseApplication.getApplication(),saveTag, mDownLoadSaveValue);
 			}
 			if (mDownLoadValue.isSendDoneEvent) {
 				DownLoadEvent downLoadEvent = new DownLoadEvent();

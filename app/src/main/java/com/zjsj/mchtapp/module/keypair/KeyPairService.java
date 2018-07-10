@@ -39,9 +39,12 @@ public class KeyPairService extends BaseService {
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         int value= getOptValue(intent);
-        if(value==OptStart&&!isOnRequest)
+        if(value==OptStart&&!isOnRequest&&!ApiConfig.isKeyPairOk())
         {
             new DownLoadThread().start();
+        }
+        else if(ApiConfig.isKeyPairOk()){
+            stopSelf();
         }
     }
 
@@ -51,7 +54,6 @@ public class KeyPairService extends BaseService {
         public void run() {
             super.run();
             isOnRequest=true;
-            getKeyPairForStore();
             getPublicKeyByUuid();
             final KeyPairEvent keyPairEvent=new KeyPairEvent();
             keyPairEvent.isKeyPairOk=ApiConfig.isKeyPairOk();
@@ -65,29 +67,6 @@ public class KeyPairService extends BaseService {
             });
             mHandler=null;
             isOnRequest=false;
-        }
-    }
-    private void getKeyPairForStore(){
-        KeyPair keyPair= RSAUtils.generateRSAKeyPair();
-        Map<String,String> map=new HashMap<>();
-        map.put("uuid", uuid);
-        map.put("keyType", ApiConfig.STORE_KEYTYPE);
-        map.put("rasPublicKey", Base64.encode(keyPair.getPublic().getEncoded()));
-        map.put("timeStamp", System.currentTimeMillis() + "");
-        ResponseText responseText=
-                new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/keypair/getKeyPairForStore").setRequestBodyText(map).doHttpSync(KeyPairDto.class, new TextHttpCallBack() {
-                    @Override
-                    public void httpCallBack(Object resultObject, String resultString, int status) {
-                        MLog.i(resultString);
-                    }
-                });
-        if(null==ResultFactory.getErrorTip(responseText)){
-            KeyPairDto keyPairDto=ResultFactory.getResult(responseText);
-            String pubKeyStr=Base64.encode(RSAUtils.decryptDataBig(Base64.decode(keyPairDto.publicKey),keyPair.getPrivate()));
-            String priKeyStr=Base64.encode(RSAUtils.decryptDataBig(Base64.decode(keyPairDto.privateKey),keyPair.getPrivate()));
-            ApiConfig.STORE_PRIVATEKEY=priKeyStr;
-            ApiConfig.STORE_PUBLICKEY=pubKeyStr;
-            AppStoreSafeImpl.configKeyPair();
         }
     }
     private void getPublicKeyByUuid(){

@@ -26,7 +26,8 @@ import javax.crypto.Cipher;
  */
 public final class RSAUtils {
 	private final static String Default_CharsetName = "UTF-8";
-	private static String RSA = "RSA";
+	private static String RSAPADDING = "RSA/ECB/PKCS1Padding";
+	private static String RSAINSTANCE="RSA";
 
 	/**
 	 * 随机生成RSA密钥对(默认密钥长度为1024)
@@ -48,7 +49,7 @@ public final class RSAUtils {
 	public static KeyPair generateRSAKeyPair(int keyLength) {
 		KeyPair mKeyPair = null;
 		try {
-			KeyPairGenerator kpg = KeyPairGenerator.getInstance(RSA);
+			KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
 			kpg.initialize(keyLength);
 			mKeyPair = kpg.genKeyPair();
 		}
@@ -90,7 +91,7 @@ public final class RSAUtils {
 	public static byte[] encryptData(byte[] sourceData, PublicKey publicKey) {
 		byte[] result = null;
 		try {
-			final Cipher cipher = Cipher.getInstance(RSA);
+			final Cipher cipher = Cipher.getInstance(RSAPADDING);
 			// 编码前设定编码方式及密钥
 			cipher.init(Cipher.ENCRYPT_MODE, publicKey);
 			// 传入编码数据并返回编码结果
@@ -115,7 +116,7 @@ public final class RSAUtils {
 	public static byte[] decryptData(byte[] encryptedData, PrivateKey privateKey) {
 		byte[] result = null;
 		try {
-			final Cipher cipher = Cipher.getInstance(RSA);
+			final Cipher cipher = Cipher.getInstance(RSAPADDING);
 			cipher.init(Cipher.DECRYPT_MODE, privateKey);
 			result = cipher.doFinal(encryptedData);
 		}
@@ -138,7 +139,7 @@ public final class RSAUtils {
 	public static byte[] encryptData(byte[] sourceData, PrivateKey privateKey) {
 		byte[] result = null;
 		try {
-			final Cipher cipher = Cipher.getInstance(RSA);
+			final Cipher cipher = Cipher.getInstance(RSAPADDING);
 			// 编码前设定编码方式及密钥
 			cipher.init(Cipher.ENCRYPT_MODE, privateKey);
 			// 传入编码数据并返回编码结果
@@ -162,7 +163,7 @@ public final class RSAUtils {
 	public static byte[] decryptData(byte[] encryptedData, PublicKey publicKey) {
 		byte[] result = null;
 		try {
-			final Cipher cipher = Cipher.getInstance(RSA);
+			final Cipher cipher = Cipher.getInstance(RSAPADDING);
 			cipher.init(Cipher.DECRYPT_MODE, publicKey);
 			result = cipher.doFinal(encryptedData);
 		}
@@ -269,7 +270,7 @@ public final class RSAUtils {
 	 *            密钥长度，取值为keyLength/8
 	 * @return 解密后的byte型数据
 	 */
-	private static byte[] decryptDataBig(byte[] encryptedData, PrivateKey privateKey, int keyLength) {
+	public static byte[] decryptDataBig(byte[] encryptedData, PrivateKey privateKey, int keyLength) {
 		if (null == encryptedData || keyLength < 512 || encryptedData.length % (keyLength / 8) != 0) {
 			return null;
 		}
@@ -323,7 +324,7 @@ public final class RSAUtils {
 	 *            密钥长度，取值为keyLength/8
 	 * @return 加密后的byte型数据
 	 */
-	private static byte[] encryptDataBig(byte[] sourceData, PrivateKey privateKey, int keyLength) {
+	public static byte[] encryptDataBig(byte[] sourceData, PrivateKey privateKey, int keyLength) {
 		if (null == sourceData || keyLength < 512) {
 			return null;
 		}
@@ -523,7 +524,7 @@ public final class RSAUtils {
 	public static PublicKey getPublicKey(byte[] keyBytes) {
 		try {
 			final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
-			final KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			final KeyFactory keyFactory = KeyFactory.getInstance(RSAINSTANCE);
 			final PublicKey publicKey = keyFactory.generatePublic(keySpec);
 			return publicKey;
 		}
@@ -545,7 +546,7 @@ public final class RSAUtils {
 	public static PrivateKey getPrivateKey(byte[] keyBytes) {
 		try {
 			final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
-			final KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			final KeyFactory keyFactory = KeyFactory.getInstance(RSAINSTANCE);
 			final PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
 			return privateKey;
 		}
@@ -570,7 +571,7 @@ public final class RSAUtils {
 			final BigInteger bigIntModulus = new BigInteger(modulus);
 			final BigInteger bigIntPrivateExponent = new BigInteger(publicExponent);
 			final RSAPublicKeySpec keySpec = new RSAPublicKeySpec(bigIntModulus, bigIntPrivateExponent);
-			final KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			final KeyFactory keyFactory = KeyFactory.getInstance(RSAINSTANCE);
 			final PublicKey publicKey = keyFactory.generatePublic(keySpec);
 			return publicKey;
 		}
@@ -595,7 +596,7 @@ public final class RSAUtils {
 			final BigInteger bigIntModulus = new BigInteger(modulus);
 			final BigInteger bigIntPrivateExponent = new BigInteger(privateExponent);
 			final RSAPublicKeySpec keySpec = new RSAPublicKeySpec(bigIntModulus, bigIntPrivateExponent);
-			final KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			final KeyFactory keyFactory = KeyFactory.getInstance(RSAINSTANCE);
 			final PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
 			return privateKey;
 		}
@@ -617,7 +618,7 @@ public final class RSAUtils {
 	public static PublicKey loadPublicKey(String publicKeyStr) {
 		try {
 			final byte[] buffer = Base64.decode(publicKeyStr);
-			final KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			final KeyFactory keyFactory = KeyFactory.getInstance(RSAINSTANCE);
 			final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(buffer);
 			return keyFactory.generatePublic(keySpec);
 		}
@@ -658,7 +659,7 @@ public final class RSAUtils {
 			final byte[] buffer = Base64.decode(privateKeyStr);
 			// X509EncodedKeySpec keySpec = new X509EncodedKeySpec(buffer);
 			final PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(buffer);
-			final KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+			final KeyFactory keyFactory = KeyFactory.getInstance(RSAINSTANCE);
 			return keyFactory.generatePrivate(keySpec);
 		}
 		catch (Exception e) {

@@ -85,4 +85,5 @@ public class BaseConfig {
 	public static final String OkHttp_SSL_Path="httpconfig/newpay.esicash.crt";
 	public static final boolean OkHttp_SSL_Safe=true;
 	public static final String Http_ResponseParse="com.zjsj.mchtapp.config.http.AppResponseParse";
+	public static final String BaseApplicationTask="com.zjsj.mchtapp.config.application.AppAplictionTask";
 }

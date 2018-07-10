@@ -25,9 +25,10 @@ public class ApiConfig {
 //     public static String TRANSMIT_PUBLICKEY=null;
      public static String TRANSMIT_DESKEY=null;
      public static PublicKey TRANSMIT_RSAKEY=null;
-     public static final String STORE_KEYTYPE="RSA";
-     public static String STORE_PUBLICKEY=null;
-     public static String STORE_PRIVATEKEY=null;
+     public static KeyPair STORE_KEYPAIR=null;
+//     public static final String STORE_KEYTYPE="RSA";
+//     public static String STORE_PUBLICKEY=null;
+//     public static String STORE_PRIVATEKEY=null;
      public static String getAppUUID(Context context)
      {
           if(TextUtils.isEmpty(uuid))
@@ -38,10 +39,10 @@ public class ApiConfig {
      }
      public static boolean isKeyPairOk()
      {
-          if(StringUtils.isEmpty(STORE_PUBLICKEY)||StringUtils.isEmpty(STORE_PRIVATEKEY))
-          {
-               return false;
-          }
+//          if(StringUtils.isEmpty(STORE_PUBLICKEY)||StringUtils.isEmpty(STORE_PRIVATEKEY))
+//          {
+//               return false;
+//          }
           if("RSA".equals(TRANSMIT_KEYTYPE))
           {
                if(null==TRANSMIT_RSAKEY)

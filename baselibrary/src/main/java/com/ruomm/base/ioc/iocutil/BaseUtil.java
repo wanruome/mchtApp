@@ -18,104 +18,104 @@ import android.view.View;
  */
 public class BaseUtil {
 
-	/**
-	 * 对象写入SharedPreferences存储中
-	 *
-	 * @param mContext
-	 * @param nameProperty
-	 *            SharedPreferences存储命名空间，即最终xml文件的名称
-	 * @param key
-	 *            SharedPreferences存储的key，key值为空的时候，按照对象的数据类型的SimpleName或者InjectEntity来获取存储的key值
-	 * @param object
-	 *            SharedPreferences存储的对象
-	 */
-	public static void saveBean(Context mContext, String nameProperty, String key, Object object) {
-		AppStoreProperty.saveBean(mContext, nameProperty, key, object, Context.MODE_PRIVATE);
-	}
-
-	/**
-	 * 从SharedPreferences存储中读取对象
-	 *
-	 * @param mContext
-	 * @param nameProperty
-	 *            SharedPreferences存储命名空间，即最终xml文件的名称
-	 * @param key
-	 *            SharedPreferences存储的key，key值为空的时候，按照对象的数据类型的SimpleName或者InjectEntity来获取存储的key值
-	 * @param T
-	 *            SharedPreferences存储的数据类型，SharedPreferences存储读取完毕后会自动解析，key为空的时候依照此取得读取的key值
-	 * @return 解析好的执行类型的对象T
-	 */
-	public static <T> T getBean(Context mContext, String nameProperty, String key, Class<T> t) {
-		return AppStoreProperty.getBean(mContext, nameProperty, key, t, Context.MODE_PRIVATE);
-	}
-
-	/**
-	 * 从SharedPreferences存储中删除对象
-	 *
-	 * @param mContext
-	 * @param nameProperty
-	 *            SharedPreferences存储命名空间，即最终xml文件的名称
-	 * @param key
-	 *            SharedPreferences存储的key，key值为空的时候，按照对象的数据类型的SimpleName或者InjectEntity来获取存储的key值
-	 * @param cls
-	 *            数据类型
-	 */
-	public static void delBean(Context mContext, String nameProperty, String key, Class<?> cls) {
-		AppStoreProperty.delBean(mContext, nameProperty, key, cls, Context.MODE_PRIVATE);
-	}
-
-	/**
-	 * 从SharedPreferences存储中删除对象
-	 *
-	 * @param mContext
-	 * @param nameProperty
-	 *            SharedPreferences存储命名空间，即最终xml文件的名称
-	 * @param key
-	 *            SharedPreferences存储的key，key值为空的时候，按照对象的数据类型的SimpleName或者InjectEntity来获取存储的key值
-	 */
-	public static void delByKey(Context mContext, String nameProperty, String key) {
-		AppStoreProperty.delete(mContext, nameProperty, key, Context.MODE_PRIVATE);
-	}
-
-	/**
-	 * String内容写入SharedPreferences存储中
-	 *
-	 * @param mContext
-	 * @param nameProperty
-	 *            SharedPreferences存储命名空间，即最终xml文件的名称
-	 * @param key
-	 *            SharedPreferences存储的key
-	 * @param value
-	 *            SharedPreferences存储的值
-	 */
-	public static void saveString(Context mContext, String nameProperty, String key, String value) {
-		AppStoreProperty.saveString(mContext, nameProperty, key, value, Context.MODE_PRIVATE);
-	}
-
-	/**
-	 * 从SharedPreferences获取存储的String内容
-	 *
-	 * @param mContext
-	 * @param nameProperty
-	 *            SharedPreferences存储命名空间，即最终xml文件的名称
-	 * @param key
-	 *            SharedPreferences存储的key
-	 * @return 获取到的String内容
-	 */
-	public static String getString(Context mContext, String nameProperty, String key) {
-		return AppStoreProperty.getString(mContext, nameProperty, key, Context.MODE_PRIVATE);
-	}
-
-	/**
-	 * 清理SharedPreferences存储
-	 *
-	 * @param mContext
-	 * @param nameProperty
-	 *            SharedPreferences存储命名空间，即最终xml文件的名称
-	 */
-	public static void clearSharedPreferences(Context mContext, String nameProperty) {
-		AppStoreProperty.clearSharedPreferences(mContext, nameProperty, Context.MODE_PRIVATE);
-	}
+//	/**
+//	 * 对象写入SharedPreferences存储中
+//	 *
+//	 * @param mContext
+//	 * @param nameProperty
+//	 *            SharedPreferences存储命名空间，即最终xml文件的名称
+//	 * @param key
+//	 *            SharedPreferences存储的key，key值为空的时候，按照对象的数据类型的SimpleName或者InjectEntity来获取存储的key值
+//	 * @param object
+//	 *            SharedPreferences存储的对象
+//	 */
+//	public static void saveBean(Context mContext, String key, Object object) {
+//		AppStoreProperty.saveBean(mContext, nameProperty, key, object, Context.MODE_PRIVATE);
+//	}
+//
+//	/**
+//	 * 从SharedPreferences存储中读取对象
+//	 *
+//	 * @param mContext
+//	 * @param nameProperty
+//	 *            SharedPreferences存储命名空间，即最终xml文件的名称
+//	 * @param key
+//	 *            SharedPreferences存储的key，key值为空的时候，按照对象的数据类型的SimpleName或者InjectEntity来获取存储的key值
+//	 * @param T
+//	 *            SharedPreferences存储的数据类型，SharedPreferences存储读取完毕后会自动解析，key为空的时候依照此取得读取的key值
+//	 * @return 解析好的执行类型的对象T
+//	 */
+//	public static <T> T getBean(Context mContext, String nameProperty, String key, Class<T> t) {
+//		return AppStoreProperty.getBean(mContext, nameProperty, key, t, Context.MODE_PRIVATE);
+//	}
+//
+//	/**
+//	 * 从SharedPreferences存储中删除对象
+//	 *
+//	 * @param mContext
+//	 * @param nameProperty
+//	 *            SharedPreferences存储命名空间，即最终xml文件的名称
+//	 * @param key
+//	 *            SharedPreferences存储的key，key值为空的时候，按照对象的数据类型的SimpleName或者InjectEntity来获取存储的key值
+//	 * @param cls
+//	 *            数据类型
+//	 */
+//	public static void delBean(Context mContext, String nameProperty, String key, Class<?> cls) {
+//		AppStoreProperty.delBean(mContext, nameProperty, key, cls, Context.MODE_PRIVATE);
+//	}
+//
+//	/**
+//	 * 从SharedPreferences存储中删除对象
+//	 *
+//	 * @param mContext
+//	 * @param nameProperty
+//	 *            SharedPreferences存储命名空间，即最终xml文件的名称
+//	 * @param key
+//	 *            SharedPreferences存储的key，key值为空的时候，按照对象的数据类型的SimpleName或者InjectEntity来获取存储的key值
+//	 */
+//	public static void delByKey(Context mContext, String nameProperty, String key) {
+//		AppStoreProperty.delete(mContext, nameProperty, key, Context.MODE_PRIVATE);
+//	}
+//
+//	/**
+//	 * String内容写入SharedPreferences存储中
+//	 *
+//	 * @param mContext
+//	 * @param nameProperty
+//	 *            SharedPreferences存储命名空间，即最终xml文件的名称
+//	 * @param key
+//	 *            SharedPreferences存储的key
+//	 * @param value
+//	 *            SharedPreferences存储的值
+//	 */
+//	public static void saveString(Context mContext, String nameProperty, String key, String value) {
+//		AppStoreProperty.saveString(mContext, nameProperty, key, value, Context.MODE_PRIVATE);
+//	}
+//
+//	/**
+//	 * 从SharedPreferences获取存储的String内容
+//	 *
+//	 * @param mContext
+//	 * @param nameProperty
+//	 *            SharedPreferences存储命名空间，即最终xml文件的名称
+//	 * @param key
+//	 *            SharedPreferences存储的key
+//	 * @return 获取到的String内容
+//	 */
+//	public static String getString(Context mContext, String nameProperty, String key) {
+//		return AppStoreProperty.getString(mContext, nameProperty, key, Context.MODE_PRIVATE);
+//	}
+//
+//	/**
+//	 * 清理SharedPreferences存储
+//	 *
+//	 * @param mContext
+//	 * @param nameProperty
+//	 *            SharedPreferences存储命名空间，即最终xml文件的名称
+//	 */
+//	public static void clearSharedPreferences(Context mContext, String nameProperty) {
+//		AppStoreProperty.clearSharedPreferences(mContext, nameProperty, Context.MODE_PRIVATE);
+//	}
 
 	/**
 	 * 放入序列化对象到 Intent

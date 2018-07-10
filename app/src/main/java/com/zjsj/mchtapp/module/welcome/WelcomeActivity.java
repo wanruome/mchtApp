@@ -72,9 +72,9 @@ public class WelcomeActivity extends AppSimpleActivity {
             isGrant=isAllGranted;
             if(isGrant)
             {
-//                gotoMainActivity();
+                gotoMainActivity();
 //                getPublicKey();
-                BaseServiceUtil.startService(mContext, KeyPairService.class,1);
+//                BaseServiceUtil.startService(mContext, KeyPairService.class,1);
             }
         }
     };

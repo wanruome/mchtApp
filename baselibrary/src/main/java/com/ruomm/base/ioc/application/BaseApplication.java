@@ -7,9 +7,12 @@ package com.ruomm.base.ioc.application;
 
 import com.ruomm.base.common.greendao.BaseDaoMaster;
 import com.ruomm.base.common.greendao.BaseDaoMaster.OpenHelper;
+import com.ruomm.base.http.config.ResponseParse;
 import com.ruomm.base.ioc.activity.AppManager;
+import com.ruomm.base.ioc.application.core.BaseApplicationTask;
 import com.ruomm.base.ioc.application.crash.CrashHandler;
 import com.ruomm.base.ioc.application.crash.CrashStoreUtil;
+import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.common.greendao.BaseDaoSession;
 import com.ruomm.base.tools.TelePhoneUtil;
@@ -19,6 +22,10 @@ import com.ruomm.baseconfig.http.StringDiskLruCache;
 
 import android.app.Application;
 import android.text.TextUtils;
+
+import org.bouncycastle.jce.provider.symmetric.ARC4;
+
+import java.lang.reflect.Constructor;
 
 /**
  * 自定义的Application类，单例模式实现
@@ -45,6 +52,7 @@ public class BaseApplication extends Application {
 
 	private String processName = null;
 	private boolean isAppProcess = true;
+	private BaseApplicationTask baseApplicationTask=null;
 
 	/**
 	 * 在onCreate时候初始化实例
@@ -71,12 +79,42 @@ public class BaseApplication extends Application {
 		if (BaseConfig.isAppUserCrashEnable) {
 			CrashHandler.getInstance().init(this);
 		}
-		if ("true".equals(app.getData(CrashStoreUtil.Key_CrashTag))) {
-			app.delData(CrashStoreUtil.Key_CrashTag);
+//		if ("true".equals(app.getData(CrashStoreUtil.Key_CrashTag))) {
+//			app.delData(CrashStoreUtil.Key_CrashTag);
+//
+//		}
+		if("true".equals(AppStoreUtil.getString(app,CrashStoreUtil.Key_CrashTag))){
+			AppStoreUtil.delString(app,CrashStoreUtil.Key_CrashTag);
+		}
+		getBaseApplicationTask();
+		if(null!=baseApplicationTask)
+		{
+			baseApplicationTask.doTaskOnCreate();
 		}
 
 	};
+	private  BaseApplicationTask getBaseApplicationTask()
+	{
+		if(TextUtils.isEmpty(BaseConfig.BaseApplicationTask))
+		{
+			return null;
+		}
+		if (null == baseApplicationTask) {
+			try {
+				Class<?> onwClass = ARC4.Base.class.getClassLoader().loadClass(BaseConfig.BaseApplicationTask);
+				Constructor<?> constructor = onwClass.getDeclaredConstructor();
+				constructor.setAccessible(true);
+				Object object = constructor.newInstance();
+				baseApplicationTask = (BaseApplicationTask) object;
 
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+				baseApplicationTask=null;
+			}
+		}
+		return baseApplicationTask;
+	}
 	public String getProcessName() {
 		return processName;
 	}
@@ -129,73 +167,73 @@ public class BaseApplication extends Application {
 		}
 	}
 
-	/**
-	 * 在SharedPreferences存储String数据，如是Value为空(null)则是删除这个String
-	 *
-	 * @param key
-	 * @param value
-	 */
-	public void setData(String key, String value) {
-		BaseUtil.saveString(app, BaseConfig.Property_Space_String, key, value);
-	}
-
-	/**
-	 * 获取SharedPreferences存储中的String数据
-	 *
-	 * @param key
-	 * @return
-	 */
-	public String getData(String key) {
-		return BaseUtil.getString(app, BaseConfig.Property_Space_String, key);
-	}
-
-	/**
-	 * 删除SharedPreferences存储中的String数据
-	 *
-	 * @param key
-	 * @return
-	 */
-	public void delData(String key) {
-		BaseUtil.delByKey(app, BaseConfig.Property_Space_String, key);
-	}
-
-	/**
-	 * 在SharedPreferences存储对象数据，如是Value为空(null)则是删除这个String
-	 * <p>
-	 * 如是key值为空字符串(null或“”)，则调用InjectUtil.getBeanKey(Class<?>
-	 * cls)方法获取存储时候的Key值，key获取逻辑为InjectEntity优先然后是object对应的类型的SimpleName
-	 *
-	 * @param key
-	 * @param object
-	 */
-	public void setBean(String key, Object object) {
-		BaseUtil.saveBean(app, BaseConfig.Property_Space_Object, key, object);
-	}
-
-	/**
-	 * 取出存储SharedPreferences中的对象数据，需要传入泛型的类型
-	 * <p>
-	 * 如是key值为空字符串(null或“”)，则调用InjectUtil.getBeanKey(Class<?> cls)方法获取读取的key值
-	 *
-	 * @param key
-	 * @param cls
-	 * @return
-	 */
-	public <T> T getBean(String key, Class<T> cls) {
-		return BaseUtil.getBean(app, BaseConfig.Property_Space_Object, key, cls);
-	}
-
-	/**
-	 * 删除存储SharedPreferences中的对象数据，需要传入泛型的类型或者Key值
-	 * 如是key值为空字符串(null或“”)，则调用InjectUtil.getBeanKey(Class<?> cls)方法获取删除的key值
-	 * 如是key值不为空，则可以不传泛型类型依照key值来删除
-	 *
-	 * @param key
-	 * @param cls
-	 */
-	public void delBean(String key, Class<?> cls) {
-		BaseUtil.delBean(app, BaseConfig.Property_Space_Object, key, cls);
-	}
+//	/**
+//	 * 在SharedPreferences存储String数据，如是Value为空(null)则是删除这个String
+//	 *
+//	 * @param key
+//	 * @param value
+//	 */
+//	public void setData(String key, String value) {
+//		AppStoreUtil.saveString(app, BaseConfig.Property_Space_String, key, value);
+//	}
+//
+//	/**
+//	 * 获取SharedPreferences存储中的String数据
+//	 *
+//	 * @param key
+//	 * @return
+//	 */
+//	public String getData(String key) {
+//		return AppStoreUtil.getString(app, BaseConfig.Property_Space_String, key);
+//	}
+//
+//	/**
+//	 * 删除SharedPreferences存储中的String数据
+//	 *
+//	 * @param key
+//	 * @return
+//	 */
+//	public void delData(String key) {
+//		AppStoreUtil.delByKey(app, BaseConfig.Property_Space_String, key);
+//	}
+//
+//	/**
+//	 * 在SharedPreferences存储对象数据，如是Value为空(null)则是删除这个String
+//	 * <p>
+//	 * 如是key值为空字符串(null或“”)，则调用InjectUtil.getBeanKey(Class<?>
+//	 * cls)方法获取存储时候的Key值，key获取逻辑为InjectEntity优先然后是object对应的类型的SimpleName
+//	 *
+//	 * @param key
+//	 * @param object
+//	 */
+//	public void setBean(String key, Object object) {
+//		AppStoreUtil.saveBean(app, BaseConfig.Property_Space_Object, key, object);
+//	}
+//
+//	/**
+//	 * 取出存储SharedPreferences中的对象数据，需要传入泛型的类型
+//	 * <p>
+//	 * 如是key值为空字符串(null或“”)，则调用InjectUtil.getBeanKey(Class<?> cls)方法获取读取的key值
+//	 *
+//	 * @param key
+//	 * @param cls
+//	 * @return
+//	 */
+//	public <T> T getBean(String key, Class<T> cls) {
+//		return AppStoreUtil.getBean(app, BaseConfig.Property_Space_Object, key, cls);
+//	}
+//
+//	/**
+//	 * 删除存储SharedPreferences中的对象数据，需要传入泛型的类型或者Key值
+//	 * 如是key值为空字符串(null或“”)，则调用InjectUtil.getBeanKey(Class<?> cls)方法获取删除的key值
+//	 * 如是key值不为空，则可以不传泛型类型依照key值来删除
+//	 *
+//	 * @param key
+//	 * @param cls
+//	 */
+//	public void delBean(String key, Class<?> cls) {
+//		AppStoreUtil.delBean(app, BaseConfig.Property_Space_Object, key, cls);
+//	}
 
 	/**
 	 * crashHanlder自定义实现模块
@@ -207,7 +245,7 @@ public class BaseApplication extends Application {
 		ex.printStackTrace();
 		// 判断是不是短时间内Crash,若是Crash间隔很短直接杀死应用防止陷入反复Crash的流程;
 		final long crashStrideTime = BaseConfig.Crash_MinResartTime * 1000l;
-		final String crashTimeString = getData(CrashStoreUtil.Key_CrashTime);
+		final String crashTimeString = AppStoreUtil.getString(app,CrashStoreUtil.Key_CrashTime);
 		boolean isRestart = true;
 		if (!TextUtils.isEmpty(crashTimeString)) {
 			final long crashTime = Long.valueOf(crashTimeString);
@@ -215,22 +253,26 @@ public class BaseApplication extends Application {
 				isRestart = false;
 			}
 			else {
-				setData(CrashStoreUtil.Key_CrashTime, System.currentTimeMillis() + "");
+				AppStoreUtil.saveString(app,CrashStoreUtil.Key_CrashTime, System.currentTimeMillis() + "");
+//				setData(CrashStoreUtil.Key_CrashTime, System.currentTimeMillis() + "");
 			}
 		}
 		else {
-			setData(CrashStoreUtil.Key_CrashTime, System.currentTimeMillis() + "");
+			AppStoreUtil.saveString(app,CrashStoreUtil.Key_CrashTime, System.currentTimeMillis() + "");
+//			setData(CrashStoreUtil.Key_CrashTime, System.currentTimeMillis() + "");
 		}
 
 		// 安排Crash重启任务,若是重启
 		if (isRestart) {
 			CrashStoreUtil.saveCrashInfoToFile(this, ex);
-			setData(CrashStoreUtil.Key_CrashTag, "true");
+			AppStoreUtil.saveString(app,CrashStoreUtil.Key_CrashTag, "true");
+//			setData(CrashStoreUtil.Key_CrashTag, "true");
 			// 只重启主界面,若是没有主界面则直接结束应用!
 			AppManager.finishAllActivityExceptOne(BaseConfig.Crash_KeepActivityName);
 		}
 		else {
-			delData(CrashStoreUtil.Key_CrashTag);
+			AppStoreUtil.delString(app,CrashStoreUtil.Key_CrashTag);
+//			delData(CrashStoreUtil.Key_CrashTag);
 			AppManager.finishAllActivity();
 		}
 
