@@ -81,8 +81,7 @@ public class DisplayUtil {
 	/**
 	 * 像素转换成厘米
 	 * 
-	 * @param mContext
-	 * @param pxValue
+	 * @param inchValue
 	 * @return
 	 */
 	public static float InchToCM(float inchValue) {

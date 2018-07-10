@@ -4,6 +4,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -17,6 +18,7 @@ import com.ruomm.base.tools.StringUtils;
 import com.ruomm.baseconfig.debug.MLog;
 import com.zjsj.mchtapp.R;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +68,7 @@ public class KeyboardUtil {
     private List<String> encryptLst=null;
     private String encryptStr=null;
     private KeyboardSafeInterface keyboardSafeInterface=null;
+    private int editTextMaxlength=0;
     public KeyboardUtil(Activity activity, EditText edit) {
         this.mEditText = edit;
         mActivity=activity;
@@ -86,7 +89,7 @@ public class KeyboardUtil {
         else {
             kv_lyt_container.setPadding(0,mActivity.getResources().getDimensionPixelSize(R.dimen.dpx006),0,mActivity.getResources().getDimensionPixelSize(R.dimen.dpx032));
         }
-
+        editTextMaxlength=getEditTextMaxLength(this.mEditText );
         keyboardView.setEnabled(true);
         keyboardView.setPreviewEnabled(false);
         keyboardView.setOnKeyboardActionListener(onKeyboardActionListener);
@@ -407,10 +410,22 @@ public class KeyboardUtil {
     };
     private void editTextInsert(int start,String str)
     {
+        if(StringUtils.isEmpty(str))
+        {
+            return;
+        }
+        Editable editable = mEditText.getText();
+        if(editTextMaxlength>0)
+        {
+            int desLength=editable.length()+str.length();
+            if(desLength>editTextMaxlength)
+            {
+                return;
+            }
+        }
         if(null!=keyboardSafeInterface) {
             if(keyboardSafeInterface.isEncryptByChar()) {
                 try {
-                    Editable editable = mEditText.getText();
                     if (editable.length() != encryptLst.size()) {
                         mEditText.setText(null);
                         encryptLst.clear();
@@ -429,7 +444,6 @@ public class KeyboardUtil {
                 try {
                     String data=keyboardSafeInterface.getDecryptStr(encryptStr);
                     StringBuilder sbTemp=StringUtils.isEmpty(data)?new StringBuilder():new StringBuilder(data) ;
-                    Editable editable = mEditText.getText();
                     if(editable.length()!= sbTemp.length())
                     {
                         mEditText.setText(null);
@@ -442,17 +456,16 @@ public class KeyboardUtil {
                     MLog.i(encryptStr);
                 }catch (Exception e)
                 {
-                    Editable editable = mEditText.getText();
+                    e.printStackTrace();
                     mEditText.setText(null);
                     encryptLst.clear();
-                    e.printStackTrace();
+
                 }
 
 
             }
         }
         else{
-            Editable editable = mEditText.getText();
             editable.insert(start, str);
         }
 
@@ -639,6 +652,28 @@ public class KeyboardUtil {
         }
         k1.setShifted(isUpper);
         keyboardView.invalidateAllKeys();
+    }
+    private int getEditTextMaxLength(EditText et) {
+        int length = 0;
+        try {
+            InputFilter[] inputFilters = et.getFilters();
+            for (InputFilter filter : inputFilters) {
+                Class<?> c = filter.getClass();
+                if (c.getName().equals("android.text.InputFilter$LengthFilter")) {
+                    Field[] f = c.getDeclaredFields();
+                    for (Field field : f) {
+                        if (field.getName().equals("mMax")) {
+                            field.setAccessible(true);
+                            length = (Integer) field.get(filter);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            length=0;
+        }
+        return length;
     }
 //
 //    private static KeyboardUtil mInstance;

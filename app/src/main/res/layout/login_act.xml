@@ -64,7 +64,9 @@
                 android:id="@+id/edt_name"
                 style="@style/editTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLength="11"
+                android:digits="@string/digits_number"/>
         </LinearLayout>
         <LinearLayout
             android:paddingBottom="@dimen/dpx016"
@@ -83,7 +85,8 @@
                 android:id="@+id/edt_pwd"
                 style="@style/editTextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLength="16"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ly_verifyCode"
@@ -107,6 +110,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/dpx012"
+                android:maxLength="10"
                 />
             <Button
                 android:id="@+id/btn_verifyCode"

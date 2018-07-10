@@ -11,4 +11,7 @@
     <string name="btn_register">注册</string>
     <string name="btn_login">登录</string>
     <string name="btn_print">打印</string>
+    <string name="digits_number">1234567890</string>
+    <string name="digits_letter_number">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
+    <string name="digits_letter">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 </resources>
