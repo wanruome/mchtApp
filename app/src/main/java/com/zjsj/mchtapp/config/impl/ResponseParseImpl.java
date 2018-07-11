@@ -1,4 +1,4 @@
-package com.zjsj.mchtapp.config.http;
+package com.zjsj.mchtapp.config.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -6,7 +6,7 @@ import com.ruomm.base.http.config.ResponseParse;
 import com.ruomm.base.tools.StringUtils;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
 
-public class AppResponseParse implements ResponseParse {
+public class ResponseParseImpl implements ResponseParse {
     @Override
     public Object parseResponseText(String resourceString, Class<?> cls) {
 

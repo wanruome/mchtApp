@@ -1,6 +1,5 @@
 package com.zjsj.mchtapp.module.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -10,12 +9,10 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ruomm.base.ioc.adapter.PagerAdapter_View;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
-import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.DisplayUtil;
 import com.ruomm.base.tools.ToastUtil;
@@ -180,7 +177,7 @@ public class MainActivity extends AppSimpleActivity{
             return true;
         }
         else{
-            startActivity(IntentFactory.getLoinActityIntent());
+            startActivity(IntentFactory.getLoinActivity());
             return false;
         }
     }

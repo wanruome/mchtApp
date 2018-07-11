@@ -1,4 +1,4 @@
-package com.zjsj.mchtapp.config.keyboard;
+package com.zjsj.mchtapp.config.impl;
 
 import com.ruomm.base.tools.Base64;
 import com.ruomm.base.tools.RSAUtils;

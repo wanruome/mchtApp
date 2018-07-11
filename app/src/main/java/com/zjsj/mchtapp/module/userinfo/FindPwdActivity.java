@@ -25,7 +25,7 @@ import com.ruomm.base.view.menutopview.MenuTopListener;
 import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.http.ApiConfig;
-import com.zjsj.mchtapp.config.keyboard.KeyboardSafeImpl;
+import com.zjsj.mchtapp.config.impl.KeyboardSafeImpl;
 import com.zjsj.mchtapp.core.PassWordService;
 import com.zjsj.mchtapp.dal.response.MsgSendDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;

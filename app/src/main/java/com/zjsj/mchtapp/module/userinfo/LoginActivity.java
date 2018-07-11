@@ -26,7 +26,7 @@ import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.IntentFactory;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
-import com.zjsj.mchtapp.config.keyboard.KeyboardSafeImpl;
+import com.zjsj.mchtapp.config.impl.KeyboardSafeImpl;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.response.MsgSendDto;
 import com.zjsj.mchtapp.dal.response.UserInfoDto;
@@ -95,11 +95,11 @@ public class LoginActivity extends AppMultiActivity {
             }
             else if(vID==R.id.text_findpwd)
             {
-                startActivity(IntentFactory.getFindPwdActivityIntent());
+                startActivity(IntentFactory.getFindPwdActivity());
             }
             else if(vID==R.id.ly_fast_register)
             {
-                startActivity(IntentFactory.getRegisterActivityIntent());
+                startActivity(IntentFactory.getRegisterActivity());
             }
         }
     };
