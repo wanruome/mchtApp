@@ -7,28 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.ruomm.base.http.config.impl.TextHttpCallBack;
-import com.ruomm.base.http.okhttp.TextOKHttp;
-import com.ruomm.base.ioc.activity.BaseFragment;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
-import com.ruomm.base.tools.StringUtils;
-import com.ruomm.base.tools.TelePhoneUtil;
-import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.resource.ui.AppFragment;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.IntentFactory;
-import com.zjsj.mchtapp.config.LoginUserFactory;
-import com.zjsj.mchtapp.config.http.ApiConfig;
-import com.zjsj.mchtapp.core.PassWordService;
-import com.zjsj.mchtapp.dal.response.base.ResultDto;
-import com.zjsj.mchtapp.dal.response.base.ResultFactory;
-import com.zjsj.mchtapp.dal.store.UserGesturesInfo;
-
-import java.util.Map;
 
 public class SettingPayPwdFragment extends AppFragment {
     @InjectAll

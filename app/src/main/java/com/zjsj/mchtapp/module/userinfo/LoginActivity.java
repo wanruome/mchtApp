@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ruomm.base.http.config.impl.TextHttpCallBack;
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
@@ -27,6 +26,7 @@ import com.zjsj.mchtapp.config.IntentFactory;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.KeyboardSafeImpl;
+import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.response.MsgSendDto;
 import com.zjsj.mchtapp.dal.response.UserInfoDto;
@@ -197,11 +197,8 @@ public class LoginActivity extends AppMultiActivity {
                 else {
                     UserInfoDto userInfoDto = ResultFactory.getResult(resultObject, status);
                     if (null != userInfoDto) {
-                        LoginUserFactory.doLogin(userInfoDto);
                         ToastUtil.makeOkToastThr(mContext, "登录成功");
-                        LoginEvent loginEvent=new LoginEvent();
-                        loginEvent.loninStatus=true;
-                        EventBus.getDefault().post(loginEvent);
+                        LoginUserFactory.doLogin(userInfoDto);
                         finish();
                     } else {
                         ToastUtil.makeFailToastThr(mContext, "登录失败");

@@ -1,15 +1,14 @@
 package com.zjsj.mchtapp.core;
 
-import com.ruomm.base.http.config.impl.TextHttpCallBack;
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.tools.StringUtils;
 import com.zjsj.mchtapp.config.http.ApiConfig;
+import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.event.MsgSendEvent;
 import com.zjsj.mchtapp.dal.response.MsgSendDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
 
 import org.greenrobot.eventbus.EventBus;
-import org.w3c.dom.Text;
 
 import java.util.Map;
 

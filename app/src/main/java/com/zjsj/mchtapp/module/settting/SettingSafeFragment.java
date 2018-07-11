@@ -5,22 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.ruomm.base.http.config.impl.TextHttpCallBack;
 import com.ruomm.base.http.okhttp.TextOKHttp;
-import com.ruomm.base.ioc.activity.BaseFragment;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.StringUtils;
-import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.resource.dialog.MessageDialog;
@@ -30,6 +25,7 @@ import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.IntentFactory;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
+import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.response.PayInfoDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
@@ -69,7 +65,7 @@ public class SettingSafeFragment extends AppFragment {
         else{
             views.setting_switch_gesture.setSelected(true);
         }
-        views.setting_switch_fingerprint.setSelected(true);
+        views.setting_switch_fingerprint.setSelected(false);
     }
     private void setOnClickListener(){
         views.setting_switch_nopaypwd.setOnClickListener(myOnClickListener);
@@ -87,7 +83,24 @@ public class SettingSafeFragment extends AppFragment {
             }
             else if(vID==R.id.setting_switch_fingerprint)
             {
+                if(v.isSelected()){
+                    MessageDialog messageDialog=new MessageDialog(mContext);
+                    messageDialog.setDialogValue(new DialogValue("确认删除指纹登录吗？"));
+                    messageDialog.setBaseDialogClick(new BaseDialogClickListener() {
+                        @Override
+                        public void onDialogItemClick(View v, Object tag) {
+                            if(v.getId()==R.id.dialog_confirm)
+                            {
+                                views.setting_switch_fingerprint.setSelected(false);
+                            }
+                        }
+                    });
+                    messageDialog.show();
 
+                }
+                else {
+                    startActivityForResult(IntentFactory.getFingerPrintActivity(), IntentFactory.Request_FingerPrintActivity);
+                }
             }
             else if(vID==R.id.setting_switch_gesture)
             {
@@ -113,7 +126,7 @@ public class SettingSafeFragment extends AppFragment {
             }
             else if(vID==R.id.setting_ly_paypwd)
             {
-               callBackActivity("3",null);
+               callBackActivity("3");
             }
         }
     };
@@ -133,6 +146,7 @@ public class SettingSafeFragment extends AppFragment {
                 if(!StringUtils.isEmpty(errTip))
                 {
                     ToastUtil.makeFailToastThr(mContext,errTip);
+                    callBackActivity("1");
                 }
                 else {
                     PayInfoDto payInfoDto=ResultFactory.getResult(resultObject,status);

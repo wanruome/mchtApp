@@ -39,13 +39,22 @@ public class ResultFactory {
         }
     }
     public static String getErrorTip(Object resultObject,int status){
+        if (status==HttpConfig.Success_Filter)
+        {
+            return "登录已经失效，请重新登录";
+        }
+        if (status==HttpConfig.Success_ParseError)
+        {
+            return "请求解析错误";
+        }
         if(status!= HttpConfig.Success)
         {
             return "网络连接错误";
         }
         if(null==resultObject||!(resultObject instanceof ResultDto))
         {
-                return "请求解析错误"; }
+                return "请求解析错误";
+        }
         ResultDto result=(ResultDto) resultObject;
         if(SUCESS_CODE.equals(result.code))
             {

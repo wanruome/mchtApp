@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ruomm.base.http.config.impl.TextHttpCallBack;
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
@@ -23,6 +22,7 @@ import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.KeyboardSafeImpl;
+import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.core.PassWordService;
 import com.zjsj.mchtapp.dal.response.MsgSendDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;

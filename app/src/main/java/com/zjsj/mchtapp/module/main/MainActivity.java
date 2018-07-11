@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-
 import com.ruomm.base.ioc.adapter.PagerAdapter_View;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
@@ -31,6 +30,7 @@ import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.IntentFactory;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
+import com.zjsj.mchtapp.dal.event.TokenEvent;
 import com.zjsj.mchtapp.module.main.adapter.MainFunctionAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -142,13 +142,21 @@ public class MainActivity extends AppSimpleActivity{
     public void onEventMainThrend(LoginEvent event){
         updateUiByUserInfo();
     }
+    @Subscribe
+    public void onEventMainThrend(TokenEvent event){
+        if(event.isInValid)
+        {
+            updateUiByUserInfo();
+            startActivity(IntentFactory.getLoinActivity());
+        }
+    }
     private View.OnClickListener myOnClickListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int vID=v.getId();
             if(vID==R.id.ly_login)
             {
-                isAppLogin(false);
+                isAppLogin(true);
             }
             else if(vID==R.id.img_scan)
             {

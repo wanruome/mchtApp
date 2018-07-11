@@ -7,7 +7,6 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 
 import com.ruomm.base.http.config.ResponseText;
-import com.ruomm.base.http.config.impl.TextHttpCallBack;
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.extend.BaseService;
 import com.ruomm.base.ioc.extend.Thread_CanStop;
@@ -15,6 +14,7 @@ import com.ruomm.base.tools.Base64;
 import com.ruomm.base.tools.RSAUtils;
 import com.ruomm.baseconfig.debug.MLog;
 import com.zjsj.mchtapp.config.http.ApiConfig;
+import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.response.KeyPairDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
 

@@ -10,20 +10,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ruomm.base.http.config.impl.TextHttpCallBack;
 import com.ruomm.base.http.okhttp.TextOKHttp;
-import com.ruomm.base.ioc.activity.BaseFragment;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.DisplayUtil;
 import com.ruomm.base.tools.StringUtils;
-import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
-import com.ruomm.base.view.percentview.FrameLayout_PercentHeight;
 import com.ruomm.base.view.percentview.RelativeLayout_PercentHeight;
-import com.ruomm.base.view.swiplayout.SwipeLayout;
 import com.ruomm.resource.dialog.MessageDialog;
 import com.ruomm.resource.dialog.dal.DialogValue;
 import com.ruomm.resource.ui.AppFragment;
@@ -31,16 +26,15 @@ import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.IntentFactory;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
+import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
+import com.zjsj.mchtapp.dal.event.TokenEvent;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.w3c.dom.Text;
 
 import java.util.Map;
-
-import javax.xml.transform.Result;
 
 public class MainMenuFragment extends AppFragment {
     @InjectAll
@@ -92,6 +86,13 @@ public class MainMenuFragment extends AppFragment {
     public void onEventMainThrend(LoginEvent event){
         updateUiByUserInfo();
     }
+    @Subscribe
+    public void onEventMainThrend(TokenEvent event){
+        if(event.isInValid)
+        {
+            updateUiByUserInfo();
+        }
+    }
     private void updateUiByUserInfo()
     {
         if(LoginUserFactory.isLogin())
@@ -136,7 +137,6 @@ public class MainMenuFragment extends AppFragment {
         else {
             MessageDialog messageDialog=new MessageDialog(mContext);
             messageDialog.setDialogValue(new DialogValue("是否退出登录?"));
-            messageDialog.setCancelable(true);
             messageDialog.setBaseDialogClick(new BaseDialogClickListener() {
                 @Override
                 public void onDialogItemClick(View v, Object tag) {
@@ -160,6 +160,7 @@ public class MainMenuFragment extends AppFragment {
                     String errMsg= ResultFactory.getErrorTip(resultObject,status);
                     if(StringUtils.isEmpty(errMsg))
                     {
+                        LoginUserFactory.doLogout();
                         ToastUtil.makeOkToastThr(mContext,"退出成功");
                     }
                     else{

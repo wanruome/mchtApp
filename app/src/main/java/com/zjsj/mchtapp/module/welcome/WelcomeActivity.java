@@ -1,16 +1,13 @@
 package com.zjsj.mchtapp.module.welcome;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import com.ruomm.base.http.config.impl.TextHttpCallBack;
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.activity.AppManager;
-import com.ruomm.base.ioc.iocutil.BaseServiceUtil;
 import com.ruomm.base.tools.Base64;
 import com.ruomm.base.tools.RSAUtils;
 import com.ruomm.base.tools.TelePhoneUtil;
@@ -19,15 +16,14 @@ import com.ruomm.base.tools.permission.PermissionHelper;
 import com.ruomm.base.tools.permission.PermissionHelperCallBack;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.baseconfig.debug.MLog;
-import com.ruomm.resource.dialog.CommonDialogLoad;
 import com.ruomm.resource.dialog.MessageDialog;
 import com.ruomm.resource.dialog.dal.DialogValue;
 import com.ruomm.resource.ui.AppSimpleActivity;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.http.ApiConfig;
+import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.response.KeyPairDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
-import com.zjsj.mchtapp.module.keypair.KeyPairService;
 
 import java.security.KeyPair;
 import java.util.HashMap;

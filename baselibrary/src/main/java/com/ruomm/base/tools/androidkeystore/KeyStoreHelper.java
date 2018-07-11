@@ -1,27 +1,18 @@
 package com.ruomm.base.tools.androidkeystore;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
-import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
-import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.Base64;
 import com.ruomm.base.tools.DesUtil;
 import com.ruomm.base.tools.RSAUtils;
 
-import org.bouncycastle.jce.provider.symmetric.ARC4;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;

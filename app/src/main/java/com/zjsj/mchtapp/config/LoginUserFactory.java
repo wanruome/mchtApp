@@ -5,10 +5,13 @@ import android.content.Context;
 import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.tools.StringUtils;
+import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.response.PayInfoDto;
 import com.zjsj.mchtapp.dal.response.UserInfoDto;
 import com.zjsj.mchtapp.dal.store.LastLoginUserInfo;
 import com.zjsj.mchtapp.dal.store.UserGesturesInfo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,12 +58,21 @@ public class LoginUserFactory {
             lastLoginUserInfo.accountType="1";
             AppStoreUtil.safeSaveBean(app,null,lastLoginUserInfo);
             AppStoreUtil.safeSaveBean(app, null, loginUserInfo);
+            //发送EventBus事件
+            LoginEvent loginEvent=new LoginEvent();
+            loginEvent.loninStatus=true;
+            EventBus.getDefault().post(loginEvent);
         }
     }
     public static void doLogout()
     {
         mLoginUserInfo=null;
+        mPayInfoDto=null;
         AppStoreUtil.safeDelBean(BaseApplication.getApplication(), null, UserInfoDto.class);
+        //发送EventBus事件
+        LoginEvent loginEvent=new LoginEvent();
+        loginEvent.loninStatus=false;
+        EventBus.getDefault().post(loginEvent);
     }
     public static void setPayInfoDto(PayInfoDto payInfoDto)
     {

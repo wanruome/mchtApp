@@ -1,33 +1,24 @@
 package com.zjsj.mchtapp.module.payinfo;
 
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.ruomm.base.http.config.impl.TextHttpCallBack;
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
-import com.ruomm.base.ioc.extend.Thread_CanStop;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.ToastUtil;
-import com.ruomm.base.tools.regextool.RegexCallBack;
-import com.ruomm.base.tools.regextool.RegexText;
-import com.ruomm.base.tools.regextool.RegexUtil;
 import com.ruomm.base.view.menutopview.MenuTopListener;
 import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.KeyboardSafeImpl;
+import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.core.PassWordService;
-import com.zjsj.mchtapp.dal.response.MsgSendDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
-import com.zjsj.mchtapp.module.userinfo.RegisterActivity;
 import com.zjsj.mchtapp.util.keyboard.KeyboardUtil;
 
 import java.util.Map;

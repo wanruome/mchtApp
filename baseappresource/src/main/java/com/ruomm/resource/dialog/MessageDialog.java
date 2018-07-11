@@ -20,11 +20,11 @@ public class MessageDialog extends BaseDialogUserConfig {
 
 	public MessageDialog(Context mContext) {
 		super(mContext, R.layout.dialog_message, R.style.dialogStyle_floating_bgdark);
-		setCancelable(false);
 		setListener(R.id.dialog_cancle);
 		setListener(R.id.dialog_confirm);
 		setDialogLayoutParams((int) (DisplayUtil.getDispalyWidth(mContext) * BaseConfig.Dialoag_WidthPercent),
 				LayoutParams.WRAP_CONTENT);
+		setCancelable(false);
 		// LinearLayout layout=(LinearLayout) findViewById(R.id.dialog_container);
 		// layout.set
 		// setDialogLayoutParams(DisplayUtil.getDispalyWidth(mContext) * 3 / 4,

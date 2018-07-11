@@ -1,9 +1,14 @@
 package com.zjsj.mchtapp.module.fingerprint;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
+import android.widget.TextView;
 
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
@@ -18,6 +23,9 @@ import com.ruomm.base.view.menutopview.MenuTopView;
 import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
+import com.zjsj.mchtapp.module.userinfo.FindPwdActivity;
+import com.zjsj.mchtapp.util.fingerprint.FingerprintUtil;
+import com.zjsj.mchtapp.view.FingerPrintDialog;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -29,67 +37,139 @@ public class FingerPrintActivity extends AppMultiActivity {
     @InjectAll
     Views views=new Views();
     class Views{
-        @InjectView(id= R.id.mymenutop)
-        MenuTopView menuTopView;
+        @InjectView(id= R.id.text_error)
+        TextView text_error;
     }
-
+    FingerprintUtil fingerprintUtil=null;
+    FingerPrintDialog fingerPrintDialog=null;
+    boolean isOnVerify=false;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
-        BaseUtil.initInjectAll(this);
-        views.menuTopView.setMenuClickListener(new MenuTopListener() {
+        setInitContentView(R.layout.fingerprint_act_lay);
+        setMenuTop();
+        views.text_error.setVisibility(View.GONE);
+        fingerPrintDialog=new FingerPrintDialog(mContext);
+        fingerprintUtil=new FingerprintUtil(mContext);
+        doVerifyFingerprint();
+
+    }
+    private void setMenuTop(){
+        mymenutop.setCenterText("设置指纹密码");
+        mymenutop.setMenuClickListener(new MenuTopListener() {
             @Override
             public void onMenuTopClick(View v, int vID) {
-                testKeyStore();
+                if(vID==R.id.menutop_left)
+                {
+                    finish();
+                }
             }
         });
     }
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public void testKeyStore() {
-
-//        KeyStoreHelper helper = new KeyStoreHelper();
-//        helper.initKeyStore();
-//
-//        helper.printAliases();
-//
-//        String aesAlias = "hello aes key";
-//        helper.createSecretKey(aesAlias);
-//        helper.getSecretKey(aesAlias);
-//        helper.printAliases();
-//
-//        String rsaAlias = "hello rsa key";
-//        helper.createKeyPair(this,rsaAlias);
-//        KeyPair keyPair=helper.getTargetKeyPair(rsaAlias);
-//        helper.printAliases();
-////        RSAPrivateKey rsaPrivateKey=(RSAPrivateKey) keyPair.getPrivate();
-//        byte[] data=keyPair.getPublic().getEncoded();
-//        String dataCode=Base64.encode(data);
-//        byte[] encryptData=RSAUtils.encryptData("你好".getBytes(),keyPair.getPublic());
-//        String encryptStr= Base64.encode(encryptData);
-//        MLog.i(data);
-//        MLog.i(dataCode);
-//        MLog.i(encryptStr);
-//        String data="溪山如画对新晴,云融融风淡淡水盈盈.最喜春来百卉荣,好花弄影细柳摇青.最怕春归百卉零,风风雨雨劫残英.君记取,青春易逝,莫负良辰美景.";
-////        String data="溪山如画对新晴,";
-//        AppStoreUtil.safeSaveString(this,"data",data);
-//        String dataStore=AppStoreUtil.safeGetString(this,"data");
-//        MLog.i(dataStore);
-
-    }
-    public static byte[] encryptData(byte[] sourceData, PrivateKey privateKey) {
-        byte[] result = null;
-        try {
-            final Cipher cipher = Cipher.getInstance("RSA");
-            // 编码前设定编码方式及密钥
-            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-            // 传入编码数据并返回编码结果
-            result = cipher.doFinal(sourceData);
+//    private void setClickListener(){
+//        views.text_tip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                doVerifyFingerprint();
+//            }
+//        });
+//    }
+    public void doVerifyFingerprint(){
+        if(isOnVerify)
+        {
+            return;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
+        isOnVerify=true;
+        fingerprintUtil.callFingerPrintVerify(new FingerprintUtil.IFingerprintResultListener() {
+            @Override
+            public void onSupport(boolean isSupport) {
+                MLog.i("onSupport"+isSupport);
+                if(!isSupport)
+                {
+                    isOnVerify=false;
+                    views.text_error.setVisibility(View.VISIBLE);
+                }
+                else {
+                    views.text_error.setVisibility(View.GONE);
+                }
+            }
+            @Override
+            public void onAuthenticateStart() {
+                MLog.i("onAuthenticateStart");
+                showDialog("验证指纹");
+            }
+
+            @Override
+            public void onAuthenticateError(int errMsgId, CharSequence errString) {
+                MLog.i("onAuthenticateError"+errMsgId+errString);
+                showDialog(errString);
+            }
+
+            @Override
+            public void onAuthenticateFailed() {
+                MLog.i("onAuthenticateFailed");
+                showDialog("指纹验证失败，请稍后重试");
+                isOnVerify=false;
+            }
+
+            @Override
+            public void onAuthenticateHelp(int helpMsgId, CharSequence helpString) {
+                MLog.i("onAuthenticateHelp"+helpMsgId+helpString);
+            }
+
+            @Override
+            public void onAuthenticateSucceeded(FingerprintManager.AuthenticationResult result) {
+                MLog.i("onAuthenticateSucceeded"+result.toString());
+                showDialog("指纹验证成功");
+                isOnVerify=false;
+//                new Thread(){
+//                    @Override
+//                    public void run() {
+//                        super.run();
+//                        SystemClock.sleep(300);
+//                        FingerPrintActivity.this.runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                fingerPrintDialog=null;
+//                                setResult(Activity.RESULT_OK);
+//                                finish();
+//                            }
+//                        });
+//                    }
+//                }.start();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(null!=fingerPrintDialog&&fingerPrintDialog.isShowing())
+                        {
+                            fingerPrintDialog.dismiss();
+                        }
+                        fingerPrintDialog=null;
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                },300);
+            }
+        });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fingerprintUtil.onDestroy();
+        fingerPrintDialog=null;
+    }
+
+    private void showDialog(CharSequence contentStr)
+    {
+        if(null==fingerPrintDialog)
+        {
+            return;
+        }
+        fingerPrintDialog.setMessageContent(contentStr);
+        fingerPrintDialog.show();
+    }
+
 
 
 }

@@ -13,16 +13,12 @@ import com.ruomm.base.tools.DesUtil;
 import com.ruomm.base.tools.RSAUtils;
 import com.ruomm.base.tools.StringUtils;
 
-import org.bouncycastle.jce.provider.symmetric.ARC4;
-
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.UnrecoverableEntryException;
@@ -30,11 +26,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Calendar;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.security.auth.x500.X500Principal;
 
 public class AndroidKeyStoreHelper {
