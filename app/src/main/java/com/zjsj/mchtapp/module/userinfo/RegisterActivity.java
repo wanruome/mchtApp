@@ -194,7 +194,7 @@ public class RegisterActivity extends AppMultiActivity {
                 {
                     verifyCodeThread=new VerifyCodeThread();
                     verifyCodeThread.start();
-
+                    ToastUtil.makeOkToastThr(mContext,"短信验证码获取成功");
                 }
                 else{
                     ToastUtil.makeFailToastThr(mContext,errorTip);

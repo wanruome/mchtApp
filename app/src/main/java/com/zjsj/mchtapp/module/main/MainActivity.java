@@ -16,12 +16,15 @@ import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.DisplayUtil;
 import com.ruomm.base.tools.ToastUtil;
+import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.base.view.dottabstripview.DotTabStripListener;
 import com.ruomm.base.view.dottabstripview.DotTabStripView;
 import com.ruomm.base.view.menutopview.MenuTopListener;
 import com.ruomm.base.view.menutopview.MenuTopView;
 import com.ruomm.base.view.percentview.FrameLayout_PercentHeight;
 import com.ruomm.base.view.percentview.LinearLayout_PercentHeight;
+import com.ruomm.resource.dialog.MessageDialog;
+import com.ruomm.resource.dialog.dal.DialogValue;
 import com.ruomm.resource.ui.AppSimpleActivity;
 import com.squareup.picasso.Picasso;
 import com.zjsj.mchtapp.R;
@@ -145,7 +148,7 @@ public class MainActivity extends AppSimpleActivity{
             int vID=v.getId();
             if(vID==R.id.ly_login)
             {
-                parseIsLogin();
+                isAppLogin(false);
             }
             else if(vID==R.id.img_scan)
             {
@@ -171,13 +174,29 @@ public class MainActivity extends AppSimpleActivity{
 
         }
     }
-    private boolean parseIsLogin(){
+    private boolean isAppLogin(boolean isShowDialog){
         if(LoginUserFactory.isLogin())
         {
             return true;
         }
         else{
-            startActivity(IntentFactory.getLoinActivity());
+            if(!isShowDialog){
+                startActivity(IntentFactory.getLoinActivity());
+            }
+            else{
+                MessageDialog messageDialog=new MessageDialog(mContext);
+                messageDialog.setDialogValue(new DialogValue("登录","是否登录应用"));
+                messageDialog.setBaseDialogClick(new BaseDialogClickListener() {
+                    @Override
+                    public void onDialogItemClick(View v, Object tag) {
+                        if(v.getId()==R.id.dialog_confirm)
+                        {
+                            startActivity(IntentFactory.getLoinActivity());
+                        }
+                    }
+                });
+                messageDialog.show();
+            }
             return false;
         }
     }

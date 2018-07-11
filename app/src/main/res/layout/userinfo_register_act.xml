@@ -9,33 +9,34 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_weight="4"
+        android:layout_weight="2"
+        android:visibility="gone"
         >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/newpay_logo"
-            android:id="@+id/img_logo"
-            />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            >
-            <TextView
-                style="@style/textWhiteLable.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="欢迎来到 "
-                />
-            <TextView
-                style="@style/textWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="新生支付"
-                />
-        </LinearLayout>
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@mipmap/newpay_logo"-->
+            <!--android:id="@+id/img_logo"-->
+            <!--/>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:gravity="center"-->
+            <!--&gt;-->
+            <!--<TextView-->
+                <!--style="@style/textWhiteLable.Small"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="欢迎来到 "-->
+                <!--/>-->
+            <!--<TextView-->
+                <!--style="@style/textWhite"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="新生支付"-->
+                <!--/>-->
+        <!--</LinearLayout>-->
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,6 +46,7 @@
         android:layout_weight="6"
         android:paddingLeft="@dimen/dpx080"
         android:paddingRight="@dimen/dpx080"
+        android:paddingTop="@dimen/dpx040"
         >
         <LinearLayout
             android:paddingBottom="@dimen/dpx016"
@@ -165,7 +167,7 @@
         </LinearLayout>
         <Button
             android:id="@+id/btn_submit"
-            style="@style/btnStyleNoMargin"
+            style="@style/btnStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="注册"

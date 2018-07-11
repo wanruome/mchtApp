@@ -43,6 +43,7 @@
                 android:layout_height="@dimen/dpx100"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:id="@+id/menu_setting"
                 >
                 <ImageView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -59,6 +60,7 @@
                 android:layout_height="@dimen/dpx100"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:id="@+id/menu_help"
                 >
                 <ImageView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,6 +77,7 @@
                 android:layout_height="@dimen/dpx100"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:id="@+id/menu_feedback"
                 >
                 <ImageView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,6 +94,7 @@
                 android:layout_height="@dimen/dpx100"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:id="@+id/menu_about_us"
                 >
                 <ImageView android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -3,9 +3,13 @@
     android:layout_width="match_parent"
     xmlns:GestureLock="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent">
+
     <com.ruomm.base.view.gesturelock.GestureLock
         android:id="@+id/gesture_lock"
-        GestureLock:line_width="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        GestureLock:line_width="@dimen/dpx010"
         GestureLock:line_normal_color="@color/text_white_sub"
         GestureLock:line_error_color="@color/text_red"
         GestureLock:gesture_error_show_arrow="true"
@@ -13,7 +17,16 @@
         GestureLock:gesture_normal_show_arrow="true"
         GestureLock:gesture_normal_show_path="true"
         GestureLock:gesture_can_repeat="true"
-        GestureLock:gesture_max_count="10"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        GestureLock:gesture_max_count="9"
+    />
+    <TextView
+        android:id="@+id/text_tip"
+        style="@style/textWhiteSub"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/gesture_lock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="绘制手势密码"
+        android:paddingBottom="@dimen/dpx010"
+        />
 </RelativeLayout>

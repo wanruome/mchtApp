@@ -28,7 +28,7 @@ public class GestureLock extends ViewGroup {
     private int mWidth, mHeight;
     private int mCenterX, mCenterY;
 
-    private int[] defaultGestures = new int[]{0};
+    private List<Integer> defaultGestures=null;
     private int[] negativeGestures;
 
     private List<Integer> gesturesContainer;
@@ -78,7 +78,7 @@ public class GestureLock extends ViewGroup {
      */
     public interface GestureLockAdapter{
         int getDepth();
-        int[] getCorrectGestures();
+        List<Integer> getCorrectGestures();
         int getUnmatchedBoundary();
         int getBlockGapSize();
         GestureLockView getGestureLockViewInstance(Context context, int position);
@@ -121,7 +121,6 @@ public class GestureLock extends ViewGroup {
 
         touchable = true;
     }
-
     public void setAdapter(GestureLockAdapter adapter){
         if(mAdapter == adapter) return;
 
@@ -424,9 +423,9 @@ public class GestureLock extends ViewGroup {
                     if (gesturesContainer.size()>0) {
                         boolean matched = false;
 
-                        if (null!=defaultGestures&&gesturesContainer.size() == defaultGestures.length) {
-                            for (int j = 0; j < defaultGestures.length; j++) {
-                                if (gesturesContainer.get(j) == defaultGestures[j]) {
+                        if (null!=defaultGestures&&gesturesContainer.size() == defaultGestures.size()) {
+                            for (int j = 0; j < defaultGestures.size(); j++) {
+                                if (gesturesContainer.get(j) == defaultGestures.get(j)) {
                                     matched = true;
                                 } else {
                                     matched = false;
@@ -488,7 +487,7 @@ public class GestureLock extends ViewGroup {
                             List<Integer> gesturesResultLst=new ArrayList<Integer>();
                             if(gesturesContainer.size()>0)
                             {
-                                gesturesResultLst.addAll(gesturesResultLst);
+                                gesturesResultLst.addAll(gesturesContainer);
 
                             }
                             onGestureEventListener.onGestureResult(matched,gesturesResultLst);

@@ -181,7 +181,7 @@ public class LoginActivity extends AppMultiActivity {
         map.put("termType", "1");
         map.put("msgVerifyCode",verifyCode);
         ApiConfig.signRequestMap(map);
-        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doHttpTask").setRequestBodyText(map).doHttp(UserInfoDto.class, new TextHttpCallBack() {
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doLogin").setRequestBodyText(map).doHttp(UserInfoDto.class, new TextHttpCallBack() {
             @Override
             public void httpCallBack(Object resultObject, String resultString, int status) {
                 String errTip=ResultFactory.getErrorTip(resultObject,status);
@@ -197,11 +197,6 @@ public class LoginActivity extends AppMultiActivity {
                 else {
                     UserInfoDto userInfoDto = ResultFactory.getResult(resultObject, status);
                     if (null != userInfoDto) {
-                        LastLoginUserInfo lastLoginUserInfo=new LastLoginUserInfo();
-                        lastLoginUserInfo.account=userInfoDto.mobile;
-                        lastLoginUserInfo.accountType="1";
-                        AppStoreUtil.safeSaveBean(mContext,null,lastLoginUserInfo);
-                        AppStoreUtil.safeSaveBean(mContext, null, userInfoDto);
                         LoginUserFactory.doLogin(userInfoDto);
                         ToastUtil.makeOkToastThr(mContext, "登录成功");
                         LoginEvent loginEvent=new LoginEvent();
@@ -250,7 +245,7 @@ public class LoginActivity extends AppMultiActivity {
                 {
                     verifyCodeThread=new VerifyCodeThread();
                     verifyCodeThread.start();
-
+                    ToastUtil.makeOkToastThr(mContext,"短信验证码获取成功");
                 }
                 else{
                     ToastUtil.makeFailToastThr(mContext,errorTip);

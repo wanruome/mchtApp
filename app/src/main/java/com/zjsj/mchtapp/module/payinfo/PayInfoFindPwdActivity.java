@@ -1,9 +1,7 @@
-package com.zjsj.mchtapp.module.userinfo;
+package com.zjsj.mchtapp.module.payinfo;
 
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,15 +13,14 @@ import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.extend.Thread_CanStop;
-import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.tools.regextool.RegexCallBack;
 import com.ruomm.base.tools.regextool.RegexText;
-import com.ruomm.base.tools.regextool.RegexUtil;
 import com.ruomm.base.view.menutopview.MenuTopListener;
 import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
+import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.KeyboardSafeImpl;
 import com.zjsj.mchtapp.core.PassWordService;
@@ -35,12 +32,10 @@ import com.zjsj.mchtapp.util.keyboard.KeyboardUtil;
 
 import java.util.Map;
 
-public class FindPwdActivity extends AppMultiActivity {
+public class PayInfoFindPwdActivity extends AppMultiActivity {
     @InjectAll
-    Views views=new Views();
+   Views views=new Views();
     class Views{
-        @InjectView(id= R.id.edt_name)
-        EditText edt_name;
         @InjectView(id=R.id.edt_pwd)
         EditText edt_pwd;
         @InjectView(id=R.id.edt_pwd_repeat)
@@ -57,16 +52,14 @@ public class FindPwdActivity extends AppMultiActivity {
     private KeyboardUtil keyboardUtil;
     private KeyboardUtil keyboardUtilRepeat;
     private VerifyCodeThread verifyCodeThread=null;
-    private LastLoginUserInfo lastLoginUserInfo=null;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         mymenutop.setMenuClickListener(myMenutopListener);
-        mymenutop.setCenterText("找回密码");
-        setInitContentView(R.layout.userinfo_findpwd_act);
-        updateUiByLastLoginUserInfo();
-        keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
-        keyboardUtilRepeat=new KeyboardUtil(this,views.edt_pwd_repeat).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
+        mymenutop.setCenterText("找回支付密码");
+        setInitContentView(R.layout.paypwd_findpwd_act);
+        keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSymbolEnable(false).setLetterEnable(false).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.NUMBER);
+        keyboardUtilRepeat=new KeyboardUtil(this,views.edt_pwd_repeat).setSymbolEnable(false).setLetterEnable(false).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.NUMBER);
         views.btn_submit.setOnClickListener(myOnClickListener);
         views.btn_verifyCode.setOnClickListener(myOnClickListener);
     }
@@ -95,91 +88,40 @@ public class FindPwdActivity extends AppMultiActivity {
             }
         }
     };
-    private void updateUiByLastLoginUserInfo()
-    {
-        lastLoginUserInfo= AppStoreUtil.safeGetBean(mContext,null,LastLoginUserInfo.class);
-        if(null!=lastLoginUserInfo&&RegexUtil.doRegex(lastLoginUserInfo.account,RegexUtil.MOBILE_NUM))
-        {
-            views.edt_name.setText(lastLoginUserInfo.account.substring(0,3)+"****"+lastLoginUserInfo.account.substring(7));
-            views.edt_name.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    views.edt_name.removeTextChangedListener(this);
-                    if(null!=lastLoginUserInfo)
-                    {
-                        views.edt_name.setText(null);
-                        lastLoginUserInfo=null;
-                    }
-
-                }
-            });
-        }
-        else {
-            lastLoginUserInfo=null;
-        }
-    }
     private void doHttpTask(){
-        String account=null;
-        if(null!=lastLoginUserInfo){
-            account=lastLoginUserInfo.account;
-        }
-        else {
-            account=views.edt_name.getText().toString();
-        }
-        if(!RegexUtil.doRegex(account,RegexUtil.MOBILE_NUM))
+
+        String verifyCode= views.edt_verifyCode.getText().toString();
+        String pwdLocalEncrypt=keyboardUtil.getEncryptStr();
+        String pwdParse= ApiConfig.decryptByApp(pwdLocalEncrypt);
+        String pwdLocalEncryptRepeat=keyboardUtilRepeat.getEncryptStr();
+        String pwdParseRepeat= ApiConfig.decryptByApp(pwdLocalEncryptRepeat);
+        if(null==pwdParse||null==pwdParseRepeat||!pwdParse.equals(pwdParseRepeat))
         {
-            ToastUtil.makeFailToastThr(mContext,"手机号不正确");
+            ToastUtil.makeFailToastThr(mContext,"新密码和确认密码不一致");
+            return;
+        }
+        if(!PassWordService.isPayPwdRuleOk(pwdParse)){
+            ToastUtil.makeFailToastThr(mContext,PassWordService.parsePayPwdRuleToString());
+            return;
         }
         boolean flag= RegexText.with(new RegexCallBack() {
             @Override
             public void errorRegex(TextView v, String value, String errorInfo) {
                 ToastUtil.makeFailToastThr(mContext,errorInfo);
             }
-        }).doRegexSize(views.edt_pwd,6,16,"密码长度为6-16位")
-                .doRegexSize(views.edt_pwd_repeat,6,16,"确认密码长度为6-16位")
-                .doRegexSize(views.edt_verifyCode,4,10,"请填写验证码").builder();
+        }).doRegexSize(views.edt_verifyCode,4,10,"请填写验证码").builder();
         if(!flag)
         {
             return;
         }
-        String verifyCode= views.edt_verifyCode.getText().toString();
-        String pwdLocalEncrypt=keyboardUtil.getEncryptStr();
-        String pwdParse= ApiConfig.decryptByApp(pwdLocalEncrypt);
-        String pwdLocalEncryptRepeat=keyboardUtilRepeat.getEncryptStr();
-        String pwdParseRepeat= ApiConfig.decryptByApp(pwdLocalEncryptRepeat);
-
-        if(null==pwdParse||null==pwdParseRepeat||!pwdParse.equals(pwdParseRepeat))
-        {
-            ToastUtil.makeFailToastThr(mContext,"密码和确认密码不一致");
-            return;
-        }
-        if(!PassWordService.isPwdRuleOk(pwdParse)){
-            ToastUtil.makeFailToastThr(mContext,PassWordService.parsePwdRuleToString());
-            return;
-        }
 
         showLoading();
-        String pwd=ApiConfig.getPassWord(pwdParse,ApiConfig.TRANSMIT_KEYTYPE);
-        Map<String,String> map=ApiConfig.createRequestMap(false);
-        map.put("account", account);
-        map.put("accountType", "1");
-        map.put("uuidEncrypt", ApiConfig.getPassWordEncrypt(false));
-        map.put("newPwdEncrypt", ApiConfig.getPassWordEncrypt(true));
-        map.put("newPwd",  ApiConfig.getPassWord(pwdParse, ApiConfig.getPassWordEncrypt(true)));
-        map.put("termType", "1");
+        Map<String,String> map=ApiConfig.createRequestMap(true);
+        map.put("newPayPwdEncrypt", ApiConfig.getPassWordEncrypt(true));
+        map.put("newPayPwd",  ApiConfig.getPassWord(pwdParse, ApiConfig.getPassWordEncrypt(true)));
         map.put("msgVerifyCode",verifyCode);
         ApiConfig.signRequestMap(map);
-        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doFindPwd").setRequestBodyText(map).doHttp(String.class, new TextHttpCallBack() {
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/repaymentPayInfo/doFindPayPwd").setRequestBodyText(map).doHttp(String.class, new TextHttpCallBack() {
             @Override
             public void httpCallBack(Object resultObject, String resultString, int status) {
                 String errTip= ResultFactory.getErrorTip(resultObject,status);
@@ -193,7 +135,7 @@ public class FindPwdActivity extends AppMultiActivity {
                     ToastUtil.makeFailToastThr(mContext,errTip);
                 }
                 else {
-                    ToastUtil.makeOkToastThr(mContext, "找回密码成功");
+                    ToastUtil.makeOkToastThr(mContext, "找回支付密码成功");
                     finish();
                 }
                 dismissLoading();
@@ -211,20 +153,10 @@ public class FindPwdActivity extends AppMultiActivity {
     }
     private void doSendMsgVerifyCode()
     {
-        boolean flag= RegexText.with(new RegexCallBack() {
-            @Override
-            public void errorRegex(TextView v, String value, String errorInfo) {
-                ToastUtil.makeFailToastThr(mContext,errorInfo);
-            }
-        }).doRegex(views.edt_name,RegexUtil.MOBILE_NUM,"手机号不正确").builder();
-        if(!flag)
-        {
-            return;
-        }
         showLoading();
-        Map<String, String> map = ApiConfig.createRequestMap(false);
-        map.put("msgFunction", "2");
-        map.put("msgAddr", views.edt_name.getText().toString());
+        Map<String, String> map = ApiConfig.createRequestMap(true);
+        map.put("msgFunction", "9");
+        map.put("msgAddr", LoginUserFactory.getLoginUserInfo().mobile);
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/msg/doMsgSend").setRequestBodyText(map).doHttp(MsgSendDto.class, new TextHttpCallBack() {
             @Override
@@ -253,7 +185,7 @@ public class FindPwdActivity extends AppMultiActivity {
             long timeRemain=timeOut- SystemClock.elapsedRealtime();
             while(timeRemain>0&&!isStopTask()){
                 final long timeRemind=timeOut- SystemClock.elapsedRealtime();
-                FindPwdActivity.this.runOnUiThread(new Runnable() {
+                PayInfoFindPwdActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         views.btn_verifyCode.setText(timeRemind/1000+"秒后获取");
@@ -264,7 +196,7 @@ public class FindPwdActivity extends AppMultiActivity {
             }
             if(!isStopTask())
             {
-                FindPwdActivity.this.runOnUiThread(new Runnable() {
+                PayInfoFindPwdActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         views.btn_verifyCode.setText("获取验证码");

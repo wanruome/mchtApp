@@ -3,6 +3,7 @@ package com.zjsj.mchtapp.config;
 import android.content.Intent;
 
 public class IntentFactory {
+    public static final int Request_GestureLockActivity=110;
     public static Intent getWelcomeActivity()
     {
         return new Intent("welcome.WelcomeActivity");
@@ -24,5 +25,29 @@ public class IntentFactory {
     {
         return new Intent("userinfo.FindPwdActivity");
     }
+    public static Intent getSettingActivity()
+    {
+        return new Intent("settting.SettingActivity");
+    }
+    public static Intent getPayInfoSetPwdActivity()
+    {
+        return new Intent("payinfo.PayInfoSetPwdActivity");
+    }
+    public static Intent getPayInfoModifyPwdActivity()
+    {
+        return new Intent("payinfo.PayInfoModifyPwdActivity");
+    }
+    public static Intent getPayInfoFindPwdActivity()
+    {
+        return new Intent("payinfo.PayInfoFindPwdActivity");
+    }
+    public static Intent getGestureLockActivity()
+    {
+        return new Intent("gesturelock.GestureLockActivity");
+    }
+
+
+
+
 
 }

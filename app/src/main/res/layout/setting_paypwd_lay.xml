@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/setting_bg_color"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dpx032">
+    <RelativeLayout
+        android:id="@+id/setting_ly_paypwd_seting"
+        android:background="@color/bg_white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:paddingLeft="@dimen/dpx040"
+        android:paddingRight="@dimen/dpx040"
+        >
+        <TextView
+            style="@style/textSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置支付密码"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+    </RelativeLayout>
+    <View style="@style/lineStyle"/>
+    <RelativeLayout
+        android:id="@+id/setting_ly_paypwd_modify"
+        android:background="@color/bg_white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:paddingLeft="@dimen/dpx040"
+        android:paddingRight="@dimen/dpx040"
+        >
+        <TextView
+            style="@style/textSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改支付密码"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+    </RelativeLayout>
+    <View style="@style/lineStyle"/>
+    <RelativeLayout
+        android:id="@+id/setting_ly_paypwd_find"
+        android:background="@color/bg_white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:paddingLeft="@dimen/dpx040"
+        android:paddingRight="@dimen/dpx040"
+        >
+        <TextView
+            style="@style/textSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="忘记支付密码"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -3,41 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/bg_mcht"
     android:gravity="center_horizontal">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_weight="2"
-        android:visibility="gone"
-        >
-       <!-- <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/newpay_logo"
-            android:id="@+id/img_logo"
-            />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            >
-            <TextView
-                style="@style/textWhiteLable.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="欢迎来到 "
-                />
-            <TextView
-                style="@style/textWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="新生支付"
-                />
-        </LinearLayout>-->
-    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -48,6 +16,7 @@
         android:paddingRight="@dimen/dpx080"
         android:paddingTop="@dimen/dpx040"
         >
+
         <LinearLayout
             android:paddingBottom="@dimen/dpx016"
             android:paddingTop="@dimen/dpx016"
@@ -59,36 +28,14 @@
                 style="@style/textWhiteSub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="用户名："
-                />
-            <EditText
-                android:id="@+id/edt_name"
-                style="@style/editTextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLength="11"
-                android:inputType="number"
-                android:digits="@string/digits_number" />
-        </LinearLayout>
-        <LinearLayout
-            android:paddingBottom="@dimen/dpx016"
-            android:paddingTop="@dimen/dpx016"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
-            <TextView
-                style="@style/textWhiteSub"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="密　码："
+                android:text="新密码："
                 />
             <EditText
                 android:id="@+id/edt_pwd"
                 style="@style/editTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="16"/>
+                android:maxLength="6"/>
         </LinearLayout>
         <LinearLayout
             android:paddingBottom="@dimen/dpx016"
@@ -108,7 +55,7 @@
                 style="@style/editTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="16"/>
+                android:maxLength="6"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ly_verifyCode"
@@ -150,7 +97,7 @@
             style="@style/btnStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="找回密码"
+            android:text="找回支付密码"
             />
     </LinearLayout>
 </LinearLayout>
