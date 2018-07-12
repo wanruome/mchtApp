@@ -1,37 +1,26 @@
 package com.zjsj.mchtapp.module.fingerprint;
-
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.hardware.fingerprint.FingerprintManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
+
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
-import com.ruomm.base.ioc.iocutil.AppStoreUtil;
-import com.ruomm.base.ioc.iocutil.BaseUtil;
-import com.ruomm.base.tools.Base64;
-import com.ruomm.base.tools.RSAUtils;
-import com.ruomm.base.tools.androidkeystore.AndroidKeyStoreRSAUtils;
-import com.ruomm.base.tools.androidkeystore.KeyStoreHelper;
+
+import com.ruomm.base.ioc.iocutil.DbStoreSafe;
 import com.ruomm.base.view.menutopview.MenuTopListener;
-import com.ruomm.base.view.menutopview.MenuTopView;
+
 import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
-import com.zjsj.mchtapp.module.userinfo.FindPwdActivity;
+
+import com.zjsj.mchtapp.config.LoginUserFactory;
+import com.zjsj.mchtapp.dal.store.UserFingerPrint;
 import com.zjsj.mchtapp.util.fingerprint.FingerprintUtil;
-import com.zjsj.mchtapp.view.FingerPrintDialog;
-
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.interfaces.RSAPrivateKey;
-
-import javax.crypto.Cipher;
 
 public class FingerPrintActivity extends AppMultiActivity {
     @InjectAll
@@ -39,17 +28,20 @@ public class FingerPrintActivity extends AppMultiActivity {
     class Views{
         @InjectView(id= R.id.text_error)
         TextView text_error;
+        @InjectView(id= R.id.text_tip)
+        TextView text_tip;
+        @InjectView(id= R.id.ly_container)
+        LinearLayout ly_container;
     }
     FingerprintUtil fingerprintUtil=null;
-    FingerPrintDialog fingerPrintDialog=null;
     boolean isOnVerify=false;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setInitContentView(R.layout.fingerprint_act_lay);
         setMenuTop();
-        views.text_error.setVisibility(View.GONE);
-        fingerPrintDialog=new FingerPrintDialog(mContext);
+        views.text_error.setVisibility(View.INVISIBLE);
+        views.ly_container.setVisibility(View.VISIBLE);
         fingerprintUtil=new FingerprintUtil(mContext);
         doVerifyFingerprint();
 
@@ -66,14 +58,6 @@ public class FingerPrintActivity extends AppMultiActivity {
             }
         });
     }
-//    private void setClickListener(){
-//        views.text_tip.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                doVerifyFingerprint();
-//            }
-//        });
-//    }
     public void doVerifyFingerprint(){
         if(isOnVerify)
         {
@@ -87,28 +71,30 @@ public class FingerPrintActivity extends AppMultiActivity {
                 if(!isSupport)
                 {
                     isOnVerify=false;
+                    views.ly_container.setVisibility(View.INVISIBLE);
                     views.text_error.setVisibility(View.VISIBLE);
                 }
                 else {
-                    views.text_error.setVisibility(View.GONE);
+                    views.ly_container.setVisibility(View.VISIBLE);
+                    views.text_error.setVisibility(View.INVISIBLE);
                 }
             }
             @Override
             public void onAuthenticateStart() {
                 MLog.i("onAuthenticateStart");
-                showDialog("验证指纹");
+                showFingerprintAuthMsg("验证指纹");
             }
 
             @Override
             public void onAuthenticateError(int errMsgId, CharSequence errString) {
                 MLog.i("onAuthenticateError"+errMsgId+errString);
-                showDialog(errString);
+                showFingerprintAuthMsg(errString);
             }
 
             @Override
             public void onAuthenticateFailed() {
                 MLog.i("onAuthenticateFailed");
-                showDialog("指纹验证失败，请稍后重试");
+                showFingerprintAuthMsg("指纹验证失败，请稍后重试");
                 isOnVerify=false;
             }
 
@@ -120,7 +106,7 @@ public class FingerPrintActivity extends AppMultiActivity {
             @Override
             public void onAuthenticateSucceeded(FingerprintManager.AuthenticationResult result) {
                 MLog.i("onAuthenticateSucceeded"+result.toString());
-                showDialog("指纹验证成功");
+                showFingerprintAuthMsg("指纹验证成功");
                 isOnVerify=false;
 //                new Thread(){
 //                    @Override
@@ -140,12 +126,10 @@ public class FingerPrintActivity extends AppMultiActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(null!=fingerPrintDialog&&fingerPrintDialog.isShowing())
-                        {
-                            fingerPrintDialog.dismiss();
+                        boolean tmp=LoginUserFactory.saveUserFingerPrint(true);
+                        if(tmp){
+                            setResult(Activity.RESULT_OK);
                         }
-                        fingerPrintDialog=null;
-                        setResult(Activity.RESULT_OK);
                         finish();
                     }
                 },300);
@@ -157,19 +141,10 @@ public class FingerPrintActivity extends AppMultiActivity {
     protected void onDestroy() {
         super.onDestroy();
         fingerprintUtil.onDestroy();
-        fingerPrintDialog=null;
     }
 
-    private void showDialog(CharSequence contentStr)
+    private void showFingerprintAuthMsg(CharSequence contentStr)
     {
-        if(null==fingerPrintDialog)
-        {
-            return;
-        }
-        fingerPrintDialog.setMessageContent(contentStr);
-        fingerPrintDialog.show();
+        views.text_tip.setText(contentStr);
     }
-
-
-
 }

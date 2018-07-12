@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface InjectEntity {
 	/**
-	 * 对象模型的Key值，AppStoreDBProperty、AppStoreProperty、BaseUtil对象化默认传参、存储的Key值
+	 * 对象模型的Key值，DbStore、AppStoreProperty、BaseUtil对象化默认传参、存储的Key值
 	 * 
 	 * @return
 	 */

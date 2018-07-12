@@ -5,13 +5,10 @@
  */
 package com.ruomm.base.ioc.iocutil;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.ruomm.base.common.greendao.BaseDaoSession;
@@ -21,6 +18,10 @@ import com.ruomm.base.common.greendao.DBEntryValueDao.Properties;
 import com.ruomm.base.ioc.annotation.util.InjectUtil;
 import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.tools.ListUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
 
@@ -43,11 +44,11 @@ import de.greenrobot.dao.query.QueryBuilder;
  * 
  * @author Ruby
  */
-public class AppStoreDBProperty {
+public class DbStoreSafe {
 	/**
 	 * 单例模式的对象
 	 */
-	private static AppStoreDBProperty instance;
+	private static DbStoreSafe instance;
 	/**
 	 * Context环境
 	 */
@@ -64,8 +65,14 @@ public class AppStoreDBProperty {
 	/**
 	 * 私有构造函数
 	 */
-	private AppStoreDBProperty() {
+	private DbStoreSafe() {
 
+	}
+	private static final String TAG=AppStoreSafe.class.getSimpleName();
+	private AppStoreSafeInterface mAppStoreSafeInterface=null;
+	public void setAppStoreSafeInterface(AppStoreSafeInterface appStoreSafeInterface)
+	{
+		mAppStoreSafeInterface=appStoreSafeInterface;
 	}
 
 	/**
@@ -73,9 +80,9 @@ public class AppStoreDBProperty {
 	 * 
 	 * @return 数据库对象化存储单例
 	 */
-	public static AppStoreDBProperty getInstance() {
+	public static DbStoreSafe getInstance() {
 		if (instance == null) {
-			instance = new AppStoreDBProperty();
+			instance = new DbStoreSafe();
 			if (appContext == null) {
 				appContext = BaseApplication.getApplication();
 			}
@@ -103,6 +110,11 @@ public class AppStoreDBProperty {
 	 * @return 存储的数据
 	 */
 	private DBEntryValue getEntryValue(String realKey, String tag, String valueTag) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return null;
+		}
 		if (null == instance.mDaoSession) {
 			return null;
 		}
@@ -129,6 +141,7 @@ public class AppStoreDBProperty {
 					qb.and(Properties.Key.eq(realKey), Properties.Tag.eq(tag), Properties.ValueTag.eq(valueTag)))
 					.list();
 		}
+
 		int listSize = ListUtils.getSize(list);
 		if (listSize > 1) {
 			for (int i = 1; i < list.size(); i++) {
@@ -136,7 +149,15 @@ public class AppStoreDBProperty {
 			}
 		}
 		if (listSize > 0) {
-			return list.get(0);
+			DBEntryValue parseValue=list.get(0);
+			DBEntryValue resultValue=new DBEntryValue();
+			resultValue.setId(parseValue.getId());
+			resultValue.setKey(parseValue.getKey());
+			resultValue.setTag(parseValue.getTag());
+			resultValue.setValueTag(parseValue.getValueTag());
+			resultValue.setUpdateTime(parseValue.getUpdateTime());
+			resultValue.setValue(mAppStoreSafeInterface.decryptStr(parseValue.getValue()));
+			return resultValue;
 		}
 		else {
 			return null;
@@ -154,6 +175,11 @@ public class AppStoreDBProperty {
 	 * @return 删除结果boolean
 	 */
 	private boolean deleteEntryList(String realKey) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return  false;
+		}
 		if (null == instance.mDaoSession) {
 			return false;
 		}
@@ -188,6 +214,11 @@ public class AppStoreDBProperty {
 	 * @return 删除结果boolean
 	 */
 	private boolean deleteEntryList(String realKey, String tag) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return  false;
+		}
 		if (null == instance.mDaoSession) {
 			return false;
 		}
@@ -228,6 +259,11 @@ public class AppStoreDBProperty {
 	 * @return 数据库结果集
 	 */
 	private List<DBEntryValue> getEntryValueList(String realKey) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return  null;
+		}
 		if (null == instance.mDaoSession) {
 			return null;
 		}
@@ -239,7 +275,19 @@ public class AppStoreDBProperty {
 		list = qb.where(Properties.Key.eq(realKey)).list();
 
 		if (null != list && !list.isEmpty()) {
-			return list;
+			List<DBEntryValue> listResult=new ArrayList<>();
+			for(DBEntryValue parseValue:list)
+			{
+				DBEntryValue resultValue=new DBEntryValue();
+				resultValue.setId(parseValue.getId());
+				resultValue.setKey(parseValue.getKey());
+				resultValue.setTag(parseValue.getTag());
+				resultValue.setValueTag(parseValue.getValueTag());
+				resultValue.setUpdateTime(parseValue.getUpdateTime());
+				resultValue.setValue(mAppStoreSafeInterface.decryptStr(parseValue.getValue()));
+				listResult.add(resultValue);
+			}
+			return listResult;
 
 		}
 		else {
@@ -259,6 +307,11 @@ public class AppStoreDBProperty {
 	 * @return 数据库结果集
 	 */
 	private List<DBEntryValue> getEntryValueList(String realKey, String tag) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return  null;
+		}
 		if (null == instance.mDaoSession) {
 			return null;
 		}
@@ -275,7 +328,19 @@ public class AppStoreDBProperty {
 		}
 
 		if (null != list && !list.isEmpty()) {
-			return list;
+			List<DBEntryValue> listResult=new ArrayList<>();
+			for(DBEntryValue parseValue:list)
+			{
+				DBEntryValue resultValue=new DBEntryValue();
+				resultValue.setId(parseValue.getId());
+				resultValue.setKey(parseValue.getKey());
+				resultValue.setTag(parseValue.getTag());
+				resultValue.setValueTag(parseValue.getValueTag());
+				resultValue.setUpdateTime(parseValue.getUpdateTime());
+				resultValue.setValue(mAppStoreSafeInterface.decryptStr(parseValue.getValue()));
+				listResult.add(resultValue);
+			}
+			return listResult;
 		}
 		else {
 			return null;
@@ -305,8 +370,6 @@ public class AppStoreDBProperty {
 	 *            第一级Tag
 	 * @param tag
 	 *            第二级Tag
-	 * @param valueTag
-	 *            第三级Tag
 	 * @return 数据库存储中的结果
 	 */
 	public String getValue(String key, String tag) {
@@ -382,6 +445,11 @@ public class AppStoreDBProperty {
 	 * @return 数据库存储结果boolean
 	 */
 	public boolean saveValue(String key, String tag, String valueTag, String value) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return  false;
+		}
 		if (null == instance.mDaoSession) {
 			return false;
 		}
@@ -389,9 +457,9 @@ public class AppStoreDBProperty {
 			return false;
 		}
 		DBEntryValue entryValue = getEntryValue(key, tag, valueTag);
-
+		String valueEncrypt=mAppStoreSafeInterface.encryptStr(value);
 		if (null != entryValue) {
-			entryValue.setValue(value);
+			entryValue.setValue(valueEncrypt);
 			entryValue.setUpdateTime(new Date());
 			entryDBModelDao.update(entryValue);
 			return true;
@@ -402,7 +470,7 @@ public class AppStoreDBProperty {
 
 			entryValue.setUpdateTime(new Date());
 
-			entryValue.setValue(value);
+			entryValue.setValue(valueEncrypt);
 			if (!TextUtils.isEmpty(tag)) {
 				entryValue.setTag(tag);
 			}
@@ -461,6 +529,11 @@ public class AppStoreDBProperty {
 	 * @return 数据库删除结果boolean
 	 */
 	public boolean delValue(String key, String tag, String valueTag) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return  false;
+		}
 		if (null == instance.mDaoSession) {
 			return false;
 		}
@@ -492,7 +565,6 @@ public class AppStoreDBProperty {
 			List<String> listString = new ArrayList<String>();
 			for (DBEntryValue entryValue : list) {
 				listString.add(entryValue.getValue());
-
 			}
 			return listString;
 		}
@@ -692,6 +764,11 @@ public class AppStoreDBProperty {
 	 * @return 数据库对象删除结果boolean
 	 */
 	public boolean delBean(String key, String tag, String valueTag, Class<?> cls) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return  false;
+		}
 		if (null == instance.mDaoSession) {
 			return false;
 		}
@@ -769,6 +846,11 @@ public class AppStoreDBProperty {
 	 * @return 数据库对象存储结果boolean
 	 */
 	public boolean saveBean(String key, String tag, String valueTag, Object value) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return  false;
+		}
 		if (null == instance.mDaoSession) {
 			return false;
 		}
@@ -782,7 +864,7 @@ public class AppStoreDBProperty {
 		DBEntryValue entryValue = getEntryValue(realKey, tag, valueTag);
 		if (null != entryValue) {
 			String json = JSON.toJSONString(value);
-			entryValue.setValue(json);
+			entryValue.setValue(mAppStoreSafeInterface.encryptStr(json));
 			entryValue.setUpdateTime(new Date());
 			entryDBModelDao.update(entryValue);
 			return true;
@@ -792,7 +874,7 @@ public class AppStoreDBProperty {
 			String json = JSON.toJSONString(value);
 			entryValue.setKey(realKey);
 			entryValue.setUpdateTime(new Date());
-			entryValue.setValue(json);
+			entryValue.setValue(mAppStoreSafeInterface.encryptStr(json));
 			if (!TextUtils.isEmpty(tag)) {
 				entryValue.setTag(tag);
 			}
@@ -816,9 +898,7 @@ public class AppStoreDBProperty {
 	 * 获取数据库存储的对象结果集，依照数据模型自动获取，第一级Tag为对象的数据类型的SimlpeName，可以通过InjectEntity注解来改变
 	 * <p>
 	 * 第二级和第三级Tag为任意值
-	 * 
-	 * @param key
-	 *            第一级Tag
+	 *
 	 * @param cls
 	 *            对象类型
 	 * @return 数据库中的对象结果集List
@@ -922,9 +1002,7 @@ public class AppStoreDBProperty {
 	 * 删除数据库存储的对象结果集，依照数据模型自动删除，第一级Tag为对象的数据类型的SimlpeName，可以通过InjectEntity注解来改变
 	 * <p>
 	 * 第二级和第三级Tag为任意值
-	 * 
-	 * @param key
-	 *            第一级Tag
+	 *
 	 * @param cls
 	 *            对象类型
 	 * @return 数据库中的对象集删除结果boolean

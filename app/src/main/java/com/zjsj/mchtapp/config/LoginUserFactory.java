@@ -1,14 +1,14 @@
 package com.zjsj.mchtapp.config;
 
-import android.content.Context;
-
 import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
+import com.ruomm.base.ioc.iocutil.DbStoreSafe;
 import com.ruomm.base.tools.StringUtils;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.response.PayInfoDto;
 import com.zjsj.mchtapp.dal.response.UserInfoDto;
 import com.zjsj.mchtapp.dal.store.LastLoginUserInfo;
+import com.zjsj.mchtapp.dal.store.UserFingerPrint;
 import com.zjsj.mchtapp.dal.store.UserGesturesInfo;
 
 import org.greenrobot.eventbus.EventBus;
@@ -82,43 +82,89 @@ public class LoginUserFactory {
         return mPayInfoDto;
     }
 
+//    public static UserGesturesInfo getUserGesturesInfo(){
+//        if(!isLogin())
+//        {
+//            return null;
+//        }
+//        UserGesturesInfo userGesturesInfo= AppStoreUtil.safeGetBean(BaseApplication.getApplication(),null,UserGesturesInfo.class);
+//        if(null==userGesturesInfo)
+//        {
+//            return null;
+//        }
+//        if(getLoginUserInfo().userId.equals(userGesturesInfo.userId))
+//        {
+//            return userGesturesInfo;
+//        }
+//        else{
+//            AppStoreUtil.delBean(BaseApplication.getApplication(),null,UserGesturesInfo.class);
+//            return null;
+//        }
+//    }
+//    public static void setUserGesturesInfo(List<Integer> gestures)
+//    {
+//        if(null==gestures||gestures.size()<=0)
+//        {
+//            return;
+//        }
+//        if(!isLogin())
+//        {
+//            return;
+//        }
+//        UserGesturesInfo userGesturesInfo=new UserGesturesInfo();
+//        userGesturesInfo.userId=getLoginUserInfo().userId;
+//        userGesturesInfo.gestures=gestures;
+//        AppStoreUtil.safeSaveBean(BaseApplication.getApplication(),null,userGesturesInfo);
+//    }
+
     public static UserGesturesInfo getUserGesturesInfo(){
         if(!isLogin())
         {
             return null;
         }
-        UserGesturesInfo userGesturesInfo= AppStoreUtil.safeGetBean(BaseApplication.getApplication(),null,UserGesturesInfo.class);
-        if(null==userGesturesInfo)
-        {
-            return null;
-        }
-        if(getLoginUserInfo().userId.equals(userGesturesInfo.userId))
-        {
-            return userGesturesInfo;
-        }
-        else{
-            AppStoreUtil.delBean(BaseApplication.getApplication(),null,UserGesturesInfo.class);
-            return null;
-        }
+        return DbStoreSafe.getInstance().getBean(null,getLoginUserInfo().userId,UserGesturesInfo.class);
     }
-    public static void delUserGesturesInfo(){
-        AppStoreUtil.delBean(BaseApplication.getApplication(),null,UserGesturesInfo.class);
-    }
-    public static void setUserGesturesInfo(List<Integer> gestures)
+    public static boolean saveUserGesturesInfo(List<Integer> gestures)
     {
-        if(null==gestures||gestures.size()<=0)
-        {
-            return;
-        }
         if(!isLogin())
         {
-            return;
+            return false;
         }
         UserGesturesInfo userGesturesInfo=new UserGesturesInfo();
         userGesturesInfo.userId=getLoginUserInfo().userId;
         userGesturesInfo.gestures=gestures;
-        AppStoreUtil.safeSaveBean(BaseApplication.getApplication(),null,userGesturesInfo);
+        if (null!=gestures&gestures.size()>0)
+        {
+            userGesturesInfo.isEnable=true;
+        }
+        else {
+            userGesturesInfo.isEnable=false;
+        }
+        return DbStoreSafe.getInstance().saveBean(null,getLoginUserInfo().userId,userGesturesInfo);
     }
+    public static void delUserGesturesInfo(){
+        AppStoreUtil.delBean(BaseApplication.getApplication(),null,UserGesturesInfo.class);
+    }
+    public static UserFingerPrint getUserFingerPrint(){
+        if(!isLogin())
+        {
+            return null;
+        }
+        return DbStoreSafe.getInstance().getBean(null,getLoginUserInfo().userId,UserFingerPrint.class);
+    }
+
+    public static boolean saveUserFingerPrint(boolean isFingerPrintEnable)
+    {
+        if(!isLogin())
+        {
+            return false;
+        }
+        UserFingerPrint userFingerPrint=new UserFingerPrint();
+        userFingerPrint.isEnable =isFingerPrintEnable;
+        userFingerPrint.userId=getLoginUserInfo().userId;
+        return DbStoreSafe.getInstance().saveBean(null,getLoginUserInfo().userId,userFingerPrint);
+    }
+
     public static boolean isTokenValid(UserInfoDto userInfoDto)
     {
             if(null==userInfoDto|| StringUtils.isEmpty(userInfoDto.validTime))

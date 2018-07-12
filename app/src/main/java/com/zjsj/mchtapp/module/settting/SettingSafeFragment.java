@@ -29,6 +29,7 @@ import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.response.PayInfoDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
+import com.zjsj.mchtapp.dal.store.UserFingerPrint;
 import com.zjsj.mchtapp.dal.store.UserGesturesInfo;
 
 import java.util.Map;
@@ -58,14 +59,20 @@ public class SettingSafeFragment extends AppFragment {
     }
     private void setDataForView(){
         UserGesturesInfo userGesturesInfo= LoginUserFactory.getUserGesturesInfo();
-        if(null==userGesturesInfo)
+        if(null!=userGesturesInfo&&userGesturesInfo.isEnable)
         {
-            views.setting_switch_gesture.setSelected(false);
-        }
-        else{
             views.setting_switch_gesture.setSelected(true);
         }
-        views.setting_switch_fingerprint.setSelected(false);
+        else{
+            views.setting_switch_gesture.setSelected(false);
+        }
+        UserFingerPrint userFingerPrint=LoginUserFactory.getUserFingerPrint();
+        if(null!=userFingerPrint&&userFingerPrint.isEnable){
+            views.setting_switch_fingerprint.setSelected(true);
+        }
+        else {
+            views.setting_switch_fingerprint.setSelected(false);
+        }
     }
     private void setOnClickListener(){
         views.setting_switch_nopaypwd.setOnClickListener(myOnClickListener);
@@ -91,7 +98,10 @@ public class SettingSafeFragment extends AppFragment {
                         public void onDialogItemClick(View v, Object tag) {
                             if(v.getId()==R.id.dialog_confirm)
                             {
-                                views.setting_switch_fingerprint.setSelected(false);
+                                boolean tmp=LoginUserFactory.saveUserFingerPrint(false);
+                                if(tmp) {
+                                    views.setting_switch_fingerprint.setSelected(false);
+                                }
                             }
                         }
                     });
@@ -172,6 +182,11 @@ public class SettingSafeFragment extends AppFragment {
         {
             ToastUtil.makeOkToastThr(mContext,"设置手势密码成功");
             views.setting_switch_gesture.setSelected(true);
+        }
+        else if(requestCode==IntentFactory.Request_FingerPrintActivity&&resultCode== Activity.RESULT_OK)
+        {
+            ToastUtil.makeOkToastThr(mContext,"指纹设置成功");
+            views.setting_switch_fingerprint.setSelected(true);
         }
     }
 }

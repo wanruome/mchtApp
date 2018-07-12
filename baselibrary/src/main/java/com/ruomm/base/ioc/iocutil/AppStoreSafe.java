@@ -37,18 +37,17 @@ class AppStoreSafe {
 	 *            SharedPreferences存储的权限
 	 */
 	public static void saveString(Context mContext, String nameProperty, String key, String value, int PropertyMODE) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return;
+		}
 		if (TextUtils.isEmpty(nameProperty)) {
 			return;
 		}
 		if (TextUtils.isEmpty(key)) {
 			return;
 		}
-		if(null==mAppStoreSafeInterface)
-		{
-			Log.i(TAG,"请先设置安全接口解密方式");
-			return;
-		}
-
 		if (null == value) {
 			SharedPreferences properties = mContext.getSharedPreferences(nameProperty, PropertyMODE);
 			SharedPreferences.Editor editor = properties.edit();
@@ -80,12 +79,12 @@ class AppStoreSafe {
 	 * @return 获取到的String内容
 	 */
 	public static String getString(Context mContext, String nameProperty, String key, int PropertyMODE) {
-		if (TextUtils.isEmpty(nameProperty)) {
-			return null;
-		}
 		if(null==mAppStoreSafeInterface)
 		{
 			Log.i(TAG,"请先设置安全接口解密方式");
+			return null;
+		}
+		if (TextUtils.isEmpty(nameProperty)) {
 			return null;
 		}
 		if (!TextUtils.isEmpty(key)) {
@@ -109,13 +108,17 @@ class AppStoreSafe {
 	 *            SharedPreferences存储的权限
 	 */
 	public static void delete(Context mContext, String nameProperty, String key, int PropertyMODE) {
+		if(null==mAppStoreSafeInterface)
+		{
+			Log.i(TAG,"请先设置安全接口解密方式");
+			return;
+		}
 		if (TextUtils.isEmpty(nameProperty)) {
 			return;
 		}
 		if (TextUtils.isEmpty(key)) {
 			return;
 		}
-
 		SharedPreferences properties = mContext.getSharedPreferences(nameProperty, PropertyMODE);
 		SharedPreferences.Editor editor = properties.edit();
 		editor.remove(key);

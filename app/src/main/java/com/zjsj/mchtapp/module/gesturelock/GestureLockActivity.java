@@ -158,8 +158,10 @@ public class GestureLockActivity extends AppMultiActivity{
                {
                    gestureView.clear();
                    gestureView.setTouchable(false);
-                   LoginUserFactory.setUserGesturesInfo(listGestrues);
-                   setResult(Activity.RESULT_OK);
+                   boolean tmp=LoginUserFactory.saveUserGesturesInfo(listGestrues);
+                   if(tmp){
+                    setResult(Activity.RESULT_OK);
+                   }
                    finish();
                }
                else {
