@@ -11,8 +11,11 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.ruomm.base.ioc.annotation.InjectUIStyle;
+import com.ruomm.base.ioc.task.ResumeFormBackGroundTask;
+import com.ruomm.base.ioc.task.TaskUtil;
 import com.ruomm.base.tools.StatusBarUtil;
 import com.ruomm.baseconfig.BaseConfig;
+import com.ruomm.baseconfig.debug.MLog;
 
 @SuppressLint("NewApi")
 public abstract class BaseFragmentActivity extends FragmentActivity {
@@ -36,7 +39,6 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
-		AppManager.onCreate(this);
 		mContext = this;
 		mFManager = getSupportFragmentManager();
 		mBundle = getIntent().getExtras();
@@ -50,15 +52,6 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 //			tintManager.setStatusBarTintEnabled(true);
 //			tintManager.setStatusBarTintColor(BaseConfig.UIBarTint_Color);
 		}
-	}
-
-	/**
-	 * 注入AppManager管理类
-	 */
-	@Override
-	public void finish() {
-		super.finish();
-		AppManager.onFinish(this);
 	}
 
 	// 设置沉浸样式
@@ -75,5 +68,22 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
 			winParams.flags &= ~bits;
 		}
 		win.setAttributes(winParams);
+	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		doResumeFormBackGroundTask();
+	}
+
+	private void  doResumeFormBackGroundTask()
+	{
+		if(AppManager.isResumeFromBackGround()){
+			MLog.i("执行后台返回的一些任务");
+			ResumeFormBackGroundTask resumeFormBackGroundTask= TaskUtil.getTask(BaseConfig.AppResumeFormBackGroundTask);
+			if(null!=resumeFormBackGroundTask)
+			{
+				resumeFormBackGroundTask.doTaskResumeFormBack(mContext);
+			}
+		}
 	}
 }

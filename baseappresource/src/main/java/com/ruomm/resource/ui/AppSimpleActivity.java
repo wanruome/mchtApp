@@ -15,9 +15,12 @@ import com.ruomm.base.ioc.activity.AppManager;
 import com.ruomm.base.ioc.annotation.InjectUIStyle;
 import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
+import com.ruomm.base.ioc.task.ResumeFormBackGroundTask;
+import com.ruomm.base.ioc.task.TaskUtil;
 import com.ruomm.base.tools.StatusBarUtil;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.baseconfig.BaseConfig;
+import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.R;
 import com.ruomm.resource.dialog.DialogLoadingListener;
 import com.ruomm.resource.dialog.DialogUtil;
@@ -175,7 +178,7 @@ public class AppSimpleActivity extends FragmentActivity implements DialogLoading
     protected void onCreate(Bundle arg0) {
         // TODO Auto-generated method stub
         super.onCreate(arg0);
-        AppManager.onCreate(this);
+//        AppManager.onCreate(this);
         mContext = this;
         mBundle = getIntent().getExtras();
         mFManager = getSupportFragmentManager();
@@ -186,16 +189,23 @@ public class AppSimpleActivity extends FragmentActivity implements DialogLoading
             StatusBarUtil.setLightMode(this);
         }
     }
-
-    /**
-     * 注入AppManager管理类
-     */
     @Override
-    public void finish() {
-        super.finish();
-        AppManager.onFinish(this);
+    protected void onResume() {
+        super.onResume();
+        doResumeFormBackGroundTask();
     }
 
+    private void  doResumeFormBackGroundTask()
+    {
+        if(AppManager.isResumeFromBackGround()){
+            MLog.i("执行后台返回的一些任务");
+            ResumeFormBackGroundTask resumeFormBackGroundTask= TaskUtil.getTask(BaseConfig.AppResumeFormBackGroundTask);
+            if(null!=resumeFormBackGroundTask)
+            {
+                resumeFormBackGroundTask.doTaskResumeFormBack(mContext);
+            }
+        }
+    }
 
     protected void setInitContentView(int layoutResID) {
         setContentView(layoutResID);

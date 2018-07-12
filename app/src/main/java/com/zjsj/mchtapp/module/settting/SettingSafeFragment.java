@@ -122,7 +122,7 @@ public class SettingSafeFragment extends AppFragment {
                         public void onDialogItemClick(View v, Object tag) {
                             if(v.getId()==R.id.dialog_confirm)
                             {
-                                LoginUserFactory.delUserGesturesInfo();
+                                LoginUserFactory.saveUserGesturesInfo(null);
                                 views.setting_switch_gesture.setSelected(false);
                             }
                         }

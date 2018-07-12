@@ -1,16 +1,25 @@
 package com.ruomm.base.ioc.activity;
 
 import com.ruomm.base.ioc.annotation.InjectUIStyle;
+import com.ruomm.base.ioc.task.BaseApplicationTask;
+import com.ruomm.base.ioc.task.ResumeFormBackGroundTask;
+import com.ruomm.base.ioc.task.TaskUtil;
 import com.ruomm.base.tools.StatusBarUtil;
 import com.ruomm.baseconfig.BaseConfig;
+import com.ruomm.baseconfig.debug.MLog;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
+
+import org.bouncycastle.jce.provider.symmetric.ARC4;
+
+import java.lang.reflect.Constructor;
 
 public abstract class BaseActivity extends Activity {
 	/**
@@ -29,7 +38,6 @@ public abstract class BaseActivity extends Activity {
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
-		AppManager.onCreate(this);
 		mContext = this;
 		mBundle = getIntent().getExtras();
 		// 设置沉浸模式是否开启,可以通过在Activity上注解InjectUIStyle来调整
@@ -47,17 +55,6 @@ public abstract class BaseActivity extends Activity {
 
 		}
 	}
-
-	/**
-	 * 注入AppManager管理类
-	 */
-	@Override
-	public void finish() {
-		super.finish();
-		AppManager.onFinish(this);
-
-	}
-
 	// 设置沉浸样式
 	@TargetApi(19)
 	private void setTranslucentStatus(boolean on) {
@@ -72,5 +69,23 @@ public abstract class BaseActivity extends Activity {
 			winParams.flags &= ~bits;
 		}
 		win.setAttributes(winParams);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		doResumeFormBackGroundTask();
+	}
+
+	private void  doResumeFormBackGroundTask()
+	{
+		if(AppManager.isResumeFromBackGround()){
+			MLog.i("执行后台返回的一些任务");
+			ResumeFormBackGroundTask resumeFormBackGroundTask= TaskUtil.getTask(BaseConfig.AppResumeFormBackGroundTask);
+			if(null!=resumeFormBackGroundTask)
+			{
+				resumeFormBackGroundTask.doTaskResumeFormBack(mContext);
+			}
+		}
 	}
 }

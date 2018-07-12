@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/setting_bg_color"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal|bottom"
+    android:paddingTop="@dimen/dpx032">
+   <FrameLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/container_fragment"
+       >
+   </FrameLayout>
+   <TextView
+       android:id="@+id/text_change"
+       style="@style/textSub"
+       android:text="切换为指纹验证"
+       android:layout_gravity="center_horizontal|bottom"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:padding="@dimen/dpx010"
+       android:layout_marginBottom="@dimen/dpx100"
+       android:layout_alignParentBottom="true"
+       android:layout_centerHorizontal="true"
+       />
+
+
+</FrameLayout>

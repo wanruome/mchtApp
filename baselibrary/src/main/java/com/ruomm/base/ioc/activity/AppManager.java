@@ -8,9 +8,10 @@ package com.ruomm.base.ioc.activity;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.os.SystemClock;
 import android.util.Log;
 
-import com.ruomm.baseconfig.BaseConfig;
+
 import com.ruomm.baseconfig.DebugConfig;
 
 /**
@@ -25,6 +26,7 @@ public class AppManager {
 	 * 单例模式的appManager的调用函数
 	 */
 	private static AppManager appManager;
+
 
 	/**
 	 * 单例模式获取一个AppManager的实例
@@ -60,7 +62,37 @@ public class AppManager {
 		}
 
 	}
+	public static boolean isResumeFromBackGround() {
+		if(null!=getInstance())
+		{
+			if(getInstance().getLastBackGroundTime()<=0)
+			{
+				return false;
+			}
+			long time=SystemClock.elapsedRealtime()-getInstance().getLastBackGroundTime();
+			getInstance().setLastBackGroundTime(SystemClock.elapsedRealtime());
+			if(time>5*1000l)
+			{
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		return false;
+	}
+	public static void setLastBackGroundTime() {
+		if (null != getInstance()){
+			getInstance().setLastBackGroundTime(SystemClock.elapsedRealtime());
+		}
 
+	}
+	public static void delLastBackGroundTime() {
+		if (null != getInstance()){
+			getInstance().setLastBackGroundTime(0);
+		}
+
+	}
 	/**
 	 * 注入Activity的onFinish方法
 	 *
@@ -170,6 +202,7 @@ public class AppManager {
 		}
 	}
 
+	private long lastBackGroundTime=0;
 	/**
 	 * Activity堆栈
 	 */
@@ -190,6 +223,14 @@ public class AppManager {
 	private void addAct(Activity activity) {
 		listActivity.add(activity);
 
+	}
+
+	public long getLastBackGroundTime() {
+		return lastBackGroundTime;
+	}
+
+	public void setLastBackGroundTime(long lastBackGroundTime) {
+		this.lastBackGroundTime = lastBackGroundTime;
 	}
 
 	/**

@@ -7,21 +7,24 @@ package com.ruomm.base.ioc.application;
 
 import com.ruomm.base.common.greendao.BaseDaoMaster;
 import com.ruomm.base.common.greendao.BaseDaoMaster.OpenHelper;
-import com.ruomm.base.http.config.ResponseParse;
 import com.ruomm.base.ioc.activity.AppManager;
-import com.ruomm.base.ioc.application.core.BaseApplicationTask;
+import com.ruomm.base.ioc.task.BaseApplicationTask;
 import com.ruomm.base.ioc.application.crash.CrashHandler;
 import com.ruomm.base.ioc.application.crash.CrashStoreUtil;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
-import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.common.greendao.BaseDaoSession;
 import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.baseconfig.BaseConfig;
+import com.ruomm.baseconfig.DebugConfig;
+import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.baseconfig.http.HttpDiskLruCache;
 import com.ruomm.baseconfig.http.StringDiskLruCache;
 
+import android.app.Activity;
 import android.app.Application;
+import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.bouncycastle.jce.provider.symmetric.ARC4;
 
@@ -33,6 +36,7 @@ import java.lang.reflect.Constructor;
  * @author Ruby
  */
 public class BaseApplication extends Application {
+	private int mFinalCount=0;
 	/**
 	 * 私有声明app
 	 */
@@ -70,6 +74,7 @@ public class BaseApplication extends Application {
 
 			isAppProcess = false;
 		}
+		doAppActivityManager();
 		// StringDiskLruCache存储初始化
 		StringDiskLruCache.initialize(this);
 		// HttpLurCache存储初始化
@@ -93,6 +98,68 @@ public class BaseApplication extends Application {
 		}
 
 	};
+	//注册Activity生命周期回到方法
+	private void doAppActivityManager()
+	{	if(!DebugConfig.isAppManagerEnable)
+		{
+			return;
+		}
+		registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+			@Override
+			public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+				AppManager.onCreate(activity);
+				MLog.i("onActivityCreated:"+activity.getClass().getName());
+			}
+
+			@Override
+			public void onActivityStarted(Activity activity) {
+				MLog.i("onActivityStarted:"+activity.getClass().getName());
+				mFinalCount++;
+				//如果mFinalCount ==1，说明是从后台到前台
+				Log.e("onActivityStarted", mFinalCount +"");
+				if (mFinalCount == 1){
+					//说明从后台回到了前台
+				}
+			}
+
+			@Override
+			public void onActivityResumed(Activity activity) {
+
+				MLog.i("onActivityResumed:"+activity.getClass().getName());
+			}
+
+			@Override
+			public void onActivityPaused(Activity activity) {
+				MLog.i("onActivityPaused:"+activity.getClass().getName());
+			}
+
+			@Override
+			public void onActivityStopped(Activity activity) {
+
+				MLog.i("onActivityStopped:"+activity.getClass().getName());
+				mFinalCount--;
+				//如果mFinalCount ==0，说明是前台到后台
+				Log.i("onActivityStopped", mFinalCount +"");
+				if (mFinalCount == 0){
+					AppManager.setLastBackGroundTime();
+				}
+				else {
+					AppManager.delLastBackGroundTime();
+				}
+			}
+
+			@Override
+			public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+			}
+
+			@Override
+			public void onActivityDestroyed(Activity activity) {
+				AppManager.onFinish(activity);
+				MLog.i("onActivityDestroyed:"+activity.getClass().getName());
+			}
+		});
+	}
 	private  BaseApplicationTask getBaseApplicationTask()
 	{
 		if(TextUtils.isEmpty(BaseConfig.BaseApplicationTask))
@@ -101,7 +168,7 @@ public class BaseApplication extends Application {
 		}
 		if (null == baseApplicationTask) {
 			try {
-				Class<?> onwClass = ARC4.Base.class.getClassLoader().loadClass(BaseConfig.BaseApplicationTask);
+				Class<?> onwClass = BaseApplication.class.getClassLoader().loadClass(BaseConfig.BaseApplicationTask);
 				Constructor<?> constructor = onwClass.getDeclaredConstructor();
 				constructor.setAccessible(true);
 				Object object = constructor.newInstance();

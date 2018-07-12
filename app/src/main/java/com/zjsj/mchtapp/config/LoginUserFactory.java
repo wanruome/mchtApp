@@ -116,6 +116,9 @@ public class LoginUserFactory {
 //        userGesturesInfo.gestures=gestures;
 //        AppStoreUtil.safeSaveBean(BaseApplication.getApplication(),null,userGesturesInfo);
 //    }
+//    public static void delUserGesturesInfo(){
+//        AppStoreUtil.delBean(BaseApplication.getApplication(),null,UserGesturesInfo.class);
+//    }
 
     public static UserGesturesInfo getUserGesturesInfo(){
         if(!isLogin())
@@ -133,7 +136,7 @@ public class LoginUserFactory {
         UserGesturesInfo userGesturesInfo=new UserGesturesInfo();
         userGesturesInfo.userId=getLoginUserInfo().userId;
         userGesturesInfo.gestures=gestures;
-        if (null!=gestures&gestures.size()>0)
+        if (null!=gestures&&gestures.size()>0)
         {
             userGesturesInfo.isEnable=true;
         }
@@ -142,9 +145,7 @@ public class LoginUserFactory {
         }
         return DbStoreSafe.getInstance().saveBean(null,getLoginUserInfo().userId,userGesturesInfo);
     }
-    public static void delUserGesturesInfo(){
-        AppStoreUtil.delBean(BaseApplication.getApplication(),null,UserGesturesInfo.class);
-    }
+
     public static UserFingerPrint getUserFingerPrint(){
         if(!isLogin())
         {

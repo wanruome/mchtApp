@@ -50,6 +50,9 @@ public class IntentFactory {
     {
         return new Intent("fingerprint.FingerPrintActivity");
     }
+    public static Intent getLockScreenActivity(){
+        return new Intent("lockscreen.LockScreenActivity");
+    }
 
 
 
