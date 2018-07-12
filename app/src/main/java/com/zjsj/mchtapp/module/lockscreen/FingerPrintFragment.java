@@ -100,6 +100,7 @@ public class FingerPrintFragment extends AppFragment {
                 MLog.i("onAuthenticateSucceeded"+result.toString());
                 showFingerprintAuthMsg("指纹验证成功");
                 isOnVerify=false;
+                getActivity().setResult(Activity.RESULT_OK);
                 getActivity().finish();
 
             }

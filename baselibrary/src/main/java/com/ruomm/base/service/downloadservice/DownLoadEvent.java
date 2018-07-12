@@ -15,6 +15,7 @@ public class DownLoadEvent implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3012465807448998231L;
+	public final static String  UpdateAppVersion_Action = "updateappversion_action";
 	public final static String ACTION_DOWNLOADEVENT_DEFAULT_PROGRESS = "downloadevent_default_progress";
 	public final static String ACTION_DOWNLOADEVENT_DEFAULT_DONE = "downloadevent_default_done";
 	public final static int DownLoadStatus_None = 0;

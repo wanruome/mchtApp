@@ -72,8 +72,6 @@ public class FileUtils {
 	 * 读取文件
 	 *
 	 * @param is
-	 *            -输入流
-	 * @param isAutoClose
 	 *            -是否自动关闭输入流
 	 * @return 输入流读取读取结果
 	 */
@@ -171,9 +169,9 @@ public class FileUtils {
 	/**
 	 * 写入文件
 	 *
-	 * @param 文件路径
-	 * @param 内容
-	 * @param 追加
+	 * @param filePath
+	 * @param content
+	 * @param append
 	 *            -被追加，如果是真的，写文件的末尾，否则文件中明确的内容，写进去
 	 * @return 返回true
 	 * @throws RuntimeException
@@ -209,9 +207,9 @@ public class FileUtils {
 	/**
 	 * 写入文件
 	 *
-	 * @param 文件路径
-	 * @param 内容
-	 * @param 追加
+	 * @param file
+	 * @param content
+	 * @param append
 	 *            -被追加，如果是真的，写文件的末尾，否则文件中明确的内容，写进去
 	 * @return 返回true
 	 * @throws RuntimeException
@@ -252,9 +250,9 @@ public class FileUtils {
 	/**
 	 * 写入文件
 	 *
-	 * @param 文件
+	 * @param file
 	 *            -
-	 * @param 流
+	 * @param stream
 	 *            -
 	 * @return
 	 * @see {@link #writeFile(File, InputStream, boolean)}
@@ -325,7 +323,7 @@ public class FileUtils {
 	 * <li>makeFolder("C:\\Users\\Tools\\") 可以创建Tools文件夹</li>
 	 * </ul>
 	 *
-	 * @param 文件路径
+	 * @param filePath
 	 *            -
 	 * @return 如果必要的目录已创建或目标目录已经存在，目录假的不能创建。
 	 *         <ul>
@@ -362,7 +360,7 @@ public class FileUtils {
 	 *      getFolderName("/home/admin/a.txt/b.mp3")  =   "/home/admin/a.txt"
 	 * </pre>
 	 *
-	 * @param 文件路径
+	 * @param filePath 文件路径
 	 *            -
 	 * @return
 	 */
@@ -394,7 +392,7 @@ public class FileUtils {
 	 *      getFileName("/home/admin/a.txt/b.mp3")  =   "b.mp3"
 	 * </pre>
 	 *
-	 * @param 文件路径
+	 * @param filePath
 	 *            -
 	 * @return 从路径文件名，包括后缀
 	 */
@@ -425,7 +423,7 @@ public class FileUtils {
 	 *      getFileNameWithoutExtension("/home/admin/a.txt/b.mp3")  =   "b"
 	 * </pre>
 	 *
-	 * @param 文件路径
+	 * @param filePath
 	 *            -
 	 * @return 从路径文件名，不包括后缀
 	 * @see

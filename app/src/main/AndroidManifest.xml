@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <application
         android:name="com.ruomm.base.ioc.application.BaseApplication"
         android:allowBackup="true"
@@ -28,12 +29,22 @@
         android:roundIcon="@mipmap/icon_app_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.zjsj.mchtapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <service android:name=".module.keypair.KeyPairService">
             <intent-filter>
                 <action android:name="keypair.KeyPairService"/>
             </intent-filter>
         </service>
-
+        <service android:name="com.ruomm.base.service.downloadservice.DownLoadService" ></service>
         <activity
             android:name=".module.welcome.WelcomeActivity"
             android:configChanges="keyboardHidden"

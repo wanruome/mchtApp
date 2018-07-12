@@ -54,4 +54,41 @@ public class ResumeFormBackGroundTaskImpl implements ResumeFormBackGroundTask{
         }
         mContext.startActivity(intent);
     }
+    public Intent getScreenLockForLoginIntent(Context mContext)
+    {
+        Activity mActivity=(Activity)mContext;
+        if(mActivity instanceof LockScreenActivity)
+        {
+            return null;
+        }
+        UserFingerPrint userFingerPrint=LoginUserFactory.getUserFingerPrint();
+        UserGesturesInfo userGesturesInfo=LoginUserFactory.getUserGesturesInfo();
+        boolean isGestureEnable=false;
+        boolean isFingerEnable=false;
+        if(null!=userFingerPrint&&userFingerPrint.isEnable)
+        {
+            isFingerEnable=true;
+        }
+        if(null!=userGesturesInfo&&userGesturesInfo.isEnable)
+        {
+            isGestureEnable=true;
+        }
+        if(!isGestureEnable&&!isFingerEnable)
+        {
+            return null;
+        }
+
+        Intent intent=IntentFactory.getLockScreenActivity();
+        if(isGestureEnable){
+            ArrayList<Integer> lst=new ArrayList<>();
+            lst.addAll(userGesturesInfo.gestures);
+            intent.putIntegerArrayListExtra("gestures",lst);
+            intent.putExtra("isGestureEnable",true);
+        }
+        if(isFingerEnable)
+        {
+            intent.putExtra("isFingerEnable",true);
+        }
+        return intent;
+    }
 }

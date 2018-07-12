@@ -88,6 +88,7 @@ public class GestureFragment extends AppFragment {
                 {
                     gestureView.clear();
                     gestureView.setTouchable(false);
+                    getActivity().setResult(Activity.RESULT_OK);
                     getActivity().finish();
                 }
                 else {

@@ -1,6 +1,11 @@
 package com.zjsj.mchtapp.module.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
@@ -9,11 +14,21 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.adapter.PagerAdapter_View;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
+import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
+import com.ruomm.base.service.downloadservice.DownLoadEvent;
+import com.ruomm.base.service.downloadservice.DownLoadTaskUtil;
+import com.ruomm.base.service.downloadservice.DownLoadValue;
 import com.ruomm.base.tools.DisplayUtil;
+import com.ruomm.base.tools.FileUtils;
+import com.ruomm.base.tools.PackageUtils;
+import com.ruomm.base.tools.StringUtils;
+import com.ruomm.base.tools.TimeUtils;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.base.view.dottabstripview.DotTabStripListener;
@@ -23,21 +38,31 @@ import com.ruomm.base.view.menutopview.MenuTopView;
 import com.ruomm.base.view.percentview.FrameLayout_PercentHeight;
 import com.ruomm.base.view.percentview.LinearLayout_PercentHeight;
 import com.ruomm.resource.dialog.MessageDialog;
+import com.ruomm.resource.dialog.UpdateAppProgressDialog;
 import com.ruomm.resource.dialog.dal.DialogValue;
 import com.ruomm.resource.ui.AppSimpleActivity;
 import com.squareup.picasso.Picasso;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.IntentFactory;
 import com.zjsj.mchtapp.config.LoginUserFactory;
+import com.zjsj.mchtapp.config.http.ApiConfig;
+import com.zjsj.mchtapp.config.impl.ResumeFormBackGroundTaskImpl;
+import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.event.TokenEvent;
+import com.zjsj.mchtapp.dal.response.AppVersion;
+import com.zjsj.mchtapp.dal.response.base.ResultFactory;
+import com.zjsj.mchtapp.dal.store.AppUpdateIgnore;
 import com.zjsj.mchtapp.module.main.adapter.MainFunctionAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppSimpleActivity{
     @InjectAll
@@ -72,10 +97,12 @@ public class MainActivity extends AppSimpleActivity{
         EventBus.getDefault().register(this);
         setInitContentView(R.layout.main_drawerlayout);
         setMainContentView();
-        views.drawer_layout.openDrawer(Gravity.START);
-
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(DownLoadEvent.UpdateAppVersion_Action);
+        mContext.registerReceiver(updateAppReceiver, intentFilter);
 
     }
+
 
     protected void setMainContentView() {
         int displayWidth= DisplayUtil.getDispalyWidth(mContext);
@@ -131,11 +158,13 @@ public class MainActivity extends AppSimpleActivity{
         updateUiByUserInfo();
         //设置监听
         views.ly_login.setOnClickListener(myOnClickListener);
+        doScreenLockForLogin();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mContext.unregisterReceiver(updateAppReceiver);
         EventBus.getDefault().unregister(this);
     }
     @Subscribe
@@ -182,6 +211,25 @@ public class MainActivity extends AppSimpleActivity{
 
         }
     }
+    private void doScreenLockForLogin(){
+        Intent intent=new ResumeFormBackGroundTaskImpl().getScreenLockForLoginIntent(mContext);
+        if(null!=intent)
+        {
+            startActivityForResult(intent,IntentFactory.Request_ScreenLockActivity);
+        }
+        else {
+            doHttpTaskGetAppVersion();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==IntentFactory.Request_ScreenLockActivity){
+            doHttpTaskGetAppVersion();
+        }
+    }
+
     private boolean isAppLogin(boolean isShowDialog){
         if(LoginUserFactory.isLogin())
         {
@@ -206,6 +254,192 @@ public class MainActivity extends AppSimpleActivity{
                 messageDialog.show();
             }
             return false;
+        }
+    }
+    //更新服务
+    private void doHttpTaskGetAppVersion(){
+        Map<String,String> map= ApiConfig.createRequestMap(false);
+        map.put("appName","商户服务APP");
+        map.put("appType","1");
+        map.put("appVersion", "1.3.6");
+        ApiConfig.signRequestMap(map);
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"/app/appVersion/doGetAppVersion").setRequestBodyText(map).doHttp(AppVersion.class, new TextHttpCallBack() {
+            @Override
+            public void httpCallBack(Object resultObject, String resultString, int status) {
+                AppVersion appVersion= ResultFactory.getResult(resultObject,status);
+                if(null!=appVersion&&"1".equals(appVersion.needUpdate)&& !StringUtils.isEmpty(appVersion.downUrl))
+                {
+
+//                        appVersion.downUrl="http://codown.youdao.com/note/youdaonote_android_6.2.3_youdaoweb.apk";
+                        mAppVersion=appVersion;
+                        if(isNeedUpdate()) {
+                            MessageDialog messageDialog = new MessageDialog(mContext);
+                            messageDialog.setDialogValue(new DialogValue("升级提醒", "你的应用需要升级？", "稍后提醒", "马上升级"));
+                            messageDialog.setBaseDialogClick(new BaseDialogClickListener() {
+                                @Override
+                                public void onDialogItemClick(View v, Object tag) {
+                                    if (v.getId() == R.id.dialog_confirm) {
+                                        doUpdateApp();
+                                    } else {
+                                        AppUpdateIgnore appUpdateIgnore = new AppUpdateIgnore();
+                                        appUpdateIgnore.version = mAppVersion.appVersion;
+                                        appUpdateIgnore.ignoreTime = System.currentTimeMillis();
+                                        AppStoreUtil.safeSaveBean(mContext, null, appUpdateIgnore);
+                                    }
+                                }
+                            });
+                            messageDialog.show();
+                        }
+                }
+            }
+        });
+    }
+    private boolean isNeedUpdate(){
+
+        if(null!=mAppVersion&&"1".equals(mAppVersion.needUpdate)&& !StringUtils.isEmpty(mAppVersion.downUrl)&&!StringUtils.isEmpty(mAppVersion.appVersion)){
+            AppUpdateIgnore appUpdateIgnore=AppStoreUtil.safeGetBean(mContext,null,AppUpdateIgnore.class);
+
+            if(null==appUpdateIgnore||appUpdateIgnore.ignoreTime<=0){
+                return true;
+            }
+            if(!mAppVersion.appVersion.equals(appUpdateIgnore.version)){
+                return true;
+            }
+            long time=Math.abs(System.currentTimeMillis()-appUpdateIgnore.ignoreTime);
+            if(time> 1000*10)
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
+    private AppVersion mAppVersion=null;
+    private void doUpdateApp() {
+        String updateApkPath = FileUtils.getPathExternalCache(mContext, "download"+File.separator+"mactApp2_" + mAppVersion.appVersion
+                + ".apk");
+        File file = new File(updateApkPath);
+        if (null != file && file.exists() && file.isFile()) {
+            try {
+                PackageUtils.installNormalNew(mContext, updateApkPath,"com.zjsj.mchtapp.fileprovider");
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+
+            catch (Exception e) {
+                // TODO: handle exception
+                e.printStackTrace();
+            }
+        }
+        else {
+            DownLoadValue mDownLoadValue = new DownLoadValue(mAppVersion.downUrl, updateApkPath);
+            mDownLoadValue.isSendProgressEvent = true;
+            mDownLoadValue.isSendDoneEvent = true;
+            mDownLoadValue.tagProgress = DownLoadEvent.UpdateAppVersion_Action;
+            mDownLoadValue.tagEnd = DownLoadEvent.UpdateAppVersion_Action;
+            boolean flag = DownLoadTaskUtil.addDownLoadTaskCurrentQueue(mContext, mDownLoadValue);
+        }
+    }
+
+
+    private UpdateAppProgressDialog progress_Dialog=null;
+    private DownLoadValue appDownloadValue;
+    private final BroadcastReceiver updateAppReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String actionName = intent.getAction();
+            if (DownLoadEvent.UpdateAppVersion_Action.equals(actionName)) {
+                if (null == mAppVersion) {
+                    if (null != progress_Dialog) {
+                        progress_Dialog.dismiss();
+                        progress_Dialog = null;
+                    }
+                    finish();
+                    return;
+                }
+                DownLoadEvent downLoadEvent = BaseUtil.serializableGet(intent, DownLoadEvent.class);
+                if (null == appDownloadValue) {
+                    appDownloadValue = downLoadEvent.mDownLoadValue;
+                }
+                setCheckUpdateStatus(downLoadEvent);
+
+                if (null != downLoadEvent && downLoadEvent.downloadStatus == DownLoadEvent.DownLoadStatus_Sucess) {
+                    try {
+                        String apkPath = downLoadEvent.mDownLoadValue.fileSucess;
+                        PackageUtils.installNormalNew(mContext, apkPath,"com.zjsj.mchtapp.fileprovider");
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                    }
+
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+        }
+    };
+
+    @SuppressWarnings("unused")
+    protected void setCheckUpdateStatus(DownLoadEvent downLoadEvent) {
+        if (null == downLoadEvent) {
+            if (null != progress_Dialog) {
+                progress_Dialog.dismiss();
+                progress_Dialog = null;
+            }
+        }
+        else {
+            if (downLoadEvent.downloadStatus == DownLoadEvent.DownLoadStatus_OnDownLoading) {
+                NumberFormat nt = NumberFormat.getPercentInstance();
+                nt.setMinimumFractionDigits(2);
+                String perString = nt.format(downLoadEvent.valueProgress);
+                if (null == progress_Dialog) {
+                    progress_Dialog = new UpdateAppProgressDialog(mContext, new BaseDialogClickListener() {
+
+                        @Override
+                        public void onDialogItemClick(View v, Object tag) {
+                            int vID = v.getId();
+                            if (vID == R.id.dialog_cancle) {
+                                Intent intent = new Intent(Intent.ACTION_MAIN);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.addCategory(Intent.CATEGORY_HOME);
+                                startActivity(intent);
+                                return;
+                            }
+                            else if (vID == R.id.dialog_confirm) {
+                                DownLoadTaskUtil.removeDownLoadTask(mContext, appDownloadValue);
+                                progress_Dialog.dismiss();
+                                progress_Dialog = null;
+
+                            }
+
+                        }
+                    });
+
+                    progress_Dialog.show();
+                }
+                else {
+                    progress_Dialog.setUpdateProgress(downLoadEvent.valueProgress);
+                }
+            }
+            else if (downLoadEvent.downloadStatus == DownLoadEvent.DownLoadStatus_Sucess) {
+
+                if (null != progress_Dialog) {
+                    progress_Dialog.dismiss();
+                    progress_Dialog = null;
+                }
+            }
+            else if (downLoadEvent.downloadStatus == DownLoadEvent.DownLoadStatus_Fail) {
+                if (null != progress_Dialog) {
+                    progress_Dialog.dismiss();
+                    progress_Dialog = null;
+                }
+            }
         }
     }
 

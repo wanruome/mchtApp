@@ -1,5 +1,6 @@
 package com.zjsj.mchtapp.module.welcome;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -53,7 +54,7 @@ public class WelcomeActivity extends AppSimpleActivity {
             if (null == permissionHelper) {
                 permissionHelper = new PermissionHelper(mContext, permissionHelperCallBack);
                 permissionHelper.setPermissions(new String[][]{
-                        {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, "存储卡"},
+                        {Manifest.permission.READ_EXTERNAL_STORAGE, "存储卡"},
                         {android.Manifest.permission.READ_PHONE_STATE, "手机状态"},
                         {android.Manifest.permission.CAMERA, "相机"},
                         {android.Manifest.permission.CALL_PHONE, "拨打电话"}

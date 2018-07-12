@@ -5,6 +5,7 @@ import android.content.Intent;
 public class IntentFactory {
     public static final int Request_FingerPrintActivity=109;
     public static final int Request_GestureLockActivity=110;
+    public static final int Request_ScreenLockActivity=111;
     public static Intent getWelcomeActivity()
     {
         return new Intent("welcome.WelcomeActivity");

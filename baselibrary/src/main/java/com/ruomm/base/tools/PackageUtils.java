@@ -20,6 +20,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
 public class PackageUtils {
@@ -109,6 +110,24 @@ public class PackageUtils {
 		context.startActivity(i);
 		return true;
 	}
+	public static boolean installNormalNew(Context context, String filePath,String authorityName) {
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		Uri data;
+		// 判断版本大于等于7.0
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			// "net.csdn.blog.ruancoder.fileprovider"即是在清单文件中配置的authorities
+			data = FileProvider.getUriForFile(context, authorityName, new File(filePath));
+			// 给目标应用一个临时授权
+			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+		} else {
+			data = Uri.parse("file://" + filePath);
+		}
+		intent.setDataAndType(data, "application/vnd.android.package-archive");
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		context.startActivity(intent);
+		return true;
+	}
+
 
 	/**
 	 * 从root安装包

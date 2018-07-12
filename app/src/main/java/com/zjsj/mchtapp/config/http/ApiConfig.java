@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ApiConfig {
-     public static final String BASE_URL = "http://192.168.100.66:9080/mchtAppUserApi/";
-//     public static final String BASE_URL = "http://192.168.3.10:8080/mchtAppUserApi/";
+//     public static final String BASE_URL = "http://192.168.100.66:9080/mchtAppUserApi/";
+     public static final String BASE_URL = "http://192.168.3.10:8080/mchtAppUserApi/";
      public static final String TRANSMIT_KEYTYPE="RSA";
      public static String TRANSMIT_DESKEY=null;
      public static PublicKey TRANSMIT_RSAKEY=null;
