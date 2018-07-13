@@ -86,7 +86,7 @@ public class KeyPairService extends BaseService {
         if(null==ResultFactory.getErrorTip(responseText)){
             KeyPairDto keyPairDto=ResultFactory.getResult(responseText);
             String pubKeyStr=new String(RSAUtils.decryptDataBig(Base64.decode(keyPairDto.publicKey),keyPair.getPrivate()));
-            ApiConfig.loadTransmitKey(pubKeyStr);
+            ApiConfig.loadTransmitKey(keyPairDto);
         }
     }
 

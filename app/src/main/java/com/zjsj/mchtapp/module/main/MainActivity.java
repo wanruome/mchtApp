@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ import com.ruomm.base.tools.DisplayUtil;
 import com.ruomm.base.tools.FileUtils;
 import com.ruomm.base.tools.PackageUtils;
 import com.ruomm.base.tools.StringUtils;
+import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.base.tools.TimeUtils;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
@@ -54,6 +56,7 @@ import com.zjsj.mchtapp.dal.response.AppVersion;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
 import com.zjsj.mchtapp.dal.store.AppUpdateIgnore;
 import com.zjsj.mchtapp.module.main.adapter.MainFunctionAdapter;
+import com.zjsj.mchtapp.module.main.dal.MainFunctionItem;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -97,10 +100,11 @@ public class MainActivity extends AppSimpleActivity{
         EventBus.getDefault().register(this);
         setInitContentView(R.layout.main_drawerlayout);
         setMainContentView();
+        setMainClickListener();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DownLoadEvent.UpdateAppVersion_Action);
         mContext.registerReceiver(updateAppReceiver, intentFilter);
-
+        doScreenLockForLogin();
     }
 
 
@@ -157,8 +161,23 @@ public class MainActivity extends AppSimpleActivity{
         views.mGridView.setAdapter(new MainFunctionAdapter(mContext));
         updateUiByUserInfo();
         //设置监听
+
+    }
+    protected void setMainClickListener() {
         views.ly_login.setOnClickListener(myOnClickListener);
-        doScreenLockForLogin();
+        views.mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                views.mGridView.get
+                MainFunctionItem function=(MainFunctionItem)views.mGridView.getAdapter().getItem(position);
+                if(null!=function&&!StringUtils.isEmpty(function.actionName))
+                {
+                    Intent intent=new Intent(function.actionName);
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -261,7 +280,7 @@ public class MainActivity extends AppSimpleActivity{
         Map<String,String> map= ApiConfig.createRequestMap(false);
         map.put("appName","商户服务APP");
         map.put("appType","1");
-        map.put("appVersion", "1.3.6");
+        map.put("appVersion", TelePhoneUtil.getPackageVersionName(mContext));
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"/app/appVersion/doGetAppVersion").setRequestBodyText(map).doHttp(AppVersion.class, new TextHttpCallBack() {
             @Override
@@ -306,7 +325,7 @@ public class MainActivity extends AppSimpleActivity{
                 return true;
             }
             long time=Math.abs(System.currentTimeMillis()-appUpdateIgnore.ignoreTime);
-            if(time> 1000*10)
+            if(time> ApiConfig.APPUPDATE_NOTIFY_SKIP_TIME)
             {
                 return true;
             }

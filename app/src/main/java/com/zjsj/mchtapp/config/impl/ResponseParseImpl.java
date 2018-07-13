@@ -23,9 +23,14 @@ public class ResponseParseImpl implements ResponseParse {
                 {
                     resultBase.data=null;
                 }
+
                 else if(cls.getName().equals(String.class.getName()))
                 {
                     resultBase.data=data;
+                }
+                else if(data.startsWith("[")&&data.endsWith("]"))
+                {
+                    resultBase.data=JSON.parseArray(data,cls);
                 }
                 else{
                     resultBase.data=JSON.parseObject(data,cls);

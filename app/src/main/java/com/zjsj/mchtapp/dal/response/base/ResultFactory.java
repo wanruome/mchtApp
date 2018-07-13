@@ -4,6 +4,8 @@ import com.ruomm.base.http.HttpConfig;
 import com.ruomm.base.http.config.ResponseText;
 import com.ruomm.base.tools.StringUtils;
 
+import java.util.List;
+
 public class ResultFactory {
     public static String ERR_PRARM = "e401";
     public static String ERR_CORE = "e402";
@@ -80,9 +82,29 @@ public class ResultFactory {
         if(null==resultObject||!(resultObject instanceof ResultDto)){
             return null;
         }
-        ResultDto result=(ResultDto) resultObject;
-        return (T) result.data;
+        T t=null;
+        try {
+            ResultDto result=(ResultDto) resultObject;
+           t=(T) result.data;
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            t=null;
+
+        }
+        return t;
     }
+//    public static <T> List<T>  getResult(Object resultObject, int status){
+//        if(status!= HttpConfig.Success)
+//        {
+//            return null;
+//        }
+//        if(null==resultObject||!(resultObject instanceof ResultDto)){
+//            return null;
+//        }
+//        ResultDto result=(ResultDto) resultObject;
+//        return List<T> result.data;
+//    }
     public static boolean isTrueResult(ResponseText responseText)
     {
         if(null==responseText)
@@ -145,8 +167,17 @@ public class ResultFactory {
         {
             return null;
         }
-        ResultDto result=(ResultDto) responseText.resultObject;
-        return (T) result.data;
+        T t=null;
+        try {
+            ResultDto result=(ResultDto) responseText.resultObject;
+            t=(T) result.data;
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            t=null;
+
+        }
+        return t;
     }
 
 }

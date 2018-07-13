@@ -44,6 +44,8 @@
     <dimen name="dpx024">12dip</dimen>
     <dimen name="dpx032">16dip</dimen>
     <dimen name="dpx040">20dip</dimen>
+    <dimen name="dpx050">25dip</dimen>
+    <dimen name="dpx060">30dip</dimen>
     <dimen name="dpx080">40dip</dimen>
     <dimen name="dpx100">50dip</dimen>
     <dimen name="dpx120">60dip</dimen>

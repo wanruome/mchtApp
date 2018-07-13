@@ -54,6 +54,12 @@ public class IntentFactory {
     public static Intent getLockScreenActivity(){
         return new Intent("lockscreen.LockScreenActivity");
     }
+    public static Intent getBankCardListActivity(){
+        return  new Intent("repayment.BankCardListActivity");
+    }
+    public static Intent getBindCardActivity(){
+        return  new Intent("repayment.BindCardActivity");
+    }
 
 
 

@@ -12,6 +12,7 @@ import com.zjsj.mchtapp.dal.store.UserFingerPrint;
 import com.zjsj.mchtapp.dal.store.UserGesturesInfo;
 import com.zjsj.mchtapp.module.gesturelock.GestureLockActivity;
 import com.zjsj.mchtapp.module.lockscreen.LockScreenActivity;
+import com.zjsj.mchtapp.module.userinfo.FindPwdActivity;
 
 import java.nio.file.attribute.UserPrincipal;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class ResumeFormBackGroundTaskImpl implements ResumeFormBackGroundTask{
     @Override
     public void doTaskResumeFormBack(Context mContext) {
         Activity mActivity=(Activity)mContext;
-        if(mActivity instanceof LockScreenActivity)
+        if(mActivity instanceof LockScreenActivity ||mActivity instanceof FindPwdActivity)
         {
             return;
         }
@@ -57,7 +58,7 @@ public class ResumeFormBackGroundTaskImpl implements ResumeFormBackGroundTask{
     public Intent getScreenLockForLoginIntent(Context mContext)
     {
         Activity mActivity=(Activity)mContext;
-        if(mActivity instanceof LockScreenActivity)
+        if(mActivity instanceof LockScreenActivity ||mActivity instanceof FindPwdActivity)
         {
             return null;
         }

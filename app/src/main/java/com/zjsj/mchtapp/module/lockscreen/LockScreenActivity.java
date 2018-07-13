@@ -25,8 +25,11 @@ public class LockScreenActivity extends AppMultiActivity {
     class  Views{
         @InjectView(id=R.id.text_change)
         TextView text_change;
+        @InjectView(id=R.id.text_verify)
+        TextView text_verify;
     }
     private int mode=0;
+    private boolean isShowVerify=false;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
@@ -62,13 +65,37 @@ public class LockScreenActivity extends AppMultiActivity {
         else {
             views.text_change.setVisibility(View.GONE);
         }
+        views.text_verify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isShowVerify){
+                    if(mode==1)
+                    {
+                        showFragmentFingerprint();
+                    }
+                    else {
+                        showFragmentGesture();
+                    }
+                }
+                else {
+                    showFragmentVerifyPassWord();
+                }
+            }
+        });
+
 
     }
     private void showFragmentGesture(){
         mode=2;
-        if(views.text_change.getVisibility()==View.VISIBLE) {
+        isShowVerify=false;
+        if(isFingerEnable&&isGestureEnable) {
+            views.text_change.setVisibility(View.VISIBLE);
             views.text_change.setText("切换为指纹解锁验证");
         }
+        else {
+            views.text_change.setVisibility(View.GONE);
+        }
+        views.text_verify.setText("验证用户密码，清除指纹手势密码");
         GestureFragment mGestureFragment=new GestureFragment();
         Bundle bundle=new Bundle();
         bundle.putIntegerArrayList("gestures",gestures);
@@ -77,10 +104,22 @@ public class LockScreenActivity extends AppMultiActivity {
     }
     private void showFragmentFingerprint(){
         mode=1;
-        if(views.text_change.getVisibility()==View.VISIBLE){
-        views.text_change.setText("切换为手势图案验证");
+        isShowVerify=false;
+        if(isFingerEnable&&isGestureEnable) {
+            views.text_change.setVisibility(View.VISIBLE);
+            views.text_change.setText("切换为手势图案验证");
         }
+        else {
+            views.text_change.setVisibility(View.GONE);
+        }
+        views.text_verify.setText("验证用户密码，清除指纹手势密码");
         mFManager.beginTransaction().replace(R.id.container_fragment,new FingerPrintFragment()).commit();
+    }
+    private void showFragmentVerifyPassWord(){
+        isShowVerify=true;
+        views.text_change.setVisibility(View.GONE);
+        views.text_verify.setText("返回，继续使用指纹或手势密码验证");
+        mFManager.beginTransaction().replace(R.id.container_fragment,new VerifyPasswordFragment()).commit();
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

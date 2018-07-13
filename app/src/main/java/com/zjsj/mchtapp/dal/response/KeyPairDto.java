@@ -5,4 +5,5 @@ public class KeyPairDto{
    public String publicKey;
    public String privateKey;
    public String keyVersion;
+   public String keyType;
 }

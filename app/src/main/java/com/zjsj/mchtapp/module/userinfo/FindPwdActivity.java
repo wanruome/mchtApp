@@ -139,6 +139,7 @@ public class FindPwdActivity extends AppMultiActivity {
         if(!RegexUtil.doRegex(account,RegexUtil.MOBILE_NUM))
         {
             ToastUtil.makeFailToastThr(mContext,"手机号不正确");
+            return;
         }
         boolean flag= RegexText.with(new RegexCallBack() {
             @Override
@@ -211,20 +212,22 @@ public class FindPwdActivity extends AppMultiActivity {
     }
     private void doSendMsgVerifyCode()
     {
-        boolean flag= RegexText.with(new RegexCallBack() {
-            @Override
-            public void errorRegex(TextView v, String value, String errorInfo) {
-                ToastUtil.makeFailToastThr(mContext,errorInfo);
-            }
-        }).doRegex(views.edt_name,RegexUtil.MOBILE_NUM,"手机号不正确").builder();
-        if(!flag)
+        String account=null;
+        if(null!=lastLoginUserInfo){
+            account=lastLoginUserInfo.account;
+        }
+        else {
+            account=views.edt_name.getText().toString();
+        }
+        if(!RegexUtil.doRegex(account,RegexUtil.MOBILE_NUM))
         {
+            ToastUtil.makeFailToastThr(mContext,"手机号不正确");
             return;
         }
         showLoading();
         Map<String, String> map = ApiConfig.createRequestMap(false);
         map.put("msgFunction", "2");
-        map.put("msgAddr", views.edt_name.getText().toString());
+        map.put("msgAddr", account);
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/msg/doMsgSend").setRequestBodyText(map).doHttp(MsgSendDto.class, new TextHttpCallBack() {
             @Override

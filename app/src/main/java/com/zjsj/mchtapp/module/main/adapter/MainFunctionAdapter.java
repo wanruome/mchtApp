@@ -23,6 +23,7 @@ public class MainFunctionAdapter   extends BaseAdapter_T<MainFunctionItem> {
         MainFunctionItem item1=new MainFunctionItem();
         item1.name="二维码支付";
         item1.imageRes=R.mipmap.home_fun_qrcodepament;
+        item1.actionName="";
         lst.add(item1);
         MainFunctionItem item2=new MainFunctionItem();
         item2.name="交易记录";
@@ -31,6 +32,7 @@ public class MainFunctionAdapter   extends BaseAdapter_T<MainFunctionItem> {
         MainFunctionItem item3=new MainFunctionItem();
         item3.name="银行卡管理";
         item3.imageRes=R.mipmap.home_fun_bankcard;
+        item3.actionName="repayment.BankCardListActivity";
         lst.add(item3);
         return lst;
     }

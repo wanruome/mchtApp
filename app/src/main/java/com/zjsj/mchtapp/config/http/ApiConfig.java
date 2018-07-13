@@ -12,24 +12,32 @@ import com.ruomm.base.tools.RSAUtils;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.TelePhoneUtil;
 import com.zjsj.mchtapp.config.LoginUserFactory;
+import com.zjsj.mchtapp.dal.response.KeyPairDto;
 import com.zjsj.mchtapp.module.keypair.KeyPairService;
 
 import java.security.KeyPair;
 import java.security.PublicKey;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ApiConfig {
-//     public static final String BASE_URL = "http://192.168.100.66:9080/mchtAppUserApi/";
-     public static final String BASE_URL = "http://192.168.3.10:8080/mchtAppUserApi/";
+     public static final SimpleDateFormat SDF_SERVER=new SimpleDateFormat("yyyyMMddHHmmssSSS");
+     public static final String BASE_URL = "http://192.168.100.66:9080/mchtAppUserApi/";
+//     public static final String BASE_URL = "http://192.168.3.10:8080/mchtAppUserApi/";
+
      public static final String TRANSMIT_KEYTYPE="RSA";
+     public static  long TRANSMIT_VERSIONTIME=0;
+     public static  long TRANSMIT_UPDATE_SKIP_TIME=1000*3600*6;
      public static String TRANSMIT_DESKEY=null;
      public static PublicKey TRANSMIT_RSAKEY=null;
      public static KeyPair STORE_KEYPAIR=null;
-     private static  String uuid=null;
+     public static long APPUPDATE_NOTIFY_SKIP_TIME=1000*3600*12;
+     private static String uuid=null;
      public static final int PWD_MIN_LENGTH=6;
      public static final int PWD_MAT_LENGTH=16;
-     public static final int PWD_MIN_RULE=2;
+     public static final int PWD_MIN_RULE=0;
      public static final int PAYPWD_MIN_LENGTH=6;
      public static final int VERIFYCODE_COUNTDOWN=60*1000;
      public static final int VERIFYCODE_THREADSLEEP=333;
@@ -43,10 +51,6 @@ public class ApiConfig {
      }
      public static boolean isKeyPairOk()
      {
-//          if(StringUtils.isEmpty(STORE_PUBLICKEY)||StringUtils.isEmpty(STORE_PRIVATEKEY))
-//          {
-//               return false;
-//          }
           if("RSA".equals(TRANSMIT_KEYTYPE))
           {
                if(null==TRANSMIT_RSAKEY)
@@ -69,30 +73,59 @@ public class ApiConfig {
                return false;
           }
      }
-     public static  boolean isKeyPairOk(Context context){
-          boolean flag=isKeyPairOk();
-          if(flag||null==context)
+     public static boolean isKeyPairNeedUpdate(){
+          if(TRANSMIT_VERSIONTIME<=0)
           {
-               return flag;
+               return true;
           }
-          try {
-               BaseServiceUtil.startService(context, KeyPairService.class,1);
-          }catch (Exception e)
+          long timeOut=System.currentTimeMillis()-TRANSMIT_VERSIONTIME;
+          if(timeOut>TRANSMIT_UPDATE_SKIP_TIME||timeOut<-TRANSMIT_UPDATE_SKIP_TIME)
+          {
+               return true;
+          }
+          else{
+               return false;
+          }
+     }
+//     public static  boolean isKeyPairOk(Context context){
+//          boolean flag=isKeyPairOk();
+//          if(flag||null==context)
+//          {
+//               return flag;
+//          }
+//          try {
+//               BaseServiceUtil.startService(context, KeyPairService.class,1);
+//          }catch (Exception e)
+//          {
+//               e.printStackTrace();
+//          }
+//
+//          return flag;
+//     }
+     public static void loadTransmitKey( KeyPairDto keyPairDto)
+     {
+          if(null==keyPairDto||StringUtils.isEmpty(keyPairDto.publicKey))
+          {
+               return;
+          }
+          long time=0;
+          try{
+               Date date=ApiConfig.SDF_SERVER.parse(keyPairDto.keyVersion);
+               time=date.getTime();
+          }
+          catch (Exception e)
           {
                e.printStackTrace();
+               time=0;
           }
-
-          return flag;
-     }
-     public static void loadTransmitKey(String keyStr)
-     {
+          TRANSMIT_VERSIONTIME=time;
           if("RSA".equals(TRANSMIT_KEYTYPE))
           {
-               TRANSMIT_RSAKEY=RSAUtils.loadPublicKey(keyStr);
+               TRANSMIT_RSAKEY=RSAUtils.loadPublicKey(keyPairDto.publicKey);
           }
           else if("3DES".equals(TRANSMIT_KEYTYPE))
           {
-              TRANSMIT_DESKEY=new String(keyStr);
+              TRANSMIT_DESKEY=new String(keyPairDto.publicKey);
           }
           else{
                return;

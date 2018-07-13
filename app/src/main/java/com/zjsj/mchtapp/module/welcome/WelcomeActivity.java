@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.activity.AppManager;
+import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.tools.Base64;
 import com.ruomm.base.tools.RSAUtils;
 import com.ruomm.base.tools.TelePhoneUtil;
@@ -112,9 +113,10 @@ public class WelcomeActivity extends AppSimpleActivity {
     private void getPublicKey()
     {
 //        new DataOKHttp().setUrl().setRequestBody()
-        if(ApiConfig.isKeyPairOk())
+        if(!ApiConfig.isKeyPairNeedUpdate())
         {
             gotoMainActivity();
+            return;
         }
         showLoading();
         Map<String,String> map=new HashMap<>();
@@ -127,8 +129,12 @@ public class WelcomeActivity extends AppSimpleActivity {
             public void httpCallBack(Object resultObject, String resultString, int status) {
                 if(null== ResultFactory.getErrorTip(resultObject,status)){
                     KeyPairDto keyPairDto=ResultFactory.getResult(resultObject,status);
+                    keyPairDto.keyType=ApiConfig.TRANSMIT_KEYTYPE;
                     String pubKeyStr=new String(RSAUtils.decryptDataBig(Base64.decode(keyPairDto.publicKey),keyPair.getPrivate()));
-                    ApiConfig.loadTransmitKey(pubKeyStr);
+                    keyPairDto.publicKey=pubKeyStr;
+                    ApiConfig.loadTransmitKey(keyPairDto);
+                    AppStoreUtil.safeSaveBean(mContext,null,keyPairDto);
+
                 }
                 dismissLoading();
                 if(!ApiConfig.isKeyPairOk())

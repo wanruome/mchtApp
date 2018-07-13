@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dpx032"
+    android:paddingRight="@dimen/dpx032"
+    android:paddingLeft="@dimen/dpx032"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_content_bg"
+        android:orientation="horizontal"
+
+        >
+        <LinearLayout
+            android:paddingTop="@dimen/dpx032"
+            android:paddingBottom="@dimen/dpx050"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/repayment_bankname"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/dpx040"
+            android:paddingBottom="@dimen/dpx050"
+            >
+            <TextView
+                android:id="@+id/lv_text_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="中国工商银行"
+                />
+            <TextView
+                android:id="@+id/lv_text_number"
+                android:paddingTop="@dimen/dpx032"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="中国工商银行666666666666"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:paddingTop="@dimen/dpx016"
+            android:paddingBottom="@dimen/dpx050"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/repayment_unionpay"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <View style="@style/lineStyle"
+        android:layout_marginTop="@dimen/dpx032"
+        ></View>
+
+</LinearLayout>
