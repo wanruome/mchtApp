@@ -1,19 +1,25 @@
 package com.zjsj.mchtapp.config;
 
+import android.view.View;
+
 import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.ioc.iocutil.DbStoreSafe;
 import com.ruomm.base.tools.StringUtils;
+import com.ruomm.base.tools.ToastUtil;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.response.PayInfoDto;
+import com.zjsj.mchtapp.dal.response.RepaymentBankCard;
 import com.zjsj.mchtapp.dal.response.UserInfoDto;
 import com.zjsj.mchtapp.dal.store.LastLoginUserInfo;
+import com.zjsj.mchtapp.dal.store.UserBankCardStore;
 import com.zjsj.mchtapp.dal.store.UserFingerPrint;
 import com.zjsj.mchtapp.dal.store.UserGesturesInfo;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -81,7 +87,29 @@ public class LoginUserFactory {
     public static PayInfoDto getPayInfo(){
         return mPayInfoDto;
     }
+    public static List<RepaymentBankCard> getBankCardInfo(){
+        UserBankCardStore userBankCardStore=AppStoreUtil.safeGetBean(BaseApplication.getApplication(),null,UserBankCardStore.class);
+        if(null==userBankCardStore||!userBankCardStore.userId.equals(getLoginUserInfo().userId))
+        {
+            return null;
+        }
+        else{
+            return userBankCardStore.list;
+        }
+    }
+    public static void saveBankCardInfo(List<RepaymentBankCard> list){
+        UserBankCardStore userBankCardStore=new UserBankCardStore();
+        userBankCardStore.userId= LoginUserFactory.getLoginUserInfo().userId;
+        if (null == list || list.size() <= 0) {
+            userBankCardStore.list=null;
+        }
+        else{
 
+            userBankCardStore.list=new ArrayList<RepaymentBankCard>();
+            userBankCardStore.list.addAll(list);
+        }
+        AppStoreUtil.safeSaveBean(BaseApplication.getApplication(),null,userBankCardStore);
+    }
 //    public static UserGesturesInfo getUserGesturesInfo(){
 //        if(!isLogin())
 //        {

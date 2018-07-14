@@ -64,6 +64,10 @@ public class IntentFactory {
     public static Intent getBindCardActivity(){
         return  new Intent("repayment.BindCardActivity");
     }
+    public static Intent getRepaymentOrderActivity(){
+        return  new Intent("repayment.RepaymentOrderActivity");
+    }
+
 
 
 

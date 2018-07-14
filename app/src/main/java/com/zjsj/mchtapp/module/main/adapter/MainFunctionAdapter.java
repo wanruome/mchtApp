@@ -28,6 +28,7 @@ public class MainFunctionAdapter   extends BaseAdapter_T<MainFunctionItem> {
         MainFunctionItem item2=new MainFunctionItem();
         item2.name="交易记录";
         item2.imageRes=R.mipmap.home_fun_tradehistory;
+        item2.actionName="repayment.RepaymentOrderActivity";
         lst.add(item2);
         MainFunctionItem item3=new MainFunctionItem();
         item3.name="银行卡管理";

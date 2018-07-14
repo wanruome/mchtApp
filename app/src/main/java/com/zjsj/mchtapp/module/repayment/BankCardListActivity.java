@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
+import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.ToastUtil;
@@ -21,6 +23,7 @@ import com.ruomm.resource.ui.AppMultiActivity;
 import com.ruomm.resource.ui.dal.WebUrlInfo;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.IntentFactory;
+import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.response.RepaymentBankCard;
@@ -28,6 +31,7 @@ import com.zjsj.mchtapp.dal.response.RepaymentBindCardDto;
 import com.zjsj.mchtapp.dal.response.RepaymentUnBindCardDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
+import com.zjsj.mchtapp.dal.store.UserBankCardStore;
 import com.zjsj.mchtapp.module.repayment.adapter.BankCardListAdapter;
 
 import org.greenrobot.eventbus.Logger;
@@ -42,6 +46,8 @@ public class BankCardListActivity extends AppMultiActivity {
     class Views{
         @InjectView(id=R.id.mListView)
         ListView mListView;
+        @InjectView(id=R.id.text_tip)
+        TextView text_tip;
     }
     private List<RepaymentBankCard> listDatas=new ArrayList<>();
     BankCardListAdapter bankCardListAdapter=null;
@@ -97,6 +103,8 @@ public class BankCardListActivity extends AppMultiActivity {
 //    }
     private void doHttpGetBankCardList(){
         showLoading();
+        views.text_tip.setText("获取绑定银行卡");
+        views.text_tip.setVisibility(View.GONE);
         Map<String,String> map=ApiConfig.createRequestMap(true);
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/repayment/doQueryBindCards").setRequestBodyText(map).doHttp(RepaymentBankCard.class, new TextHttpCallBack() {
@@ -105,23 +113,31 @@ public class BankCardListActivity extends AppMultiActivity {
                 String error=ResultFactory.getErrorTip(resultObject,status);
                 List<RepaymentBankCard> list=ResultFactory.getResult(resultObject,status);
                 if(StringUtils.isEmpty(error)) {
+
+                    listDatas.clear();
                     if (null == list || list.size() <= 0) {
-                        ToastUtil.makeFailToastThr(mContext,"你还没有绑定银行卡");
+                        ToastUtil.makeOkToastThr(mContext,"你还没有绑定银行卡");
+                        views.text_tip.setText("你还没有绑定银行卡");
+                        views.text_tip.setVisibility(View.VISIBLE);
                     }
-                    if (StringUtils.isEmpty(error)) {
-                        ToastUtil.makeOkToastThr(mContext,"获取绑定银行卡成功");
+                    else{
                         listDatas.addAll(list);
-                        bankCardListAdapter.notifyDataSetChanged();
+                        ToastUtil.makeOkToastThr(mContext,"获取绑定银行卡成功");
+                        views.text_tip.setText("获取绑定银行卡成功");
+                        views.text_tip.setVisibility(View.GONE);
                     }
+                    LoginUserFactory.saveBankCardInfo(listDatas);
+                    bankCardListAdapter.notifyDataSetChanged();
                 }
                 else {
                     ToastUtil.makeFailToastThr(mContext,error);
+                    views.text_tip.setText(error);
+                    views.text_tip.setVisibility(View.VISIBLE);
                 }
                 dismissLoading();
 
             }
         });
-
     }
     private void doUnBindCardTask(final RepaymentBankCard repaymentBankCard){
         if(null==repaymentBankCard)
@@ -141,7 +157,7 @@ public class BankCardListActivity extends AppMultiActivity {
         });
         messageDialog.show();
     }
-    private void doHttpTaskUnBindCard(RepaymentBankCard repaymentBankCard){
+    private void doHttpTaskUnBindCard(final RepaymentBankCard repaymentBankCard){
         showLoading();
         Map<String,String> map=ApiConfig.createRequestMap(true);
         map.put("cardIndex",repaymentBankCard.cardIndex);
@@ -161,9 +177,11 @@ public class BankCardListActivity extends AppMultiActivity {
                 }
                 else{
                     RepaymentUnBindCardDto resultUnBindCardDto=ResultFactory.getResult(resultObject,status);
+                    listDatas.remove(repaymentBankCard);
+                    LoginUserFactory.saveBankCardInfo(listDatas);
                     MLog.i(resultUnBindCardDto);
                     ToastUtil.makeOkToastThr(mContext,"解绑成功");
-
+                    bankCardListAdapter.notifyDataSetChanged();
                 }
                 dismissLoading();
 
