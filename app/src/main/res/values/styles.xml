@@ -1,2 +1,12 @@
 <resources>
+    <style name="btnStyleTrade">
+        <item name="android:layout_marginTop">@dimen/dpx020</item>
+        <item name="android:paddingTop">@dimen/dpx024</item>
+        <item name="android:paddingBottom">@dimen/dpx024</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dpx100</item>
+        <item name="android:textSize">@dimen/textMiddle</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:background">@mipmap/btn_submit_trade</item>
+    </style>
 </resources>

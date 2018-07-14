@@ -14,4 +14,5 @@
     <string name="digits_number">1234567890</string>
     <string name="digits_letter_number">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
     <string name="digits_letter">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="digits_idcard">1234567890xX</string>
 </resources>

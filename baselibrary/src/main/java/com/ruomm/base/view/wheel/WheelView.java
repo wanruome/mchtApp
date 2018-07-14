@@ -695,6 +695,7 @@ public class WheelView extends View {
 			float base_y = value.y_postion + value.text_size * Value_PaintText_Offset / 2;
 			float base_x = 0;
 			if (algin_type == Value_AlginType_Center) {
+
 				base_x = center_x + value.x_skewx;
 			}
 			else if (algin_type == Value_AlginType_Left) {

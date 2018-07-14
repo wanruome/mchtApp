@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/dpx600"
+        android:background="@drawable/popdialog_title"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dpx024"
+        android:paddingRight="@dimen/dpx024" >
+        <TextView
+            style="@style/textSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择省份"
+            />
+        <com.ruomm.base.view.wheel.wheelstring.WheelView
+            android:id="@+id/wheel_province"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:wheel_algin_type="center"
+            app:wheel_flingspeed="0.8"
+            app:wheel_isCyclic="false"
+            app:wheel_skiplinecolor="@color/wheel_lineskip"
+            app:wheel_text_lineSpacing="1.5"
+            app:wheel_textcolor_current="@color/wheel_color_current"
+            app:wheel_textcolor_drak="@color/wheel_color_drak"
+            app:wheel_textcolor_little="@color/wheel_color_little"
+            app:wheel_textsize="@dimen/textNormal"
+            app:wheel_zoom_textsize="0"
+            app:wheel_zoom_width="0"
+            />
+        <TextView
+            style="@style/textSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择城市"
+            />
+        <com.ruomm.base.view.wheel.wheelstring.WheelView
+            android:id="@+id/wheel_city"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:wheel_algin_type="center"
+            app:wheel_flingspeed="0.4"
+            app:wheel_isCyclic="false"
+            app:wheel_skiplinecolor="@color/wheel_lineskip"
+            app:wheel_text_lineSpacing="1.5"
+            app:wheel_textcolor_current="@color/wheel_color_current"
+            app:wheel_textcolor_drak="@color/wheel_color_drak"
+            app:wheel_textcolor_little="@color/wheel_color_little"
+            app:wheel_textsize="@dimen/textNormal"
+            app:wheel_zoom_textsize="0"
+            app:wheel_zoom_width="0"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/wheelbtn_over"
+            style="@style/text.Middle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/popdialog_btn_left"
+            android:gravity="center"
+            android:text="确定" />
+        <TextView
+            android:id="@+id/wheelbtn_cancle"
+            style="@style/text.Middle"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/popdialog_btn_right"
+            android:gravity="center"
+            android:text="取消" />
+    </LinearLayout>
+
+</LinearLayout>

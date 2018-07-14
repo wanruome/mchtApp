@@ -46,6 +46,15 @@
         </service>
         <service android:name="com.ruomm.base.service.downloadservice.DownLoadService" ></service>
         <activity
+            android:name="com.ruomm.resource.ui.CommonWebInfoActivity"
+            android:configChanges="keyboardHidden"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="webmodule.CommonWebInfoActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".module.welcome.WelcomeActivity"
             android:configChanges="keyboardHidden"
             android:screenOrientation="portrait" >

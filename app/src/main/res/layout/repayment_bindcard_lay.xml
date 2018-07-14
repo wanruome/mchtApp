@@ -3,6 +3,158 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_mcht_content"
+    android:paddingLeft="@dimen/dpx032"
+    android:paddingRight="@dimen/dpx032"
+    android:orientation="vertical"
     >
+    <LinearLayout
+        android:layout_marginTop="@dimen/dpx024"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:background="@drawable/main_content_bg"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dpx032"
+        android:paddingRight="@dimen/dpx032"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/text_bankcard"
+            style="@style/textSub"
+            android:layout_width="@dimen/dpx160"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="银行卡号" />
+        <EditText
+            android:id="@+id/edt_bankcard"
+            style="@style/editTextStyleTransparent"
+            android:digits="@string/digits_number"
+            android:inputType="number"
+            android:maxLength="20"
+            android:hint="输入银行卡号"
+            android:text="6226090000000048"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="@dimen/dpx024"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:background="@drawable/main_content_bg"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dpx032"
+        android:paddingRight="@dimen/dpx032"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/text_mobile"
+            style="@style/textSub"
+            android:layout_width="@dimen/dpx160"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="手机号" />
+        <EditText
+            android:id="@+id/edt_mobile"
+            style="@style/editTextStyleTransparent"
+            android:digits="@string/digits_number"
+            android:inputType="number"
+            android:maxLength="11"
+            android:hint="输入手机号"
+            android:text="18100000000"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="@dimen/dpx024"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:background="@drawable/main_content_bg"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dpx032"
+        android:paddingRight="@dimen/dpx032"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/text_idcardno"
+            style="@style/textSub"
+            android:layout_width="@dimen/dpx160"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="开户证件号" />
+        <EditText
+            android:id="@+id/edt_idcardno"
+            style="@style/editTextStyleTransparent"
+            android:digits="@string/digits_idcard"
+            android:maxLength="18"
+            android:hint="输入开户证件号"
+            android:text="510265790128303"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+
+        android:layout_marginTop="@dimen/dpx024"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:background="@drawable/main_content_bg"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dpx032"
+        android:paddingRight="@dimen/dpx032"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/text_idcardname"
+            style="@style/textSub"
+            android:layout_width="@dimen/dpx160"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="开户姓名" />
+        <EditText
+            android:id="@+id/edt_idcardname"
+            style="@style/editTextStyleTransparent"
+            android:maxLength="20"
+            android:hint="输入开户姓名"
+            android:text="张三"
+            />
+    </LinearLayout>
+    <LinearLayout
+
+        android:layout_marginTop="@dimen/dpx024"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:background="@drawable/main_content_bg"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dpx032"
+        android:paddingRight="@dimen/dpx032"
+        android:gravity="center_vertical"
+        >
+        <TextView
+            android:id="@+id/text_area"
+            style="@style/textSub"
+            android:layout_width="@dimen/dpx160"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="区域" />
+        <TextView
+            android:id="@+id/text_select_area"
+            style="@style/editTextStyleTransparent"
+            android:textColor="@color/text_lable"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="浙江省-杭州市" />
+        <ImageView
+            android:layout_width="@dimen/dpx032"
+            android:layout_height="@dimen/dpx024"
+            android:layout_marginLeft="@dimen/dpx024"
+            android:layout_marginRight="@dimen/dpx024"
+            android:src="@mipmap/mcht_spinner_down" />
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_submit"
+        style="@style/btnStyleTrade"
+        android:text="提交"
+        ></Button>
 
 </LinearLayout>

@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 
+
 public class DialogUtil {
 	public static Dialog mLoadDialog;
 	public static boolean isUseBindDialog = false;

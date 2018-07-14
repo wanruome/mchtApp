@@ -49,7 +49,10 @@
     <dimen name="dpx080">40dip</dimen>
     <dimen name="dpx100">50dip</dimen>
     <dimen name="dpx120">60dip</dimen>
+    <dimen name="dpx140">70dip</dimen>
     <dimen name="dpx160">80dip</dimen>
+    <dimen name="dpx240">120dip</dimen>
     <dimen name="dpx320">160dip</dimen>
     <dimen name="dpx400">200dip</dimen>
+    <dimen name="dpx600">300dip</dimen>
 </resources>

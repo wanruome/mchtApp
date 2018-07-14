@@ -49,6 +49,17 @@
         <item name="android:textSize">@dimen/textNormal</item>
         <item name="android:background">@drawable/bg_edittext_black</item>
     </style>
+    <style name="editTextStyleTransparent">
+        <item name="android:textColor">@color/text_sub</item>
+        <item name="android:textColorHint">@color/text_lable</item>
+        <item name="android:paddingLeft">@dimen/dpx010</item>
+        <item name="android:paddingRight">@dimen/dpx010</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/textNormal</item>
+        <item name="android:background">@color/AllTransparent</item>
+    </style>
 
     <style name="btnStyle">
         <item name="android:layout_marginTop">@dimen/dpx020</item>

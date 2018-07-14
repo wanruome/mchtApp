@@ -32,6 +32,7 @@ public class MainFunctionAdapter   extends BaseAdapter_T<MainFunctionItem> {
         MainFunctionItem item3=new MainFunctionItem();
         item3.name="银行卡管理";
         item3.imageRes=R.mipmap.home_fun_bankcard;
+//        item3.actionName="repayment.BindCardActivity";
         item3.actionName="repayment.BankCardListActivity";
         lst.add(item3);
         return lst;
