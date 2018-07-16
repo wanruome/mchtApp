@@ -36,6 +36,8 @@
     <dimen name="textMiddle">18sp</dimen>
     <dimen name="textLarge">20sp</dimen>
     <!-- dp属性 -->
+    <dimen name="dpx002">1dip</dimen>
+    <dimen name="dpx004">2dip</dimen>
     <dimen name="dpx006">3dip</dimen>
     <dimen name="dpx010">5dip</dimen>
     <dimen name="dpx012">6dip</dimen>
@@ -55,5 +57,6 @@
     <dimen name="dpx300">150dip</dimen>
     <dimen name="dpx320">160dip</dimen>
     <dimen name="dpx400">200dip</dimen>
+    <dimen name="dpx480">240dip</dimen>
     <dimen name="dpx600">300dip</dimen>
 </resources>

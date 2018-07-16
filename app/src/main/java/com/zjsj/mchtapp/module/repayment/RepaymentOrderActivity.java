@@ -35,6 +35,8 @@ import com.zjsj.mchtapp.util.StringMask;
 import com.zjsj.mchtapp.view.BankCardWheelDialog;
 import com.zjsj.mchtapp.view.ListStringWheelDialog;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,8 @@ public class RepaymentOrderActivity extends AppMultiActivity{
         TextView text_query_orderTime;
         @InjectView(id=R.id.mListView)
         ListView mListView;
+        @InjectView(id=R.id.text_tip)
+        TextView text_tip;
     }
     List<String> transTypeList= RepaymentConfigFactory.getTransTypeList();
     List<RepaymentBankCard> listBankCards=new ArrayList<RepaymentBankCard>();
@@ -229,6 +233,7 @@ public class RepaymentOrderActivity extends AppMultiActivity{
                         errMsg=null==repaymentOrderDto?errMsg:repaymentOrderDto.responseRemark;
                     }
                     ToastUtil.makeFailToastThr(mContext,errMsg);
+                    views.text_tip.setText(errMsg);
                 }
                 else {
                     listDatasQuery.clear();
@@ -236,9 +241,11 @@ public class RepaymentOrderActivity extends AppMultiActivity{
                     if(null==repaymentOrderDto.transInfo||repaymentOrderDto.transInfo.size()<=0)
                     {
                         ToastUtil.makeOkToastThr(mContext,"没有查询到符合条件的订单");
+                        views.text_tip.setText("没有查询到符合条件的订单");
                     }
                     else{
                         listDatasQuery.addAll(repaymentOrderDto.transInfo);
+                        views.text_tip.setText(null);
                     }
                 }
                 updateUiBySelection();
@@ -249,10 +256,15 @@ public class RepaymentOrderActivity extends AppMultiActivity{
     private void updateUiBySelection(){
 
         listDatas.clear();
+        if(listDatasQuery.size()<=0)
+        {
+            repaymentOrderAdapter.notifyDataSetChanged();
+            return;
+        }
         List<RepaymentOrderTransInfo> listByBank=new ArrayList<>();
         for(RepaymentOrderTransInfo tmp:listDatasQuery){
             if(null!=queryBankCard&&!"0".equals(queryBankCard.cardIndex)) {
-                if (queryBankCard.accountNo.equals(StringMask.getMaskBankNo(tmp.accountNo))) {
+                if(StringUtils.getLength(tmp.accountNo)>0&&queryBankCard.accountNo.endsWith(tmp.accountNo)){
                     listByBank.add(tmp);
                 }
             }
@@ -278,6 +290,11 @@ public class RepaymentOrderActivity extends AppMultiActivity{
         if(null!=listByType&&listByType.size()>0)
         {
             listDatas.addAll(listByType);
+            views.text_tip.setText(null);
+        }
+        else{
+
+            views.text_tip.setText("没有查询到符合条件的订单");
         }
         repaymentOrderAdapter.notifyDataSetChanged();
     }

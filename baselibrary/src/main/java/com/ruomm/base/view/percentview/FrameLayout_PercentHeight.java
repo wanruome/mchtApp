@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 public class FrameLayout_PercentHeight extends FrameLayout {
@@ -68,10 +69,26 @@ public class FrameLayout_PercentHeight extends FrameLayout {
 			size_width = WIDTH_DISPLAY;
 		}
 		int height = (int) ((size_width - paddingLeft - paddingRight) * percentValue) + paddingTop + paddingButtom;
-		android.widget.LinearLayout.LayoutParams layoutParams = new android.widget.LinearLayout.LayoutParams(width,
-				height);
-		this.setLayoutParams(layoutParams);
+		this.getLayoutParams().height=height;
+//		ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(width,
+//				height);
+//		this.setLayoutParams(layoutParams);
 		this.requestLayout();
 	}
 
+//	@Override
+//	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//	}
+//
+//	@Override
+//	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+//		int newH=0;
+//		if(oldw==0&&oldh==0&&w>0)
+//		{
+//			newH=(int)(w*percentValue);
+//			getLayoutParams().height=newH;
+//		}
+//		super.onSizeChanged(w, newH, oldw, oldh);
+//	}
 }

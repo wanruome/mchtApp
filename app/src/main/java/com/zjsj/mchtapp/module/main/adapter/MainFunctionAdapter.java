@@ -23,7 +23,7 @@ public class MainFunctionAdapter   extends BaseAdapter_T<MainFunctionItem> {
         MainFunctionItem item1=new MainFunctionItem();
         item1.name="二维码支付";
         item1.imageRes=R.mipmap.home_fun_qrcodepament;
-        item1.actionName="";
+        item1.actionName="repayment.RepaymentQrCodeActivity";
         lst.add(item1);
         MainFunctionItem item2=new MainFunctionItem();
         item2.name="交易记录";

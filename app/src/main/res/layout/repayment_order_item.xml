@@ -4,92 +4,79 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="@dimen/dpx016"
-    android:background="@drawable/main_content_bg"
-    android:paddingRight="@dimen/dpx032"
-    android:paddingLeft="@dimen/dpx032"
     >
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <LinearLayout android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            >
-            <TextView
-                style="@style/textSub"
-                android:id="@+id/lv_text_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="消费"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            >
-            <TextView
-                style="@style/textSub"
-                android:id="@+id/lv_text_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="0.5元"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            >
-            <TextView
-                style="@style/textSub"
-                android:id="@+id/lv_text_status"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="已支付"/>
-        </LinearLayout>
+        android:layout_height="@dimen/dpx010"/>
+     <LinearLayout
+         android:background="@drawable/main_content_bg"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="vertical"
+         android:paddingTop="@dimen/dpx016"
+         android:paddingBottom="@dimen/dpx016"
+         android:paddingRight="@dimen/dpx032"
+         android:paddingLeft="@dimen/dpx032"
+         android:layout_marginLeft="@dimen/dpx016"
+         android:layout_marginRight="@dimen/dpx016"
+         >
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             >
+             <LinearLayout android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="3"
+                 android:orientation="horizontal"
+                 >
+                 <TextView
+                     style="@style/textSub"
+                     android:id="@+id/lv_text_type"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:text="消费"/>
+             </LinearLayout>
+             <LinearLayout android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="3"
+                 android:orientation="horizontal"
+                 >
+                 <TextView
+                     style="@style/textSub"
+                     android:id="@+id/lv_text_amount"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:text="0.5元"/>
+             </LinearLayout>
+             <LinearLayout android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="2"
+                 android:orientation="horizontal"
+                 android:gravity="center_horizontal"
+                 >
+                 <TextView
+                     style="@style/textSub"
+                     android:id="@+id/lv_text_status"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="已支付"/>
+             </LinearLayout>
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-            <TextView
-                style="@style/textSub"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="卡号:"/>
-            <TextView
-                style="@style/textSub"
-                android:id="@+id/lv_text_cardno"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6445546456456666456456"/>
+         </LinearLayout>
 
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-            style="@style/textSub"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="时间:"/>
-        <TextView
-            style="@style/textSub"
-            android:id="@+id/lv_text_ordertime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="20190905141513"/>
-
-
-    </LinearLayout>
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             android:paddingTop="@dimen/dpx010"
+             >
+             <TextView
+                 style="@style/textSub"
+                 android:id="@+id/lv_text_ordertime"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content" />
+         </LinearLayout>
+     </LinearLayout>
 
 </LinearLayout>

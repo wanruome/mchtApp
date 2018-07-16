@@ -2,6 +2,7 @@ package com.zjsj.mchtapp.config;
 
 import android.view.View;
 
+import com.ruomm.base.ioc.adapter.BaseAdapter_T;
 import com.ruomm.base.ioc.application.BaseApplication;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.ioc.iocutil.DbStoreSafe;
@@ -12,6 +13,7 @@ import com.zjsj.mchtapp.dal.response.PayInfoDto;
 import com.zjsj.mchtapp.dal.response.RepaymentBankCard;
 import com.zjsj.mchtapp.dal.response.UserInfoDto;
 import com.zjsj.mchtapp.dal.store.LastLoginUserInfo;
+import com.zjsj.mchtapp.dal.store.UserBankCardForQrCode;
 import com.zjsj.mchtapp.dal.store.UserBankCardStore;
 import com.zjsj.mchtapp.dal.store.UserFingerPrint;
 import com.zjsj.mchtapp.dal.store.UserGesturesInfo;
@@ -109,6 +111,49 @@ public class LoginUserFactory {
             userBankCardStore.list.addAll(list);
         }
         AppStoreUtil.safeSaveBean(BaseApplication.getApplication(),null,userBankCardStore);
+    }
+    public static RepaymentBankCard getBankCardForQrCode( List<RepaymentBankCard> listBankCards){
+        UserBankCardForQrCode userBankCardForQrCode=AppStoreUtil.safeGetBean(BaseApplication.getApplication(),null,UserBankCardForQrCode.class);
+        if(null==listBankCards||listBankCards.size()<=0)
+        {
+            return null;
+        }
+        if(null==userBankCardForQrCode||!userBankCardForQrCode.userId.equals(getLoginUserInfo().userId)){
+            RepaymentBankCard repaymentBankCard=listBankCards.get(0);
+            saveBankCardForQrCode(repaymentBankCard);
+            return repaymentBankCard;
+        }
+        else{
+            RepaymentBankCard repaymentBankCard=null;
+            for(RepaymentBankCard tmp:listBankCards)
+            {
+                if(tmp.cardIndex.equals(userBankCardForQrCode.cardIndex))
+                {
+                    repaymentBankCard=tmp;
+                    break;
+                }
+            }
+            if(null==repaymentBankCard)
+            {
+                repaymentBankCard=listBankCards.get(0);
+                saveBankCardForQrCode(repaymentBankCard);
+            }
+            return repaymentBankCard;
+        }
+    }
+    public static RepaymentBankCard getBankCardForQrCode(){
+       return getBankCardForQrCode(getBankCardInfo());
+    }
+    public static void saveBankCardForQrCode(RepaymentBankCard repaymentBankCard)
+    {
+        if(null==repaymentBankCard)
+        {
+            return;
+        }
+        UserBankCardForQrCode userBankCardForQrCode=new UserBankCardForQrCode();
+        userBankCardForQrCode.userId=getLoginUserInfo().userId;
+        userBankCardForQrCode.cardIndex=repaymentBankCard.cardIndex;
+        AppStoreUtil.safeSaveBean(BaseApplication.getApplication(),null,userBankCardForQrCode);
     }
 //    public static UserGesturesInfo getUserGesturesInfo(){
 //        if(!isLogin())

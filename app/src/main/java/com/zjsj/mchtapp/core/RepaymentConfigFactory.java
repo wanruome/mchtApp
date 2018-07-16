@@ -34,6 +34,46 @@ public class RepaymentConfigFactory {
         list.add("已退货");
         return list;
     }
+    public static String parseOrderState(String status)
+    {
+//        01	未支付	02	支付中
+//        03	已支付	04	已作废
+//        05	退款中	06	已撤销
+//        07	已退货
+        if("01".equals(status))
+        {
+            return "未支付";
+        }
+        else  if("02".equals(status))
+        {
+            return "支付中";
+        }
+        else  if("03".equals(status))
+        {
+            return "已支付";
+        }
+        else  if("04".equals(status))
+        {
+            return "已作废";
+        }
+        else  if("05".equals(status))
+        {
+            return "退款中";
+        }
+        else  if("06".equals(status))
+        {
+            return "已撤销";
+        }
+        else  if("07".equals(status))
+        {
+            return "已退货";
+        }
+        else
+        {
+            return "待审核";
+        }
+
+    }
     public static String getOrderStateByDes(String orderStateDes)
     {
         if(StringUtils.isEmpty(orderStateDes)){

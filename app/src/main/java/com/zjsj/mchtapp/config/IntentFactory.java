@@ -70,6 +70,10 @@ public class IntentFactory {
     public static Intent getRepaymentOrderDetailActivity(){
         return  new Intent("repayment.RepaymentOrderDetailActivity");
     }
+    public static Intent getRepaymentQrCodeActivity()
+    {
+        return new Intent("repayment.RepaymentQrCodeActivity");
+    }
 
 
 

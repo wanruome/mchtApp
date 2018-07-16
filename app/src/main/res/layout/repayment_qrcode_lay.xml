@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dpx016"
+    android:background="@drawable/bg_mcht_content"
+    >
+    <ScrollView
+        style="@style/listStyle"
+       >
+       <LinearLayout
+           android:paddingLeft="@dimen/dpx032"
+           android:paddingRight="@dimen/dpx032"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:gravity="center_horizontal"
+           android:orientation="vertical">
+           <com.ruomm.base.view.percentview.FrameLayout_PercentHeight
+               android:id="@+id/qrly_barcode"
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/dpx120" >
+               <ImageView
+                   android:background="@color/bg_gray"
+                   android:id="@+id/qrimg_barcode"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:scaleType="fitXY"
+                   />
+           </com.ruomm.base.view.percentview.FrameLayout_PercentHeight>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_marginTop="@dimen/dpx016"
+               android:layout_marginBottom="@dimen/dpx024"
+               android:background="@color/text_white"
+               android:gravity="center_horizontal"
+               android:paddingTop="@dimen/dpx004"
+               android:paddingBottom="@dimen/dpx004"
+               >
+                <TextView style="@style/text"
+                    android:id="@+id/qrtext_qrno"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" "
+                    />
+           </LinearLayout>
+           <com.ruomm.base.view.percentview.FrameLayout_PercentHeight
+               android:id="@+id/qrly_qrcode"
+               android:layout_width="match_parent"
+               android:layout_marginLeft="@dimen/dpx050"
+               android:layout_marginRight="@dimen/dpx050"
+               android:layout_height="@dimen/dpx400" >
+               <ImageView
+                   android:background="@color/bg_gray"
+                   android:id="@+id/qrimg_qrcode"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:scaleType="fitXY"/>
+           </com.ruomm.base.view.percentview.FrameLayout_PercentHeight>
+           <RelativeLayout
+               android:id="@+id/qrly_cardbanks"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:paddingTop="@dimen/dpx020"
+               android:paddingBottom="@dimen/dpx020"
+               android:paddingLeft="@dimen/dpx024"
+               android:paddingRight="@dimen/dpx024"
+               android:layout_marginTop="@dimen/dpx016"
+               android:layout_marginBottom="@dimen/dpx024"
+               android:layout_marginLeft="@dimen/dpx100"
+               android:layout_marginRight="@dimen/dpx100"
+               android:background="@color/text_white"
+               android:gravity="center_horizontal"
+
+               >
+               <TextView style="@style/text"
+                   android:id="@+id/qrtext_cardbank"
+                   android:layout_centerInParent="true"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text=" "
+                   />
+               <ImageView
+                   android:layout_width="@dimen/dpx016"
+                   android:layout_height="@dimen/dpx012"
+                   android:src="@mipmap/mcht_spinner_down"
+                   android:layout_alignParentRight="true"
+                   android:layout_centerVertical="true"
+                   />
+           </RelativeLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_marginTop="@dimen/dpx016"
+               android:layout_marginBottom="@dimen/dpx024"
+               android:background="@color/text_white"
+               android:gravity="center_horizontal"
+               android:paddingTop="@dimen/dpx004"
+               android:paddingBottom="@dimen/dpx004"
+               >
+               <TextView style="@style/text"
+                   android:id="@+id/qrtext_validtime"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="付款码有效时间：56秒"
+                   />
+           </LinearLayout>
+
+       </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

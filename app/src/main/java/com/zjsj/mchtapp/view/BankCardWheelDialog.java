@@ -26,6 +26,7 @@ public class BankCardWheelDialog extends BaseDialogUserConfig implements OnWheel
 	List<RepaymentBankCard> listDatas;
 	private RepaymentBankCard wheelValue=null;
 	private RepaymentBankCard wheelValueInt=null;
+//	private boolean isDialogShow=true;
 
 
 	public BankCardWheelDialog(Context mContext, List<RepaymentBankCard> listDatas, BaseDialogClickListener listener) {
@@ -49,7 +50,7 @@ public class BankCardWheelDialog extends BaseDialogUserConfig implements OnWheel
 		setBaseDialogClick(listener);
 		setListener(R.id.wheelbtn_over);
 //		setListener(R.id.wheelbtn_clear);
-		setListenerCancle(R.id.wheelbtn_cancle);
+        setListenerCancle(R.id.wheelbtn_cancle);
 		setText(R.id.dialog_title,"选择交易银行卡");
 		setDialogLayoutParams((int) (DisplayUtil.getDispalyWidth(mContext) * Dialoag_WidthPercent),
 				LayoutParams.WRAP_CONTENT);
@@ -107,4 +108,16 @@ public class BankCardWheelDialog extends BaseDialogUserConfig implements OnWheel
 			v.setTag(wheelValue);
 		}
 	}
+
+//    @Override
+//    public void show() {
+//        super.show();
+//        isDialogShow=true;
+//    }
+//
+//    @Override
+//    public void dismiss() {
+//        super.dismiss();
+//        isD
+//    }
 }
