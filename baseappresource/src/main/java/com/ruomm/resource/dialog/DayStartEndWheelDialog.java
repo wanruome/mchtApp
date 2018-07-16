@@ -101,7 +101,7 @@ public class DayStartEndWheelDialog extends BaseDialogUserConfig implements OnWh
         }
     }
     public void setDateValue(String value){
-	    if(StringUtils.isEmpty(value))
+	    if(StringUtils.isEmpty(value)||value.length()<8)
         {
 			setDateValueForStart(System.currentTimeMillis());
 			setDateValueForEnd(System.currentTimeMillis());

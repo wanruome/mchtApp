@@ -67,6 +67,11 @@ public class IntentFactory {
     public static Intent getRepaymentOrderActivity(){
         return  new Intent("repayment.RepaymentOrderActivity");
     }
+    public static Intent getRepaymentOrderDetailActivity(){
+        return  new Intent("repayment.RepaymentOrderDetailActivity");
+    }
+
+
 
 
 

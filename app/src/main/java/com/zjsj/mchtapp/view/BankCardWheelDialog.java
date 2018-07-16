@@ -25,30 +25,32 @@ public class BankCardWheelDialog extends BaseDialogUserConfig implements OnWheel
 	private BankCardWheelAdapter wheelAdapter;
 	List<RepaymentBankCard> listDatas;
 	private RepaymentBankCard wheelValue=null;
+	private RepaymentBankCard wheelValueInt=null;
 
 
 	public BankCardWheelDialog(Context mContext, List<RepaymentBankCard> listDatas, BaseDialogClickListener listener) {
 		super(mContext, R.layout.dialog_stringwheel, R.style.dialogStyle_floating_bgdark);
 		this.listDatas =listDatas;
-		this.wheelValue=null;
+		this.wheelValueInt=null;
 		setBaseDialogClick(listener);
 		setListener(R.id.wheelbtn_over);
-		setListener(R.id.wheelbtn_clear);
+//		setListener(R.id.wheelbtn_clear);
 		setListenerCancle(R.id.wheelbtn_cancle);
-		setText(R.id.dialog_title,"选择交易卡号");
+		setText(R.id.dialog_title,"选择交易银行卡");
 		setDialogLayoutParams((int) (DisplayUtil.getDispalyWidth(mContext) * Dialoag_WidthPercent),
 				LayoutParams.WRAP_CONTENT);
 		wheel_string = (WheelView) findViewById(R.id.wheel_string);
 		setAdapter();
 	}
-	public BankCardWheelDialog(Context mContext, List<RepaymentBankCard> listDatas,RepaymentBankCard wheelValue, BaseDialogClickListener listener) {
+	public BankCardWheelDialog(Context mContext, List<RepaymentBankCard> listDatas,RepaymentBankCard wheelValueInt, BaseDialogClickListener listener) {
 		super(mContext, R.layout.dialog_stringwheel, R.style.dialogStyle_floating_bgdark);
 		this.listDatas =listDatas;
-		this.wheelValue=wheelValue;
+		this.wheelValueInt=wheelValueInt;
 		setBaseDialogClick(listener);
 		setListener(R.id.wheelbtn_over);
-		setListener(R.id.wheelbtn_clear);
+//		setListener(R.id.wheelbtn_clear);
 		setListenerCancle(R.id.wheelbtn_cancle);
+		setText(R.id.dialog_title,"选择交易银行卡");
 		setDialogLayoutParams((int) (DisplayUtil.getDispalyWidth(mContext) * Dialoag_WidthPercent),
 				LayoutParams.WRAP_CONTENT);
 		wheel_string = (WheelView) findViewById(R.id.wheel_string);
@@ -58,18 +60,26 @@ public class BankCardWheelDialog extends BaseDialogUserConfig implements OnWheel
 
 
 	private void setAdapter() {
-		this.wheelValue=wheelValue;
+
 		wheel_string.addChangingListener(this);
 		wheelAdapter=new BankCardWheelAdapter(listDatas);
 		wheel_string.setAdapter(wheelAdapter);
 		int index=0;
-		if(null!=wheelValue){
-			index= listDatas.indexOf(wheelValue);
+		if(null!=wheelValueInt){
+			index= listDatas.indexOf(wheelValueInt);
 		}
-		if(index<0)
-		{
+		if(index<0){
 			index=0;
 		}
+//		for(int i=0;i<listDatas.size();i++)
+//		{
+//			if(wheelValue.cardIndex.equals(listDatas.get(i).cardIndex))
+//			{
+//				index=i;
+//				break;
+//			}
+//		}
+
 		wheel_string.setCurrentItem(index);
 
 	}

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 import com.ruomm.base.tools.DisplayUtil;
+import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.base.view.dialog.BaseDialogUserConfig;
 import com.ruomm.base.view.wheel.wheelstring.OnWheelStringChangedListener;
@@ -24,12 +25,13 @@ public class ListStringWheelDialog extends BaseDialogUserConfig implements OnWhe
 	private ListStringWheelAdapter wheelAdapter;
 	List<String> listDatas;
 	private String wheelValue=null;
+	private String wheelValueInt=null;
 
 
 	public ListStringWheelDialog(Context mContext,List<String> listDatas, BaseDialogClickListener listener) {
 		super(mContext, R.layout.dialog_stringwheel, R.style.dialogStyle_floating_bgdark);
 		this.listDatas =listDatas;
-		this.wheelValue=null;
+		this.wheelValueInt=null;
 		setBaseDialogClick(listener);
 		setListener(R.id.wheelbtn_over);
 		setListener(R.id.wheelbtn_clear);
@@ -39,31 +41,39 @@ public class ListStringWheelDialog extends BaseDialogUserConfig implements OnWhe
 		wheel_string = (WheelView) findViewById(R.id.wheel_string);
 		setAdapter();
 	}
-	public ListStringWheelDialog(Context mContext, List<String> listDatas, String wheelValue, BaseDialogClickListener listener) {
+	public ListStringWheelDialog(Context mContext, List<String> listDatas, String wheelValueInt, BaseDialogClickListener listener) {
 		super(mContext, R.layout.dialog_stringwheel, R.style.dialogStyle_floating_bgdark);
 		this.listDatas =listDatas;
-		this.wheelValue=wheelValue;
+		this.wheelValueInt=wheelValueInt;
 		setBaseDialogClick(listener);
 		setListener(R.id.wheelbtn_over);
 		setListener(R.id.wheelbtn_clear);
 		setListenerCancle(R.id.wheelbtn_cancle);
-		setText(R.id.dialog_title,"选择交易手机号");
+//		setText(R.id.dialog_title,"选择交易手机号");
 		setDialogLayoutParams((int) (DisplayUtil.getDispalyWidth(mContext) * Dialoag_WidthPercent),
 				LayoutParams.WRAP_CONTENT);
 		wheel_string = (WheelView) findViewById(R.id.wheel_string);
 		setAdapter();
+	}
+	public void setDialogTitile(String titleDes)
+	{
+		if(StringUtils.isEmpty(titleDes)){
+			setText(R.id.dialog_title,"选择筛选条件");
+		}else{
+			setText(R.id.dialog_title,titleDes);
+		}
+
 	}
 
 
 
 	private void setAdapter() {
-		this.wheelValue=wheelValue;
 		wheel_string.addChangingListener(this);
 		wheelAdapter=new ListStringWheelAdapter(listDatas);
 		wheel_string.setAdapter(wheelAdapter);
 		int index=0;
-		if(null!=wheelValue&&wheelValue.length()>0){
-			index= listDatas.indexOf(wheelValue);
+		if(null!=wheelValueInt&&wheelValueInt.length()>0){
+			index= listDatas.indexOf(wheelValueInt);
 		}
 		if(index<0)
 		{
