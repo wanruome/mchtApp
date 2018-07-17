@@ -6,10 +6,11 @@ public class IntentFactory {
     public static final int Request_FingerPrintActivity=109;
     public static final int Request_GestureLockActivity=110;
     public static final int Request_ScreenLockActivity=111;
-    public static Intent getCommonWebInfoActivity()
-    {
-        return new Intent("webmodule.CommonWebInfoActivity");
-    }
+    public static final int Request_PayInfoModifyNoPwdFlagActivity=120;
+//    public static Intent getCommonWebInfoActivity()
+//    {
+//        return new Intent("webmodule.CommonWebInfoActivity");
+//    }
     public static Intent getWelcomeActivity()
     {
         return new Intent("welcome.WelcomeActivity");
@@ -47,6 +48,11 @@ public class IntentFactory {
     {
         return new Intent("payinfo.PayInfoFindPwdActivity");
     }
+    public static Intent getPayInfoModifyNoPwdFlagActivity()
+    {
+        return new Intent("payinfo.PayInfoModifyNoPwdFlagActivity");
+    }
+
     public static Intent getGestureLockActivity()
     {
         return new Intent("gesturelock.GestureLockActivity");
@@ -63,6 +69,9 @@ public class IntentFactory {
     }
     public static Intent getBindCardActivity(){
         return  new Intent("repayment.BindCardActivity");
+    }
+    public static Intent getBindCardWebInfoActivity(){
+        return  new Intent("repayment.BindCardWebInfoActivity");
     }
     public static Intent getRepaymentOrderActivity(){
         return  new Intent("repayment.RepaymentOrderActivity");

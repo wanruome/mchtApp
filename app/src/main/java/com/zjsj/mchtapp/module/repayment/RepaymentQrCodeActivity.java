@@ -193,10 +193,10 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
                     RepaymentQrCodeDto repaymentQrCodeDto=ResultFactory.getResult(resultObject,status);
                     MLog.i(repaymentQrCodeDto);
                     qrNo=repaymentQrCodeDto.qrNo;
-                    if(new Random().nextInt(10)>7)
-                    {
-                        qrNo=null;
-                    }
+//                    if(new Random().nextInt(10)>7)
+//                    {
+//                        qrNo=null;
+//                    }
                     createQrCode();
 
                 }

@@ -178,10 +178,16 @@ public class BindCardActivity extends AppMultiActivity {
                 else{
                     RepaymentBindCardDto resultBindCardDto=ResultFactory.getResult(resultObject,status);
                     MLog.i(resultBindCardDto);
-                    String data=resultBindCardDto.transInfo.replace("183.129.219.202","192.168.100.85");
+                    String data=null;
+                    if(ApiConfig.BASE_URL.contains("192.168.")){
+                        data=resultBindCardDto.transInfo.replace("183.129.219.202","192.168.100.85");
+                    }
+                    else {
+                        data=resultBindCardDto.transInfo;
+                    }
                     WebUrlInfo webUrlInfo=new WebUrlInfo();
                     webUrlInfo.setWebData(data);
-                    Intent intent=IntentFactory.getCommonWebInfoActivity();
+                    Intent intent=IntentFactory.getBindCardWebInfoActivity();
                     BaseUtil.serializablePut(intent,webUrlInfo);
                     startActivity(intent);
                     finish();

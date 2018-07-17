@@ -106,7 +106,24 @@ public class MainActivity extends AppSimpleActivity{
         mContext.registerReceiver(updateAppReceiver, intentFilter);
         doScreenLockForLogin();
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mContext.unregisterReceiver(updateAppReceiver);
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe
+    public void onEventMainThrend(LoginEvent event){
+        updateUiByUserInfo();
+    }
+    @Subscribe
+    public void onEventMainThrend(TokenEvent event){
+        if(event.isInValid)
+        {
+            updateUiByUserInfo();
+            startActivity(IntentFactory.getLoinActivity());
+        }
+    }
 
     protected void setMainContentView() {
         int displayWidth= DisplayUtil.getDispalyWidth(mContext);
@@ -165,10 +182,16 @@ public class MainActivity extends AppSimpleActivity{
     }
     protected void setMainClickListener() {
         views.ly_login.setOnClickListener(myOnClickListener);
+        views.img_scan.setOnClickListener(myOnClickListener);
+        views.img_paymentcode.setOnClickListener(myOnClickListener);
         views.mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                views.mGridView.get
+                if(!isAppLogin(true))
+                {
+                    return;
+                }
                 MainFunctionItem function=(MainFunctionItem)views.mGridView.getAdapter().getItem(position);
                 if(null!=function&&!StringUtils.isEmpty(function.actionName))
                 {
@@ -180,24 +203,7 @@ public class MainActivity extends AppSimpleActivity{
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mContext.unregisterReceiver(updateAppReceiver);
-        EventBus.getDefault().unregister(this);
-    }
-    @Subscribe
-    public void onEventMainThrend(LoginEvent event){
-        updateUiByUserInfo();
-    }
-    @Subscribe
-    public void onEventMainThrend(TokenEvent event){
-        if(event.isInValid)
-        {
-            updateUiByUserInfo();
-            startActivity(IntentFactory.getLoinActivity());
-        }
-    }
+
     private View.OnClickListener myOnClickListener=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -212,10 +218,11 @@ public class MainActivity extends AppSimpleActivity{
             }
             else if(vID==R.id.img_paymentcode)
             {
-                if(!LoginUserFactory.isLogin())
+                if(isAppLogin(true))
                 {
-
+                    startActivity(IntentFactory.getRepaymentQrCodeActivity());
                 }
+
             }
         }
     };

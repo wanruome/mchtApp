@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/base_dialog_bgcolor"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dpx240"
+        android:layout_marginRight="@dimen/dpx100"
+        android:layout_marginLeft="@dimen/dpx100"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/dialog_title"
+            style="@style/text.Middle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/popdialog_title"
+            android:gravity="center_vertical"
+            android:text="输入用户密码"
+            android:textColor="@color/common_dialog_title_color" />
+
+        <LinearLayout android:layout_width="match_parent"
+            android:background="@drawable/popdialog_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+
+                android:id="@+id/dialog_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dpx040"
+                android:layout_marginLeft="@dimen/dpx040"
+                android:paddingTop="@dimen/dpx012"
+                android:paddingBottom="@dimen/dpx012"
+                android:maxLength="16"
+                style="@style/editTextStyleBlcak"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/dialog_confirm"
+                style="@style/text"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/popdialog_btn_left"
+                android:gravity="center"
+                android:text="@string/btn_confirm" />
+
+            <TextView
+                android:id="@+id/dialog_cancle"
+                style="@style/textSub"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/popdialog_btn_right"
+                android:gravity="center"
+                android:text="@string/btn_cancle" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

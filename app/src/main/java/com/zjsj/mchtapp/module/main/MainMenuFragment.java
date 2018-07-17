@@ -19,6 +19,8 @@ import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.base.view.percentview.RelativeLayout_PercentHeight;
+import com.ruomm.baseconfig.debug.MLog;
+import com.ruomm.resource.dialog.EditTextDialog;
 import com.ruomm.resource.dialog.MessageDialog;
 import com.ruomm.resource.dialog.dal.DialogValue;
 import com.ruomm.resource.ui.AppFragment;
@@ -40,6 +42,8 @@ public class MainMenuFragment extends AppFragment {
     @InjectAll
     Views views=new Views();
     class Views{
+        @InjectView(id=R.id.activity_main_menu)
+        LinearLayout activity_main_menu;
         @InjectView(id=R.id.ly_userinfo)
         RelativeLayout_PercentHeight ly_userinfo;
         @InjectView(id=R.id.img_header)
@@ -105,11 +109,13 @@ public class MainMenuFragment extends AppFragment {
         }
     }
     private void  setViewClickListener(){
+        views.activity_main_menu.setOnClickListener(myOnClickListener);
         views.menu_exit_app.setOnClickListener(myOnClickListener);
         views.menu_setting.setOnClickListener(myOnClickListener);
         views.menu_help.setOnClickListener(myOnClickListener);
         views.menu_feedback.setOnClickListener(myOnClickListener);
         views.menu_about_us.setOnClickListener(myOnClickListener);
+        views.text_name.setOnClickListener(myOnClickListener);
 
     }
     private View.OnClickListener myOnClickListener=new View.OnClickListener() {
@@ -126,6 +132,22 @@ public class MainMenuFragment extends AppFragment {
                     startActivity(IntentFactory.getSettingActivity());
                 }
 
+            }
+            else if(vID==R.id.text_name)
+            {
+                if(isAppLogin(true)){
+                    EditTextDialog editTextDialog=new EditTextDialog(mContext);
+                    editTextDialog.setDialogTitle("输入用户昵称");
+                    editTextDialog.setBaseDialogClick(new BaseDialogClickListener() {
+                        @Override
+                        public void onDialogItemClick(View v, Object tag) {
+                            String data=(String)v.getTag();
+                            MLog.i(data);
+                            doHttpTaskModifyNickName(data);
+                        }
+                    });
+                    editTextDialog.show();
+                }
             }
         }
     };
@@ -148,6 +170,38 @@ public class MainMenuFragment extends AppFragment {
             });
             messageDialog.show();
         }
+    }
+    private void doHttpTaskModifyNickName(final String nickName){
+        int lengthNickName=StringUtils.getLength(nickName);
+        if(lengthNickName<2||lengthNickName>16)
+        {
+            ToastUtil.makeFailToastThr(mContext,"昵称必须在2-16位之间");
+            return;
+        }
+        showLoading();
+        Map<String, String> map = ApiConfig.createRequestMap(true);
+        map.put("nickName",nickName);
+        ApiConfig.signRequestMap(map);
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL + "app/userAccount/doModifyUserInfo")
+                .setRequestBodyText(map).doHttp(String.class, new TextHttpCallBack() {
+            @Override
+            public void httpCallBack(Object resultObject, String resultString, int status) {
+                String errMsg= ResultFactory.getErrorTip(resultObject,status);
+                if(StringUtils.isEmpty(errMsg))
+                {
+
+                    ToastUtil.makeOkToastThr(mContext,"昵称修改成功");
+                    LoginUserFactory.getLoginUserInfo().nickName=nickName;
+                    LoginUserFactory.saveLoginForModify();
+                    updateUiByUserInfo();
+                }
+                else{
+                    ToastUtil.makeFailToastThr(mContext,errMsg);
+                }
+                dismissLoading();
+            }
+        });
+
     }
     private void doHttpTaskLogout(){
         showLoading();

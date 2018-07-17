@@ -17,6 +17,7 @@ import com.zjsj.mchtapp.dal.store.UserBankCardForQrCode;
 import com.zjsj.mchtapp.dal.store.UserBankCardStore;
 import com.zjsj.mchtapp.dal.store.UserFingerPrint;
 import com.zjsj.mchtapp.dal.store.UserGesturesInfo;
+import com.zjsj.mchtapp.dal.store.UserPayInfoStore;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -56,6 +57,13 @@ public class LoginUserFactory {
             }
         }
     }
+    public static void saveLoginForModify()
+    {
+        if(isLogin()){
+            AppStoreUtil.safeSaveBean(BaseApplication.getApplication(), null, mLoginUserInfo);
+        }
+
+    }
     public  static void doLogin(UserInfoDto loginUserInfo){
         mLoginUserInfo=loginUserInfo;
         if(null!=mLoginUserInfo)
@@ -77,16 +85,34 @@ public class LoginUserFactory {
         mLoginUserInfo=null;
         mPayInfoDto=null;
         AppStoreUtil.safeDelBean(BaseApplication.getApplication(), null, UserInfoDto.class);
+        savePayInfoDto(null);
         //发送EventBus事件
         LoginEvent loginEvent=new LoginEvent();
         loginEvent.loninStatus=false;
         EventBus.getDefault().post(loginEvent);
     }
-    public static void setPayInfoDto(PayInfoDto payInfoDto)
+    public static void savePayInfoDto(PayInfoDto payInfoDto)
     {
+        BaseApplication app=BaseApplication.getApplication();
+        if(null==payInfoDto)
+        {
+            AppStoreUtil.safeDelBean(app,null, UserPayInfoStore.class);
+        }
+        UserPayInfoStore userPayInfoStore=new UserPayInfoStore();
+        userPayInfoStore.userId=getLoginUserInfo().userId;
+        userPayInfoStore.payInfoDto=payInfoDto;
+        AppStoreUtil.safeSaveBean(BaseApplication.getApplication(),null,userPayInfoStore);
         mPayInfoDto=payInfoDto;
     }
     public static PayInfoDto getPayInfo(){
+        if(null==mPayInfoDto)
+        {
+            UserPayInfoStore userPayInfoStore=AppStoreUtil.safeGetBean(BaseApplication.getApplication(),null,UserPayInfoStore.class);
+            if(null!=userPayInfoStore&&null!=userPayInfoStore.userId&&userPayInfoStore.userId.equals(getLoginUserInfo().userId))
+            {
+                mPayInfoDto=userPayInfoStore.payInfoDto;
+            }
+        }
         return mPayInfoDto;
     }
     public static List<RepaymentBankCard> getBankCardInfo(){

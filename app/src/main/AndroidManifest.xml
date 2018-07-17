@@ -129,11 +129,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".module.payinfo.PayInfoFindPwdActivity"
+        android:name=".module.payinfo.PayInfoFindPwdActivity"
+        android:configChanges="keyboardHidden"
+        android:screenOrientation="portrait" >
+        <intent-filter>
+            <action android:name="payinfo.PayInfoFindPwdActivity" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+        </activity>
+        <activity
+            android:name=".module.payinfo.PayInfoModifyNoPwdFlagActivity"
             android:configChanges="keyboardHidden"
             android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="payinfo.PayInfoFindPwdActivity" />
+                <action android:name="payinfo.PayInfoModifyNoPwdFlagActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -179,6 +188,15 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="repayment.BindCardActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".module.repayment.BindCardWebInfoActivity"
+            android:configChanges="keyboardHidden"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="repayment.BindCardWebInfoActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

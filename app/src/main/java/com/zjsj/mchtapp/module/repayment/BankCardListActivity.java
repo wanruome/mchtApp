@@ -26,6 +26,8 @@ import com.zjsj.mchtapp.config.IntentFactory;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
+import com.zjsj.mchtapp.dal.event.BindCardResultEvent;
+import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.response.RepaymentBankCard;
 import com.zjsj.mchtapp.dal.response.RepaymentBindCardDto;
 import com.zjsj.mchtapp.dal.response.RepaymentUnBindCardDto;
@@ -34,7 +36,9 @@ import com.zjsj.mchtapp.dal.response.base.ResultFactory;
 import com.zjsj.mchtapp.dal.store.UserBankCardStore;
 import com.zjsj.mchtapp.module.repayment.adapter.BankCardListAdapter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Logger;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +58,22 @@ public class BankCardListActivity extends AppMultiActivity {
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
+        EventBus.getDefault().register(this);
         setInitContentView(R.layout.repayment_backcardlist_lay);
         setMenuTop();
         bankCardListAdapter=new BankCardListAdapter(mContext,listDatas);
         views.mListView.setAdapter(bankCardListAdapter);
         views.mListView.setOnItemLongClickListener(myOnItemLongClickListener);
+        doHttpGetBankCardList();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+    @Subscribe
+    public void onEventMainThrend(BindCardResultEvent event){
         doHttpGetBankCardList();
     }
     private void setMenuTop(){
@@ -113,7 +128,6 @@ public class BankCardListActivity extends AppMultiActivity {
                 String error=ResultFactory.getErrorTip(resultObject,status);
                 List<RepaymentBankCard> list=ResultFactory.getResult(resultObject,status);
                 if(StringUtils.isEmpty(error)) {
-
                     listDatas.clear();
                     if (null == list || list.size() <= 0) {
                         ToastUtil.makeOkToastThr(mContext,"你还没有绑定银行卡");

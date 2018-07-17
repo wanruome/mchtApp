@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import com.ruomm.base.tools.DisplayUtil;
 import com.ruomm.base.tools.StringUtils;
@@ -52,6 +53,7 @@ public class KeyboardUtil {
 
 
     private ViewGroup rootView;
+    private FrameLayout containerView;
     private View keyboradContainer;
 
     private View kv_img_hidden;
@@ -70,14 +72,19 @@ public class KeyboardUtil {
     private String encryptStr=null;
     private KeyboardSafeInterface keyboardSafeInterface=null;
     private int editTextMaxlength=0;
-    public KeyboardUtil(Activity activity, EditText edit) {
+    public KeyboardUtil(Activity activity, EditText edit,FrameLayout containerView) {
         this.mEditText = edit;
         mActivity=activity;
         k1 = new Keyboard(activity, R.xml.key_letter);
         k2 = new Keyboard(activity,R.xml.key_number);
         k3 = new Keyboard(activity,R.xml.key_symbol);
         mLayoutInflater=LayoutInflater.from(activity);
-        rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content));
+        if(null==containerView){
+            rootView = (ViewGroup) ((ViewGroup) activity.findViewById(android.R.id.content));
+        }
+        else {
+            this.containerView=containerView;
+        }
         keyboradContainer=mLayoutInflater.inflate(R.layout.lyt_keyboard,null);
         kv_img_hidden=keyboradContainer.findViewById(R.id.kv_img_hidden);
         kv_lyt_container=keyboradContainer.findViewById(R.id.kv_lyt_container);
@@ -99,6 +106,9 @@ public class KeyboardUtil {
         mEditText.setOnFocusChangeListener(kvOnFocusChangeListener);
         mEditText.setLongClickable(false);
         mEditText.setTextIsSelectable(false);
+    }
+    public KeyboardUtil(Activity activity, EditText edit) {
+        this(activity,edit,null);
     }
         //    Keyboard.Key k1Number=k1.getKeys().get(28);
         //    Keyboard.Key k1Symbol=k1.getKeys().get(29);
@@ -535,8 +545,13 @@ public class KeyboardUtil {
     }
     public void showKeyboard() {
         if (!isShow) {
-
-            rootView.addView(keyboradContainer);
+            if(null!=containerView)
+            {
+                containerView.addView(keyboradContainer);
+            }
+            else {
+                rootView.addView(keyboradContainer);
+            }
             isShow = true;
             DisplayUtil.closeSoftInputView(mActivity);
             if(!isFirstShow&&isNumberRandom&&keyboardView.getKeyboard()==k2)
@@ -549,11 +564,25 @@ public class KeyboardUtil {
     }
 
     public void hideKeyboard() {
-        if (rootView != null && keyboardView != null && isShow) {
-            isShow = false;
-            rootView.removeView(keyboradContainer);
+        if(null!=containerView){
 
+            if(keyboardView!=null&&isShow)
+            {
+                containerView.removeView(keyboradContainer);
+            }
+            isShow = false;
         }
+        else if(null!=rootView){
+            if (keyboardView != null && isShow) {
+                rootView.removeView(keyboradContainer);
+            }
+            isShow = false;
+        }
+//        if (rootView != null && keyboardView != null && isShow) {
+//            isShow = false;
+//            rootView.removeView(keyboradContainer);
+//
+//        }
 //        mInstance = null;
     }
     private void destoryKeyBoard(){
