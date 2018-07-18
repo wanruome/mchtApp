@@ -69,13 +69,13 @@ public class PermissionHelper {
         if(null==permissionBean)
         {
             boolean allGranted=checkAllGranted();
-            if(!allGranted)
-            {
-                showMissingPermissionDialog();
-            }
+//            if(!allGranted)
+//            {
+//                showMissingPermissionDialog();
+//            }
             if(null!=permissionHelperCallBack)
             {
-                permissionHelperCallBack.grantedCallBack(list,allGranted);
+                permissionHelperCallBack.grantedCallBack(list,getDialogName(),allGranted);
             }
             return;
         }
@@ -148,35 +148,45 @@ public class PermissionHelper {
         }
         return granted;
     }
-    // 显示缺失权限提示
-    private void showMissingPermissionDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        final AlertDialog alertDialog = builder.create();
+    private String getDialogName()
+    {
         String denyName=getDenyNames();
         if(TextUtils.isEmpty(denyName)) {
-            builder.setMessage("当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。");
+            return "当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。";
         }
         else{
-            builder.setMessage("当前应用缺少 "+denyName+" 等权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。");
+            return "当前应用缺少 "+denyName+" 等权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。";
         }
-        // 拒绝, 退出应用
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                alertDialog.dismiss();
-            }
-        });
-
-        builder.setPositiveButton("设置", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startAppSettings();
-            }
-        });
-
-        builder.show();
     }
+//    // 显示缺失权限提示
+//    private void showMissingPermissionDialog() {
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+//        final AlertDialog alertDialog = builder.create();
+//        String denyName=getDenyNames();
+//        if(TextUtils.isEmpty(denyName)) {
+//            builder.setMessage("当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。");
+//        }
+//        else{
+//            builder.setMessage("当前应用缺少 "+denyName+" 等权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。");
+//        }
+//        // 拒绝, 退出应用
+//        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                alertDialog.dismiss();
+//            }
+//        });
+//
+//        builder.setPositiveButton("设置", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                startAppSettings();
+//            }
+//        });
+//
+//        builder.show();
+//    }
     private String getDenyNames()
     {
         StringBuilder sb=new StringBuilder();

@@ -38,7 +38,7 @@
                 android:layout_marginLeft="@dimen/dpx040"
                 android:paddingTop="@dimen/dpx012"
                 android:paddingBottom="@dimen/dpx012"
-                android:maxLength="16"
+                android:maxLength="30"
                 style="@style/editTextStyleBlcak"
                 />
         </LinearLayout>

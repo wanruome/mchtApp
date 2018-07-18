@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    style="@style/lineStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/abutus"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <com.ruomm.base.view.menutopview.MenuTopView
+            android:id="@id/mymenutop"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/menutop_height"
+            android:background="@color/AllTransparent"
+            app:imageLeft="@drawable/menutop_left"
+            app:menuButtomLineColor="@color/menutop_bottomline_color"
+            app:menuImageSizePercent="0.7"
+            app:menuPaddinghorizontal="@dimen/menutop_padding"
+            app:menuTextColor="@color/menutop_textcenter_color"
+            app:menuTextSize="@dimen/menutop_textsize"
+            app:textLeft_Color="@color/menutop_textsider_color"
+            app:textLeft_Size="@dimen/menutop_textsize_small"
+            app:textRight_Color="@color/menutop_textsider_color"
+            app:textRight_Size="@dimen/menutop_textsize_small"
+            >
+        </com.ruomm.base.view.menutopview.MenuTopView>
+        <ImageView
+            android:layout_marginTop="@dimen/dpx100"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/newpay_logo"
+
+            />
+        <TextView
+            android:id="@+id/text_appverison"
+            android:layout_marginTop="@dimen/dpx012"
+            style="@style/textSub.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+       <TextView
+           android:layout_marginTop="@dimen/dpx060"
+           android:paddingLeft="@dimen/dpx070"
+           android:paddingRight="@dimen/dpx070"
+           android:id="@+id/text_tip"
+           style="@style/text"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           />
+    </LinearLayout>
+</ScrollView>

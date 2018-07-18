@@ -32,6 +32,20 @@ public class IntentFactory {
     {
         return new Intent("userinfo.FindPwdActivity");
     }
+
+    public static Intent getFeedBackActivity()
+    {
+        return new Intent("help.FeedBackActivity");
+    }
+    public static Intent getAboutUsActivity()
+    {
+        return new Intent("help.AboutUsActivity");
+    }
+    public static Intent getAboutHelpActivity()
+    {
+        return new Intent("help.AboutHelpActivity");
+    }
+
     public static Intent getSettingActivity()
     {
         return new Intent("settting.SettingActivity");

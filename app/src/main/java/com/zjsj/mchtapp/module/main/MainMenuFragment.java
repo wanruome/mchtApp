@@ -149,6 +149,20 @@ public class MainMenuFragment extends AppFragment {
                     editTextDialog.show();
                 }
             }
+            else if (vID==R.id.menu_feedback)
+            {
+                if(isAppLogin(true)){
+                   startActivity(IntentFactory.getFeedBackActivity());
+                }
+            }
+            else if (vID==R.id.menu_about_us)
+            {
+                startActivity(IntentFactory.getAboutUsActivity());
+            }
+            else if (vID==R.id.menu_help)
+            {
+                startActivity(IntentFactory.getAboutHelpActivity());
+            }
         }
     };
     private void showLogoutDialog()
@@ -173,9 +187,14 @@ public class MainMenuFragment extends AppFragment {
     }
     private void doHttpTaskModifyNickName(final String nickName){
         int lengthNickName=StringUtils.getLength(nickName);
-        if(lengthNickName<2||lengthNickName>16)
+        if(lengthNickName<1)
         {
-            ToastUtil.makeFailToastThr(mContext,"昵称必须在2-16位之间");
+            ToastUtil.makeFailToastThr(mContext,"请填写昵称");
+            return;
+        }
+        if(lengthNickName>30)
+        {
+            ToastUtil.makeFailToastThr(mContext,"昵称不能超过30位");
             return;
         }
         showLoading();

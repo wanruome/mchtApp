@@ -4,5 +4,5 @@ import java.security.Permission;
 import java.util.List;
 
 public interface PermissionHelperCallBack {
-    public void grantedCallBack(List<PermissionBean> listPermissionBeans,boolean isAllGranted);
+    public void grantedCallBack(List<PermissionBean> listPermissionBeans,String dialogMsg,boolean isAllGranted);
 }

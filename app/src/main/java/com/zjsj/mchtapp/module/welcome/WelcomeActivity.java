@@ -2,8 +2,10 @@ package com.zjsj.mchtapp.module.welcome;
 
 import android.Manifest;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.view.View;
 
@@ -16,6 +18,8 @@ import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.base.tools.permission.PermissionBean;
 import com.ruomm.base.tools.permission.PermissionHelper;
 import com.ruomm.base.tools.permission.PermissionHelperCallBack;
+import com.ruomm.base.tools.rootcheck.RootCheck;
+import com.ruomm.base.tools.rootcheck.RootCheckCallBack;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.dialog.MessageDialog;
@@ -56,10 +60,14 @@ public class WelcomeActivity extends AppSimpleActivity {
                 permissionHelper = new PermissionHelper(mContext, permissionHelperCallBack);
                 permissionHelper.setPermissions(new String[][]{
                         {Manifest.permission.READ_EXTERNAL_STORAGE, "存储卡"},
-                        {android.Manifest.permission.READ_PHONE_STATE, "手机状态"},
-                        {android.Manifest.permission.CAMERA, "相机"},
-                        {android.Manifest.permission.CALL_PHONE, "拨打电话"}
+                        {Manifest.permission.ACCESS_FINE_LOCATION, "定位"},
+//                        {android.Manifest.permission.READ_PHONE_STATE, "手机状态"},
+//                        {android.Manifest.permission.CAMERA, "相机"},
+//                        {android.Manifest.permission.CALL_PHONE, "拨打电话"}
                 });
+                permissionHelper.checkPermissions();
+            }
+            else{
                 permissionHelper.checkPermissions();
             }
         }
@@ -73,12 +81,32 @@ public class WelcomeActivity extends AppSimpleActivity {
 
     PermissionHelperCallBack permissionHelperCallBack=new PermissionHelperCallBack() {
         @Override
-        public void grantedCallBack(List<PermissionBean> listPermissionBeans, boolean isAllGranted) {
+        public void grantedCallBack(List<PermissionBean> listPermissionBeans,String dialogMsg, boolean isAllGranted) {
             MLog.i("权限申请完毕");
             isGrant=isAllGranted;
             if(isGrant)
             {
-                getPublicKey();
+//                getPublicKey();
+                doCheckRoot();
+            }
+            else {
+                MessageDialog messageDialog=new MessageDialog(mContext);
+                messageDialog.setDialogValue(new DialogValue("提示",dialogMsg,"退出","设置"));
+                messageDialog.setBaseDialogClick(new BaseDialogClickListener() {
+                    @Override
+                    public void onDialogItemClick(View v, Object tag) {
+                        if(v.getId()==R.id.dialog_confirm){
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            intent.setData(Uri.parse("package:" + mContext.getPackageName()));
+                            mContext.startActivity(intent);
+                        }
+                        else if(v.getId()==R.id.dialog_cancle)
+                        {
+                            AppManager.exitApp();
+                        }
+                    }
+                });
+                messageDialog.show();
             }
         }
     };
@@ -109,6 +137,46 @@ public class WelcomeActivity extends AppSimpleActivity {
         Intent intent=new Intent("main.MainActivity");
         startActivity(intent);
         finish();
+    }
+    private void doCheckRoot()
+    {
+        new RootCheck().doRootCheck(new RootCheckCallBack() {
+            @Override
+            public void checkStart() {
+                showLoading("检查手机环境安全");
+            }
+
+            @Override
+            public void checkResult(boolean isRoot) {
+                dismissLoading();
+                if(isRoot)
+                {
+                    MessageDialog messageDialog=new MessageDialog(mContext);
+                    DialogValue dialogValue=new DialogValue("提示","手机被root过了，环境不安全。","退出应用","  ");
+                    messageDialog.setDialogValue(dialogValue);
+                    messageDialog.setAutoDisMisss(false);
+                    messageDialog.setBaseDialogClick(new BaseDialogClickListener() {
+                        @Override
+                        public void onDialogItemClick(View v, Object tag) {
+                            if(v.getId()==R.id.dialog_cancle)
+                            {
+                                dismissLoading();
+                                AppManager.exitApp();
+
+                            }
+                            else if(v.getId()==R.id.dialog_confirm)
+                            {
+
+                            }
+                        }
+                    });
+                    messageDialog.show();
+                }
+                else {
+                    getPublicKey();
+                }
+            }
+        });
     }
     private void getPublicKey()
     {

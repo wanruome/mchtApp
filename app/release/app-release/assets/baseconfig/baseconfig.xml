@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 此配置请复制到应用目录的Assets目录下的baseconfig文件夹里面，可以依据功能对配置经行调节 -->
+<baseconfig xmlns:debugconfig="http://www.ruomm.com/debugconfig"
+    xmlns:config="http://www.ruomm.com/config" >
+
+    <!-- 加载额外的配置文件，Eclipse需要提供打包密钥的MD5指纹，Android Studio下面可以直接判定 -->
+
+    <config:configLoad
+        debugLoad="baseconfig/configdebug.xml"
+        isDebug="true"
+        releaseFingerprint="0110BDF9C252248D0603D66E2C71016F"
+        releaseLoad="baseconfig/configrelease.xml" />
+    <!-- ActivityManager管理类是否启用 -->
+    <!-- 继承了BaseActivity和BaseFragmentActivity的类自动管理 -->
+    <!-- 其他的需要在OnCreate和Finish方法里面添加AppManager.onCreate(activity)和AppManager.Onfinish(activity) -->
+
+    <config:AppManagerEnable value="true" />
+
+    <!-- 自定义Crash是否启用,需要重写BaseApplication的crashHanlder方法 -->
+
+    <config:AppUserCrash
+        crashStorePath="fads"
+        crashStoreType="2"
+        isEnable="true"
+        keepActivityName="MainActivity"
+        minResartTime="30" />
+
+    <!-- AsyncHttpClient是否开启Https请求 -->
+
+    <config:AsyncHttpClientEnableHTTPS value="true" />
+    <!-- DownLoadService使用AsyncHttpClient或者使用OkHttpClient作为网络请求Client -->
+
+    <config:DownLoadServiceUseOKHttp value="true" />
+
+    <!-- UI沉浸模式是否开启 -->
+
+    <config:UIBarTintConfig
+        isEnable="true"
+        tintColor="0xffF4956D" />
+
+    <!-- 设置是否启用对象数据库化存储模块，以及设置对象数据库化存储模块的数据库版本号和名称 -->
+
+    <config:BaseDBEntryConfig
+        dbName="baseentrystore.db"
+        dbVersion="1"
+        isEnable="true" />
+
+    <!-- SharepreFerence 默认存储的XML文件，String存储一个XML文件，Object对象存储一个文件 -->
+
+    <config:PropertyStore
+        objectStore="propertyObject"
+        strigStore="propertyString" />
+    <!-- Http请求的内存缓存大小和DiskLruCache缓存大小设置，M=1024*1024(Btye) K=1024(Btye) B=1(Btye) -->
+
+    <config:HttpCache
+        cacheName="httpCache"
+        cacheSize="100M"
+        cacheSizeInMemory="1M"
+        isEnable="true"
+        useDiskLruCache="true" />
+    <!-- DiskLrucache是否启用和配置，M=1024*1024(Btye) K=1024(Btye) B=1(Btye) -->
+
+    <config:DiskLruCache
+        cacheName="diskCache"
+        cacheSize="100M"
+        isEnable="true" />
+    <!-- http连接是否自动显示调试信息 -->
+
+    <debugconfig:HttpAutoDebug value="true" />
+
+    <!-- 配置调试信息是否显示 -->
+
+    <debugconfig:MlogEnale value="true" />
+
+    <!-- 调试信息是否输出到文件 -->
+
+    <debugconfig:MlogOutToFile value="true" />
+
+    <!-- API管理器使用启用，启用可以切换运行环境 -->
+
+    <debugconfig:ApiManagerEnable value="true" />
+    <!-- App应用Crash信息存储位置 -->
+    <!-- <=0:表示不存储,1:表示在存储到缓存,2:存储到应用的Data目录,>=3:存储到存储卡的目录; -->
+
+    <debugconfig:CrashStoreType value="2" />
+
+</baseconfig>

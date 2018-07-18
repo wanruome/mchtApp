@@ -22,8 +22,10 @@
             android:layout_alignParentLeft="true"
             />
     </RelativeLayout>
-    <View style="@style/lineStyle"/>
+    <View style="@style/lineStyle"
+        android:visibility="gone"/>
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/setting_ly_version"
         android:background="@color/bg_white"
         android:layout_width="match_parent"

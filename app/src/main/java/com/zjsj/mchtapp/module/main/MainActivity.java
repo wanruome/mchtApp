@@ -53,6 +53,7 @@ import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.event.TokenEvent;
 import com.zjsj.mchtapp.dal.response.AppVersion;
+import com.zjsj.mchtapp.dal.response.RepaymentBankCard;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
 import com.zjsj.mchtapp.dal.store.AppUpdateIgnore;
 import com.zjsj.mchtapp.module.main.adapter.MainFunctionAdapter;
@@ -231,11 +232,13 @@ public class MainActivity extends AppSimpleActivity{
         if(LoginUserFactory.isLogin())
         {
             views.ly_login.setVisibility(View.GONE);
+
         }
         else{
             views.ly_login.setVisibility(View.VISIBLE);
 
         }
+        doHttpGetBankCardList();
     }
     private void doScreenLockForLogin(){
         Intent intent=new ResumeFormBackGroundTaskImpl().getScreenLockForLoginIntent(mContext);
@@ -281,6 +284,33 @@ public class MainActivity extends AppSimpleActivity{
             }
             return false;
         }
+    }
+    //
+    private void doHttpGetBankCardList(){
+        if(!LoginUserFactory.isLogin())
+        {
+            return;
+        }
+        showLoading();
+        Map<String,String> map=ApiConfig.createRequestMap(true);
+        ApiConfig.signRequestMap(map);
+        new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/repayment/doQueryBindCards").setRequestBodyText(map).doHttp(RepaymentBankCard.class, new TextHttpCallBack() {
+            @Override
+            public void httpCallBack(Object resultObject, String resultString, int status) {
+                String error=ResultFactory.getErrorTip(resultObject,status);
+                List<RepaymentBankCard> list=ResultFactory.getResult(resultObject,status);
+                if(StringUtils.isEmpty(error)) {
+                    if (null ==list || list.size() <= 0) {
+                        LoginUserFactory.saveBankCardInfo(null);
+                    }
+                    else{
+                        LoginUserFactory.saveBankCardInfo(list);
+                    }
+                }
+                dismissLoading();
+
+            }
+        });
     }
     //更新服务
     private void doHttpTaskGetAppVersion(){
