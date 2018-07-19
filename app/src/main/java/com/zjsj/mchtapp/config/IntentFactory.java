@@ -7,6 +7,7 @@ public class IntentFactory {
     public static final int Request_GestureLockActivity=110;
     public static final int Request_ScreenLockActivity=111;
     public static final int Request_PayInfoModifyNoPwdFlagActivity=120;
+    public static final int Notification_GoToBackGround=101;
 //    public static Intent getCommonWebInfoActivity()
 //    {
 //        return new Intent("webmodule.CommonWebInfoActivity");

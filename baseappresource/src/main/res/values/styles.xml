@@ -2,8 +2,22 @@
 
     <style name="AppBaseTheme" parent="android:Theme.Light"></style>
 
-    <style name="AppTheme" parent="@android:style/Theme.Light.NoTitleBar"></style>
-    <style name="AppFullTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+    <!--<style name="AppTheme" parent="@android:style/Theme.Light.NoTitleBar"></style>-->
+    <!--<style name="AppFullTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">-->
+        <!--<item name="android:windowBackground">@drawable/appbg</item>-->
+    <!--</style>-->
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@drawable/appbg</item>
+    </style>
+    <style name="AppFullTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@drawable/appbg</item>
     </style>
 

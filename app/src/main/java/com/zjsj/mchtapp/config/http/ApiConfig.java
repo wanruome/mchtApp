@@ -37,9 +37,11 @@ public class ApiConfig {
      public static long APPUPDATE_NOTIFY_SKIP_TIME=1000*3600*12;
      private static String uuid=null;
      public static final int PWD_MIN_LENGTH=6;
-     public static final int PWD_MAT_LENGTH=16;
-     public static final int PWD_MIN_RULE=0;
+     public static final int PWD_MAT_LENGTH=24;
+     public static final int PWD_MIN_RULE=2;
+     public static final boolean PWD_SYMBOL_ENABLE=false;
      public static final int PAYPWD_MIN_LENGTH=6;
+
      public static final int VERIFYCODE_COUNTDOWN=60*1000;
      public static final int VERIFYCODE_THREADSLEEP=333;
      public static String getAppUUID()
@@ -142,6 +144,10 @@ public class ApiConfig {
           }
      }
      public static String getPassWord(String pwdStr, String pwdEncrypt) {
+          if(StringUtils.isEmpty(pwdStr))
+          {
+               return pwdStr;
+          }
           if (pwdEncrypt.equals("NONE")) {
                return pwdStr;
           }

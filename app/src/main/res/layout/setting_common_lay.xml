@@ -23,6 +23,54 @@
             />
     </RelativeLayout>
     <View style="@style/lineStyle"
+        android:visibility="visible"/>
+    <RelativeLayout
+        android:id="@+id/setting_ly_shortcut"
+        android:background="@color/bg_white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:paddingLeft="@dimen/dpx040"
+        android:paddingRight="@dimen/dpx040"
+        >
+        <TextView
+            style="@style/textSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加付款码快捷方式"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+    </RelativeLayout>
+    <View style="@style/lineStyle"
+        android:visibility="visible"/>
+    <RelativeLayout
+        android:id="@+id/setting_ly_screensecure"
+        android:background="@color/bg_white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dpx100"
+        android:paddingLeft="@dimen/dpx040"
+        android:paddingRight="@dimen/dpx040"
+        >
+        <TextView
+            style="@style/textSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="截屏防护"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            />
+        <ImageView
+            android:id="@+id/setting_switch_screensecure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dpx016"
+            android:paddingBottom="@dimen/dpx016"
+            android:src="@drawable/setting_switch"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
+    <View style="@style/lineStyle"
         android:visibility="gone"/>
     <RelativeLayout
         android:visibility="gone"

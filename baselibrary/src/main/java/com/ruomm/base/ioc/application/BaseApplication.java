@@ -13,6 +13,9 @@ import com.ruomm.base.ioc.application.crash.CrashHandler;
 import com.ruomm.base.ioc.application.crash.CrashStoreUtil;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.common.greendao.BaseDaoSession;
+import com.ruomm.base.ioc.task.ResumeFormBackGroundTask;
+import com.ruomm.base.ioc.task.StopToBcakGroundTask;
+import com.ruomm.base.ioc.task.TaskUtil;
 import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.baseconfig.BaseConfig;
 import com.ruomm.baseconfig.DebugConfig;
@@ -118,7 +121,15 @@ public class BaseApplication extends Application {
 				//如果mFinalCount ==1，说明是从后台到前台
 				Log.e("onActivityStarted", mFinalCount +"");
 				if (mFinalCount == 1){
-					//说明从后台回到了前台
+					StopToBcakGroundTask stopToBcakGroundTask= TaskUtil.getTask(BaseConfig.AppStopToBcakGroundTask);
+					if(null!=stopToBcakGroundTask)
+					{
+						stopToBcakGroundTask.doTaskResumeFormBcakGround(activity);
+					}
+				}
+				else if(mFinalCount>1)
+				{
+					AppManager.delLastBackGroundTime();
 				}
 			}
 
@@ -142,9 +153,15 @@ public class BaseApplication extends Application {
 				Log.i("onActivityStopped", mFinalCount +"");
 				if (mFinalCount == 0){
 					AppManager.setLastBackGroundTime();
+					StopToBcakGroundTask stopToBcakGroundTask= TaskUtil.getTask(BaseConfig.AppStopToBcakGroundTask);
+					if(null!=stopToBcakGroundTask)
+					{
+						stopToBcakGroundTask.doTaskStopToBcakGround(activity);
+					}
 				}
 				else {
 					AppManager.delLastBackGroundTime();
+
 				}
 			}
 

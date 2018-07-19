@@ -78,7 +78,7 @@ public class PayInfoModifyNoPwdFlagActivity extends AppMultiActivity {
         }
         else{
             views.text_pwd_old_tip.setText("用户密码");
-            keyboardUtilOld=new KeyboardUtil(this,views.edt_pwd_old).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
+            keyboardUtilOld=new KeyboardUtil(this,views.edt_pwd_old).setSymbolEnable(ApiConfig.PWD_SYMBOL_ENABLE).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
         }
 
 

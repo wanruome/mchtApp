@@ -52,7 +52,7 @@ public class VerifyPasswordFragment extends AppFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView=LayoutInflater.from(mContext).inflate(R.layout.lockscreen_verifypwd_lay,null);
         BaseUtil.initInjectAll(this,mView);
-        keyboardUtil=new KeyboardUtil(getActivity(),views.edt_pwd).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
+        keyboardUtil=new KeyboardUtil(getActivity(),views.edt_pwd).setSymbolEnable(ApiConfig.PWD_SYMBOL_ENABLE).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
         views.btn_submit.setOnClickListener(myOnClickListener);
         views.text_findpwd.setOnClickListener(myOnClickListener);
         return mView;

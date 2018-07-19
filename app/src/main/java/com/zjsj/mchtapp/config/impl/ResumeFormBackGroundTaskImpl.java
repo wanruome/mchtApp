@@ -1,6 +1,7 @@
 package com.zjsj.mchtapp.config.impl;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 
@@ -20,40 +21,12 @@ import java.util.ArrayList;
 public class ResumeFormBackGroundTaskImpl implements ResumeFormBackGroundTask{
     @Override
     public void doTaskResumeFormBack(Context mContext) {
-        Activity mActivity=(Activity)mContext;
-        if(mActivity instanceof LockScreenActivity ||mActivity instanceof FindPwdActivity)
-        {
-            return;
-        }
-        UserFingerPrint userFingerPrint=LoginUserFactory.getUserFingerPrint();
-        UserGesturesInfo userGesturesInfo=LoginUserFactory.getUserGesturesInfo();
-        boolean isGestureEnable=false;
-        boolean isFingerEnable=false;
-        if(null!=userFingerPrint&&userFingerPrint.isEnable)
-        {
-            isFingerEnable=true;
-        }
-        if(null!=userGesturesInfo&&userGesturesInfo.isEnable)
-        {
-            isGestureEnable=true;
-        }
-        if(!isGestureEnable&&!isFingerEnable)
-        {
-            return;
-        }
 
-        Intent intent=IntentFactory.getLockScreenActivity();
-        if(isGestureEnable){
-            ArrayList<Integer> lst=new ArrayList<>();
-            lst.addAll(userGesturesInfo.gestures);
-            intent.putIntegerArrayListExtra("gestures",lst);
-            intent.putExtra("isGestureEnable",true);
-        }
-        if(isFingerEnable)
+       Intent intent=getScreenLockForLoginIntent(mContext);
+       if(null!=intent)
         {
-            intent.putExtra("isFingerEnable",true);
+         mContext.startActivity(intent);
         }
-        mContext.startActivity(intent);
     }
     public Intent getScreenLockForLoginIntent(Context mContext)
     {
@@ -90,6 +63,6 @@ public class ResumeFormBackGroundTaskImpl implements ResumeFormBackGroundTask{
         {
             intent.putExtra("isFingerEnable",true);
         }
-        return intent;
+       return intent;
     }
 }

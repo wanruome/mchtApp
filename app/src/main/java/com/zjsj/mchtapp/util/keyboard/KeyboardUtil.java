@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 
 import com.ruomm.base.tools.DisplayUtil;
 import com.ruomm.base.tools.StringUtils;
+import com.ruomm.base.view.android.NullMenuEditText;
 import com.ruomm.baseconfig.debug.MLog;
 import com.zjsj.mchtapp.R;
 
@@ -104,8 +105,12 @@ public class KeyboardUtil {
         kv_img_hidden.setOnClickListener(kvOnClickListener);
         mEditText.setOnTouchListener(kvOnTouchListener);
         mEditText.setOnFocusChangeListener(kvOnFocusChangeListener);
-        mEditText.setLongClickable(false);
-        mEditText.setTextIsSelectable(false);
+        if(!(mEditText instanceof NullMenuEditText)){
+            mEditText.setLongClickable(false);
+            mEditText.setTextIsSelectable(false);
+        }
+//        mEditText.setLongClickable(false);
+//        mEditText.setTextIsSelectable(false);
     }
     public KeyboardUtil(Activity activity, EditText edit) {
         this(activity,edit,null);

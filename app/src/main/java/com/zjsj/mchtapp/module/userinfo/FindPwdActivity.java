@@ -65,8 +65,8 @@ public class FindPwdActivity extends AppMultiActivity {
         mymenutop.setCenterText("找回密码");
         setInitContentView(R.layout.userinfo_findpwd_act);
         updateUiByLastLoginUserInfo();
-        keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
-        keyboardUtilRepeat=new KeyboardUtil(this,views.edt_pwd_repeat).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
+        keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSymbolEnable(ApiConfig.PWD_SYMBOL_ENABLE).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
+        keyboardUtilRepeat=new KeyboardUtil(this,views.edt_pwd_repeat).setSymbolEnable(ApiConfig.PWD_SYMBOL_ENABLE).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
         views.btn_submit.setOnClickListener(myOnClickListener);
         views.btn_verifyCode.setOnClickListener(myOnClickListener);
     }

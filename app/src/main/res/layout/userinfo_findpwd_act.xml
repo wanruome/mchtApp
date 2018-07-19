@@ -83,12 +83,12 @@
                 android:layout_height="wrap_content"
                 android:text="密　码："
                 />
-            <EditText
+            <com.ruomm.base.view.android.NullMenuEditText
                 android:id="@+id/edt_pwd"
                 style="@style/editTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="16"/>
+                android:maxLength="24"/>
         </LinearLayout>
         <LinearLayout
             android:paddingBottom="@dimen/dpx016"
@@ -103,12 +103,12 @@
                 android:layout_height="wrap_content"
                 android:text="确认密码："
                 />
-            <EditText
+            <com.ruomm.base.view.android.NullMenuEditText
                 android:id="@+id/edt_pwd_repeat"
                 style="@style/editTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="16"/>
+                android:maxLength="24"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/ly_verifyCode"

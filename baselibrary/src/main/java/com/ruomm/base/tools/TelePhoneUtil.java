@@ -2,6 +2,7 @@ package com.ruomm.base.tools;
 
 import java.util.List;
 
+import com.ruomm.base.ioc.application.BaseApplication;
 import com.wanruome.utdid.device.UTDevice;
 
 import android.app.ActivityManager;

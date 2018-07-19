@@ -156,11 +156,13 @@ public class BindCardActivity extends AppMultiActivity {
         }
         showLoading();
         Map<String,String> map=ApiConfig.createRequestMap(true);
-        map.put("accountNo",cardNo);
+//        map.put("accountNo",cardNo);
         map.put("mobileNo",mobile);
         map.put("name",idCardName);
         map.put("idcardNo",idCardNo);
         map.put("area",area);
+        map.put("dataEncrypt",ApiConfig.getPassWordEncrypt(false));
+        map.put("accountNo",ApiConfig.getPassWord(cardNo,ApiConfig.getPassWordEncrypt(false)));
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"/app/repayment/doBindCard").setRequestBodyText(map).doHttp(RepaymentBindCardDto.class, new TextHttpCallBack() {
             @Override

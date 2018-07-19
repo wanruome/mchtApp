@@ -6,9 +6,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -27,12 +29,13 @@ import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.R;
 import com.ruomm.resource.dialog.DialogLoadingListener;
 import com.ruomm.resource.dialog.DialogUtil;
+import com.ruomm.resource.ui.dal.ScreenSercureConfig;
 
 /**
  * Created by Niu on 2017/8/2.
  */
 @InjectUIStyle
-public abstract  class AppMultiActivity extends FragmentActivity implements DialogLoadingListener {
+public abstract  class AppMultiActivity extends AppCompatActivity implements DialogLoadingListener {
     private boolean isShowDialog00 = false;
     private boolean isShowDialog01 = false;
     protected BaseApplication app = BaseApplication.getApplication();
@@ -187,6 +190,10 @@ public abstract  class AppMultiActivity extends FragmentActivity implements Dial
     protected void onCreate(Bundle arg0) {
         // TODO Auto-generated method stub
         super.onCreate(arg0);
+        if(ScreenSercureConfig.isAppScreenSecure){
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
         mContext = this;
         mFManager = getSupportFragmentManager();
         mBundle = getIntent().getExtras();

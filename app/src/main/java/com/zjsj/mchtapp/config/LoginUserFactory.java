@@ -8,10 +8,12 @@ import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.ioc.iocutil.DbStoreSafe;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.ToastUtil;
+import com.ruomm.resource.ui.dal.ScreenSercureConfig;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
 import com.zjsj.mchtapp.dal.response.PayInfoDto;
 import com.zjsj.mchtapp.dal.response.RepaymentBankCard;
 import com.zjsj.mchtapp.dal.response.UserInfoDto;
+import com.zjsj.mchtapp.dal.store.AppScreenSecure;
 import com.zjsj.mchtapp.dal.store.LastLoginUserInfo;
 import com.zjsj.mchtapp.dal.store.UserBankCardForQrCode;
 import com.zjsj.mchtapp.dal.store.UserBankCardStore;
@@ -30,6 +32,7 @@ public class LoginUserFactory {
     private static final SimpleDateFormat TOKEN_FORAMT=new SimpleDateFormat("yyyyMMddHHmmssSSS");
     private static UserInfoDto mLoginUserInfo=null;
     private static PayInfoDto mPayInfoDto=null;
+//    private static AppScreenSecure mAppScreenSecure=null;
     public static boolean isLogin()
     {
         return null==mLoginUserInfo?false:true;
@@ -181,7 +184,33 @@ public class LoginUserFactory {
         userBankCardForQrCode.cardIndex=repaymentBankCard.cardIndex;
         AppStoreUtil.safeSaveBean(BaseApplication.getApplication(),null,userBankCardForQrCode);
     }
-//    public static UserGesturesInfo getUserGesturesInfo(){
+    public static boolean isAppScreenSecure()
+    {
+        boolean isAppScreenSecure=getAppScreenSecure().isScreenSecrue;
+        ScreenSercureConfig.isAppScreenSecure=isAppScreenSecure;
+        return isAppScreenSecure;
+    }
+
+    private static AppScreenSecure getAppScreenSecure() {
+            AppScreenSecure  mAppScreenSecure=AppStoreUtil.safeGetBean(BaseApplication.getApplication(),null,AppScreenSecure.class);
+            if(null==mAppScreenSecure)
+            {
+                mAppScreenSecure=new AppScreenSecure();
+                mAppScreenSecure.isScreenSecrue=false;
+            }
+            return mAppScreenSecure;
+
+    }
+    public static void saveAppScreenSecure(AppScreenSecure appScreenSecure)
+    {
+        if(null==appScreenSecure)
+        {
+            return;
+        }
+        AppStoreUtil.safeSaveBean(BaseApplication.getApplication(),null,appScreenSecure);
+        ScreenSercureConfig.isAppScreenSecure=appScreenSecure.isScreenSecrue;
+    }
+    //    public static UserGesturesInfo getUserGesturesInfo(){
 //        if(!isLogin())
 //        {
 //            return null;

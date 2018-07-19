@@ -7,8 +7,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.ruomm.base.ioc.activity.AppManager;
@@ -24,8 +26,9 @@ import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.R;
 import com.ruomm.resource.dialog.DialogLoadingListener;
 import com.ruomm.resource.dialog.DialogUtil;
+import com.ruomm.resource.ui.dal.ScreenSercureConfig;
 
-public class AppSimpleActivity extends FragmentActivity implements DialogLoadingListener {
+public class AppSimpleActivity extends AppCompatActivity implements DialogLoadingListener {
     private boolean isShowDialog00 = false;
     private boolean isShowDialog01 = false;
     protected BaseApplication app = BaseApplication.getApplication();
@@ -178,6 +181,9 @@ public class AppSimpleActivity extends FragmentActivity implements DialogLoading
     protected void onCreate(Bundle arg0) {
         // TODO Auto-generated method stub
         super.onCreate(arg0);
+        if(ScreenSercureConfig.isAppScreenSecure){
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        }
 //        AppManager.onCreate(this);
         mContext = this;
         mBundle = getIntent().getExtras();

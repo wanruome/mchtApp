@@ -9,6 +9,7 @@ import com.ruomm.base.tools.androidkeystore.AndroidKeyStoreHelper;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.dal.response.KeyPairDto;
+import com.zjsj.mchtapp.dal.store.AppScreenSecure;
 
 import java.security.KeyPair;
 
@@ -26,7 +27,7 @@ public class BaseApplicationTaskImpl implements BaseApplicationTask {
         {
             ApiConfig.loadTransmitKey(keyPairDto);
         }
-
+        LoginUserFactory.isAppScreenSecure();
     }
 
 

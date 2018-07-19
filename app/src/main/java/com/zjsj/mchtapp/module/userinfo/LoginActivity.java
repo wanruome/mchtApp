@@ -71,7 +71,7 @@ public class LoginActivity extends AppMultiActivity {
         setInitContentView(R.layout.login_act);
         views.ly_verifyCode.setVisibility(View.GONE);
         updateUiByLastLoginUserInfo();
-        keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
+        keyboardUtil=new KeyboardUtil(this,views.edt_pwd).setSymbolEnable(ApiConfig.PWD_SYMBOL_ENABLE).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.LETTER_LOWER);
         views.btn_submit.setOnClickListener(myOnClickListener);
         views.btn_verifyCode.setOnClickListener(myOnClickListener);
         views.ly_fast_register.setOnClickListener(myOnClickListener);

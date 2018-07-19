@@ -155,7 +155,7 @@ public class PayInfoFindPwdActivity extends AppMultiActivity {
         showLoading();
         Map<String, String> map = ApiConfig.createRequestMap(true);
         map.put("msgFunction", "9");
-        map.put("msgAddr", LoginUserFactory.getLoginUserInfo().mobile);
+        map.put("msgAddr", "1");
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/msg/doMsgSend").setRequestBodyText(map).doHttp(MsgSendDto.class, new TextHttpCallBack() {
             @Override

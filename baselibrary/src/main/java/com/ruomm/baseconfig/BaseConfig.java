@@ -87,4 +87,5 @@ public class BaseConfig {
 	public static final String Http_ResponseParse="com.zjsj.mchtapp.config.impl.ResponseParseImpl";
 	public static final String BaseApplicationTask="com.zjsj.mchtapp.config.impl.BaseApplicationTaskImpl";
 	public static final String AppResumeFormBackGroundTask="com.zjsj.mchtapp.config.impl.ResumeFormBackGroundTaskImpl";
+	public static final String AppStopToBcakGroundTask="com.zjsj.mchtapp.config.impl.StopToBcakGroundTaskImpl";
 }
