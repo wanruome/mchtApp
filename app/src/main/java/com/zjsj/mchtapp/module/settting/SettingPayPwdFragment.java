@@ -11,9 +11,11 @@ import android.widget.RelativeLayout;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
+import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.resource.ui.AppFragment;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.IntentFactory;
+import com.zjsj.mchtapp.config.LoginUserFactory;
 
 public class SettingPayPwdFragment extends AppFragment {
     @InjectAll
@@ -46,14 +48,26 @@ public class SettingPayPwdFragment extends AppFragment {
             int vID=v.getId();
             if(vID==R.id.setting_ly_paypwd_seting)
             {
+                if("1".equals(LoginUserFactory.getPayInfo().payPwdStatus)){
+                    ToastUtil.makeShortToast(mContext,"你已经设置过了支付密码");
+                    return ;
+                }
                 startActivity(IntentFactory.getPayInfoSetPwdActivity());
             }
             else  if(vID==R.id.setting_ly_paypwd_modify)
             {
+                if("0".equals(LoginUserFactory.getPayInfo().payPwdStatus)){
+                    ToastUtil.makeShortToast(mContext,"请先设置支付密码");
+                    return ;
+                }
                 startActivity(IntentFactory.getPayInfoModifyPwdActivity());
             }
             else  if(vID==R.id.setting_ly_paypwd_find)
             {
+                if("0".equals(LoginUserFactory.getPayInfo().payPwdStatus)){
+                    ToastUtil.makeShortToast(mContext,"请先设置支付密码");
+                    return ;
+                }
                 startActivity(IntentFactory.getPayInfoFindPwdActivity());
             }
         }

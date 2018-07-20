@@ -101,7 +101,7 @@ public class RegisterActivity extends AppMultiActivity {
             }
         }).doRegex(views.edt_name, RegexUtil.MOBILE_NUM,"手机号不正确")
                 .doRegexSize(views.edt_pwd,6,16,"密码长度为6-16位")
-                .doRegexSize(views.edt_pwd_repeat,6,16,"确认密码长度为6-16位")
+                .doRegexSize(views.edt_pwd_repeat,6,16,"确认密码长度为6-16位").doRegexSize(views.edt_nickname,1,30,"请填写用户昵称")
                 .doRegexSize(views.edt_verifyCode,4,10,"请填写验证码").builder();
         if(!flag)
         {

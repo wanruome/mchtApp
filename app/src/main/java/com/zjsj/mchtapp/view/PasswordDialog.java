@@ -26,7 +26,7 @@ public class PasswordDialog extends BaseDialogUserConfig {
         setCancelable(false);
         EditText editText=(EditText)findViewById(R.id.dialog_content);
         FrameLayout frameLayout=(FrameLayout)findViewById(R.id.container_keyboard);
-        keyboardUtil=new KeyboardUtil((Activity) mContext,editText ,frameLayout).setSymbolEnable(false).setLetterEnable(false).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.NUMBER);
+        keyboardUtil=new KeyboardUtil((Activity) mContext,editText ,frameLayout).setSymbolEnable(false).setSafeInterFace(new KeyboardSafeImpl()).bulider(KeyboardUtil.KEYMODE.NUMBER);
         // LinearLayout layout=(LinearLayout) findViewById(R.id.dialog_container);
         // layout.set
         // setDialogLayoutParams(DisplayUtil.getDispalyWidth(mContext) * 3 / 4,

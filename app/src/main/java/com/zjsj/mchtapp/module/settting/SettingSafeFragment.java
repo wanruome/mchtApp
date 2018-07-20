@@ -2,6 +2,7 @@ package com.zjsj.mchtapp.module.settting;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -156,6 +157,10 @@ public class SettingSafeFragment extends AppFragment {
             }
             else if(vID==R.id.setting_switch_fingerprint)
             {
+                if(Build.VERSION.SDK_INT <Build.VERSION_CODES.M){
+                    ToastUtil.makeShortToast(mContext,"Android 6.0以下不支持开启指纹");
+                    return;
+                }
 //                if(v.isSelected()){
 //                    MessageDialog messageDialog=new MessageDialog(mContext);
 //                    messageDialog.setDialogValue(new DialogValue("确认删除指纹登录吗？"));

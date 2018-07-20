@@ -504,4 +504,23 @@ public class ImageUtils {
 			return "";
 		}
 	}
+	/**
+	 * 旋转图片，使图片保持正确的方向。
+	 * @param bitmap 原始图片
+	 * @param degrees 原始图片的角度
+	 * @return Bitmap 旋转后的图片
+	 */
+	public static Bitmap rotateBitmap(Bitmap bitmap, int degrees) {
+		if (degrees == 0 || null == bitmap) {
+			return bitmap;
+		}
+		Matrix matrix = new Matrix();
+		matrix.setRotate(degrees, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
+		Bitmap bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+		if (null != bitmap) {
+			bitmap.recycle();
+		}
+		return bmp;
+	}
+
 }

@@ -99,8 +99,8 @@ public class RepaymentOrderActivity extends AppMultiActivity{
         views.text_query_transType.setText("全部");
         views.text_query_bankCard.setText("全部");
         views.text_query_orderState.setText("全部");
-//        views.text_query_orderTime.setText("当天");
-        views.text_query_orderTime.setText("20180528-20180530");
+        views.text_query_orderTime.setText("当天");
+//        views.text_query_orderTime.setText("20180528-20180530");
         views.ly_query_transType.setOnClickListener(myOnClickListener);
         views.ly_query_bankCard.setOnClickListener(myOnClickListener);
         views.ly_query_orderState.setOnClickListener(myOnClickListener);

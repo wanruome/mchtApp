@@ -3,6 +3,8 @@ package com.zjsj.mchtapp.module.main;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.DisplayUtil;
+import com.ruomm.base.tools.SpanStringUtil;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
@@ -101,11 +104,28 @@ public class MainMenuFragment extends AppFragment {
     {
         if(LoginUserFactory.isLogin())
         {
-            String nickName=StringUtils.isEmpty(LoginUserFactory.getLoginUserInfo().nickName)?"你好，请设置昵称":"你好，"+LoginUserFactory.getLoginUserInfo().nickName;
-            views.text_name.setText(nickName);
+            if(StringUtils.isEmpty(LoginUserFactory.getLoginUserInfo().nickName)){
+                SpannableStringBuilder sp=new SpannableStringBuilder();
+                SpannableString sbNihao=new SpannableString("你好，请设置昵称");
+                SpanStringUtil.setForecolor(sbNihao,getResources().getColor(R.color.text_white_lable));
+                sp.append(sbNihao);
+                views.text_name.setText(sp);
+            }
+            else {
+                SpannableStringBuilder sp=new SpannableStringBuilder();
+                SpannableString sbNihao=new SpannableString("你好，");
+                SpanStringUtil.setForecolor(sbNihao,getResources().getColor(R.color.text_white_lable));
+                sp.append(sbNihao).append(LoginUserFactory.getLoginUserInfo().nickName);
+                views.text_name.setText(sp);
+            }
+
         }
         else{
-            views.text_name.setText("你好，请登录");
+            SpannableStringBuilder sp=new SpannableStringBuilder();
+            SpannableString sbNihao=new SpannableString("你好，请登录");
+            SpanStringUtil.setForecolor(sbNihao,getResources().getColor(R.color.text_white_lable));
+            sp.append(sbNihao);
+            views.text_name.setText(sp);
         }
     }
     private void  setViewClickListener(){

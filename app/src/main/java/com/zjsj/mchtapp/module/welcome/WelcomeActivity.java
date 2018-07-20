@@ -60,7 +60,8 @@ public class WelcomeActivity extends AppSimpleActivity {
                 permissionHelper = new PermissionHelper(mContext, permissionHelperCallBack);
                 permissionHelper.setPermissions(new String[][]{
                         {Manifest.permission.READ_EXTERNAL_STORAGE, "存储卡"},
-                        {Manifest.permission.ACCESS_FINE_LOCATION, "定位"},
+                        {Manifest.permission.ACCESS_FINE_LOCATION, "定位"}
+//                        {Manifest.permission.INSTALL_SHORTCUT, "快捷方式"},
 //                        {android.Manifest.permission.READ_PHONE_STATE, "手机状态"},
 //                        {android.Manifest.permission.CAMERA, "相机"},
 //                        {android.Manifest.permission.CALL_PHONE, "拨打电话"}

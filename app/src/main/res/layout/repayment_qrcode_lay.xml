@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,6 +7,7 @@
     android:paddingTop="@dimen/dpx016"
     android:background="@drawable/bg_mcht_content"
     >
+
     <ScrollView
         style="@style/listStyle"
        >
@@ -114,5 +115,38 @@
        </LinearLayout>
 
     </ScrollView>
+    <FrameLayout
+        android:id="@+id/container_qrcode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_white"
 
-</LinearLayout>
+        >
+        <ImageView
+            android:layout_gravity="center"
+            android:id="@+id/img_qrcode"
+            android:scaleType="fitXY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dpx016"
+            android:layout_marginBottom="@dimen/dpx024"
+            android:background="@color/text_white"
+            android:gravity="center_horizontal"
+            android:layout_gravity="bottom"
+            android:paddingTop="@dimen/dpx004"
+            android:paddingBottom="@dimen/dpx004"
+            >
+            <TextView style="@style/text"
+                android:id="@+id/qrtext_validtime_large"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="付款码有效时间：56秒"
+                />
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

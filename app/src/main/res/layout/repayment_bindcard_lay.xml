@@ -31,7 +31,7 @@
             android:inputType="number"
             android:maxLength="20"
             android:hint="输入银行卡号"
-            android:text="6226090000000048"
+
             />
 
     </LinearLayout>
@@ -59,7 +59,7 @@
             android:inputType="number"
             android:maxLength="11"
             android:hint="输入手机号"
-            android:text="18100000000"
+
             />
 
     </LinearLayout>
@@ -86,7 +86,7 @@
             android:digits="@string/digits_idcard"
             android:maxLength="18"
             android:hint="输入开户证件号"
-            android:text="510265790128303"
+
             />
 
     </LinearLayout>
@@ -113,7 +113,7 @@
             style="@style/editTextStyleTransparent"
             android:maxLength="20"
             android:hint="输入开户姓名"
-            android:text="张三"
+
             />
     </LinearLayout>
     <LinearLayout

@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
@@ -64,6 +65,17 @@ public class DisplayUtil {
 		float scale = getDensity(mContext);
 		return (int) (pxValue / scale + 0.5f);
 	}
+
+	public static int sp2px(Context context, float spVal)
+
+	{
+
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
+
+				spVal, context.getResources().getDisplayMetrics());
+
+	}
+
 
 	/**
 	 * 像素转换成英寸

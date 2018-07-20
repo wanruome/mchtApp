@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.view.Gravity;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.ruomm.base.tools.DisplayUtil;
+import com.ruomm.base.tools.StringUtils;
 
 import java.util.Hashtable;
 
@@ -63,27 +66,40 @@ public class ZxingCreateUtil {
     public static Bitmap creatBarcode(Context context, String contents,
                                       int desiredWidth, int desiredHeight, boolean displayCode) {
         Bitmap ruseltBitmap = null;
-        int marginW = 20;
+//        int marginW = 20;
         BarcodeFormat barcodeFormat = BarcodeFormat.CODE_128;
 
         if (displayCode) {
             Bitmap barcodeBitmap = encodeAsBitmap(contents, barcodeFormat,
                     desiredWidth, desiredHeight);
-            Bitmap codeBitmap = creatCodeBitmap(contents, desiredWidth + 2
-                    * marginW, desiredHeight, context);
+            Bitmap codeBitmap = creatCodeBitmap(contents, desiredWidth , desiredHeight, context);
+            if(null==codeBitmap)
+            {
+                return barcodeBitmap;
+            }
             ruseltBitmap = mixtureBitmap(barcodeBitmap, codeBitmap, new PointF(
                     0, desiredHeight));
+            return ruseltBitmap;
+//            Bitmap codeBitmap = creatCodeBitmap(contents, desiredWidth + 2
+//                    * marginW, desiredHeight, context);
+//            ruseltBitmap = mixtureBitmap(barcodeBitmap, codeBitmap, new PointF(
+//                    0, desiredHeight));
         } else {
             ruseltBitmap = encodeAsBitmap(contents, barcodeFormat,
                     desiredWidth, desiredHeight);
+            return ruseltBitmap;
         }
 
-        return ruseltBitmap;
+
     }
 
 
     protected static Bitmap encodeAsBitmap(String contents,
                                            BarcodeFormat format, int desiredWidth, int desiredHeight) {
+        if(StringUtils.isEmpty(contents))
+        {
+            return null;
+        }
         final int WHITE = 0xFFFFFFFF;
         final int BLACK = 0xFF000000;
 
@@ -117,23 +133,69 @@ public class ZxingCreateUtil {
 
     protected static Bitmap creatCodeBitmap(String contents, int width,
                                             int height, Context context) {
-        TextView tv = new TextView(context);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv.setLayoutParams(layoutParams);
-        tv.setText(contents);
-        tv.setHeight(height);
-        tv.setGravity(Gravity.CENTER_HORIZONTAL);
-        tv.setWidth(width);
-        tv.setDrawingCacheEnabled(true);
-        tv.setTextColor(Color.BLACK);
-        tv.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        tv.layout(0, 0, tv.getMeasuredWidth(), tv.getMeasuredHeight());
 
-        tv.buildDrawingCache();
-        Bitmap bitmapCode = tv.getDrawingCache();
-        return bitmapCode;
+        Paint paint_text = new Paint();
+        paint_text.setAntiAlias(true);
+        paint_text.setColor(Color.BLACK);
+        paint_text.setTextSize(36);
+        paint_text.setStyle(Paint.Style.FILL);
+        int temp_length = contents.length();
+        float chars_length[] = new float[temp_length];
+
+        paint_text.getTextWidths(contents, chars_length);
+
+        // 计算最大宽度
+        float max_textwidth = 0;
+        for (int temp = 0; temp < temp_length; temp++) {
+            if (temp != temp_length - 1) {
+                max_textwidth += chars_length[temp] * 1.0;
+            }
+            else {
+                max_textwidth += chars_length[temp];
+            }
+        }
+        float textSize=36*0.8f*width/max_textwidth;
+        paint_text.setTextSize(textSize);
+        max_textwidth = 0;
+        paint_text.getTextWidths(contents, chars_length);
+        for (int temp = 0; temp < temp_length; temp++) {
+            if (temp != temp_length - 1) {
+                max_textwidth += chars_length[temp] * 1.0;
+            }
+            else {
+                max_textwidth += chars_length[temp];
+            }
+        }
+        float heithSize[] = new float[2];
+        paint_text.getTextWidths("绘图",heithSize);
+        int textHeight=(int)(heithSize[0]+0.5);
+        int cvHeight=textHeight*11/10;
+//        int textHeight=DisplayUtil.sp2px(context,textSize);
+        Bitmap newBitmap = Bitmap.createBitmap(
+                width, cvHeight, Bitmap.Config.ARGB_4444);
+        Canvas cv = new Canvas(newBitmap);
+        cv.drawText(contents,(width-max_textwidth)/2,cvHeight,paint_text);
+        cv.save(Canvas.ALL_SAVE_FLAG);
+        cv.restore();
+        return newBitmap;
+//        TextView tv = new TextView(context);
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+//                width, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        tv.setLayoutParams(layoutParams);
+//        tv.setText(contents);
+//        tv.setHeight(height);
+//        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+//        tv.setWidth(width);
+//        tv.setDrawingCacheEnabled(true);
+//        tv.setTextColor(Color.BLACK);
+//
+//        tv.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+//        tv.layout(0, 0, tv.getMeasuredWidth(), tv.getMeasuredHeight());
+//
+//        tv.buildDrawingCache();
+//        Bitmap bitmapCode = tv.getDrawingCache();
+//        return bitmapCode;
     }
 
 
@@ -142,12 +204,12 @@ public class ZxingCreateUtil {
         if (first == null || second == null || fromPoint == null) {
             return null;
         }
-        int marginW = 20;
         Bitmap newBitmap = Bitmap.createBitmap(
-                first.getWidth() + second.getWidth() + marginW,
+                first.getWidth(),
                 first.getHeight() + second.getHeight(), Bitmap.Config.ARGB_4444);
         Canvas cv = new Canvas(newBitmap);
-        cv.drawBitmap(first, marginW, 0, null);
+        cv.drawBitmap(first, 0, 0, null);
+
         cv.drawBitmap(second, fromPoint.x, fromPoint.y, null);
         cv.save(Canvas.ALL_SAVE_FLAG);
         cv.restore();

@@ -13,6 +13,7 @@ import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.view.menutopview.MenuTopListener;
 import com.ruomm.resource.ui.AppMultiActivity;
 import com.zjsj.mchtapp.R;
+import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.KeyboardSafeImpl;
 import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
@@ -97,7 +98,9 @@ public class PayInfoSetPwdActivity extends AppMultiActivity {
                     ToastUtil.makeFailToastThr(mContext,errTip);
                 }
                 else {
+                    LoginUserFactory.getPayInfo().payPwdStatus="1";
                     ToastUtil.makeOkToastThr(mContext, "设置支付密码成功");
+                    LoginUserFactory.savePayInfoDto(LoginUserFactory.getPayInfo());
                     finish();
                 }
                 dismissLoading();

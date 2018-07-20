@@ -3,6 +3,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -11,14 +12,17 @@ import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.extend.Thread_CanStop;
 import com.ruomm.base.tools.DisplayUtil;
+import com.ruomm.base.tools.ImageUtils;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.ToastUtil;
+import com.ruomm.base.tools.picasso.PicassoUtil;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.base.view.menutopview.MenuTopListener;
 import com.ruomm.base.view.percentview.FrameLayout_PercentHeight;
 import com.ruomm.base.zxing.ZxingCreateUtil;
 import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.ui.AppMultiActivity;
+import com.squareup.picasso.Picasso;
 import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
@@ -29,6 +33,7 @@ import com.zjsj.mchtapp.dal.response.RepaymentQrCodeDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
 import com.zjsj.mchtapp.dal.response.base.ResultFactory;
 import com.zjsj.mchtapp.dal.store.UserBankCardForQrCode;
+import com.zjsj.mchtapp.util.StringMask;
 import com.zjsj.mchtapp.view.BankCardWheelDialog;
 
 import java.util.List;
@@ -55,6 +60,13 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
         TextView qrtext_cardbank;
         @InjectView(id=R.id.qrtext_validtime)
         TextView qrtext_validtime;
+
+        @InjectView(id=R.id.qrtext_validtime_large)
+        TextView qrtext_validtime_large;
+        @InjectView(id=R.id.container_qrcode)
+        FrameLayout container_qrcode;
+        @InjectView(id=R.id.img_qrcode)
+        ImageView img_qrcode;
     }
     private List<RepaymentBankCard> listBankCards;
     private RepaymentBankCard bankCardForQrCode;
@@ -65,6 +77,9 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
     private boolean isOnQueryQrNo=false;
     private QueryQrcodeThread queryQrcodeThread=new QueryQrcodeThread();
     private String qrNo=null;
+    private boolean isShowLarge=false;
+    private boolean isShowQrCode=false;
+    private Bitmap bitmapLargeShow=null;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
@@ -76,6 +91,7 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
 
         views.qrly_qrcode.setHeightPercent(qrcode_width*1.0f/dispalyWidth);
         setDataForViews();
+        createQrCodeLarge();
     }
 
     @Override
@@ -116,6 +132,10 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
         views.qrtext_qrno.setText(" ");
         views.qrly_cardbanks.setOnClickListener(myOnClickListener);
         views.qrtext_validtime.setOnClickListener(myOnClickListener);
+        views.qrtext_validtime_large.setOnClickListener(myOnClickListener);
+        views.qrimg_qrcode.setOnClickListener(myOnClickListener);
+        views.qrimg_barcode.setOnClickListener(myOnClickListener);
+        views.container_qrcode.setOnClickListener(myOnClickListener);
         views.qrtext_cardbank.setText(bankCardForQrCode.accountNo);
         queryQrcodeThread.start();
     }
@@ -148,9 +168,27 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
                 });
                 bankCardWheelDialog.show();
             }
-            else if(vID==R.id.qrtext_validtime&&StringUtils.isBlank(qrNo))
+            else if((vID==R.id.qrtext_validtime||vID==R.id.qrtext_validtime_large)&&StringUtils.isBlank(qrNo))
             {
                 doHttpGetQrCode();
+            }
+            else if(vID==R.id.qrimg_barcode)
+            {
+                isShowLarge=true;
+                isShowQrCode=false;
+                createQrCodeLarge();
+            }
+            else if(vID==R.id.qrimg_qrcode)
+            {
+                isShowLarge=true;
+                isShowQrCode=true;
+                createQrCodeLarge();
+            }
+            else if(vID==R.id.container_qrcode)
+            {
+                isShowLarge=false;
+                isShowQrCode=false;
+                createQrCodeLarge();
             }
         }
     };
@@ -233,9 +271,11 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
         {
             if(isOnQueryQrNo){
                 views.qrtext_validtime.setText("正在申请付款码");
+                views.qrtext_validtime_large.setText("正在申请付款码");
             }
             else {
                 views.qrtext_validtime.setText("付款码丢失，点击重新获取");
+                views.qrtext_validtime_large.setText("付款码丢失，点击重新获取");
             }
 
         }
@@ -244,16 +284,73 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
             long s=timeRun/1000;
             if(s<0){
                 views.qrtext_validtime.setText("付款码有效时间：60秒");
+                views.qrtext_validtime_large.setText("付款码有效时间：60秒");
             }
             else if(s>60)
             {
                 views.qrtext_validtime.setText("付款码有效时间：0秒");
+                views.qrtext_validtime_large.setText("付款码有效时间：0秒");
             }
             else{
                 long sTmp=60-s;
                 views.qrtext_validtime.setText("付款码有效时间："+sTmp+"秒");
+                views.qrtext_validtime_large.setText("付款码有效时间："+sTmp+"秒");
             }
 
+        }
+    }
+    private void createQrCodeLarge(){
+
+        if(!isShowLarge)
+        {
+
+            views.img_qrcode.setImageBitmap(null);
+            if(null!=bitmapLargeShow)
+            {
+                bitmapLargeShow.recycle();
+                bitmapLargeShow=null;
+            }
+            views.container_qrcode.setVisibility(View.GONE);
+            return;
+        }
+        views.container_qrcode.setVisibility(View.VISIBLE);
+        if(StringUtils.isEmpty(qrNo))
+        {
+            views.img_qrcode.setImageBitmap(null);
+            if(null!=bitmapLargeShow)
+            {
+                bitmapLargeShow.recycle();
+                bitmapLargeShow=null;
+            }
+            return;
+        }
+        if(isShowQrCode)
+        {
+
+            int imgWidth=DisplayUtil.getDispalyAbsWidth(mContext)*8/10;
+
+            Bitmap bitmapQrCodeTemp= ZxingCreateUtil.createQRCode(qrNo,imgWidth);
+
+            views.img_qrcode.setImageBitmap(bitmapQrCodeTemp);
+            if(null!=bitmapLargeShow)
+            {
+                bitmapLargeShow.recycle();
+                bitmapLargeShow=null;
+            }
+
+            bitmapLargeShow=bitmapQrCodeTemp;
+
+        }
+        else {
+            int imgHeight=(DisplayUtil.getDispalyAbsHeight(mContext)-getResources().getDimensionPixelSize(R.dimen.menutop_height)*2)*9/10;
+            Bitmap bitmapQrCodeTemp= ImageUtils.rotateBitmap(ZxingCreateUtil.creatBarcode(mContext,qrNo,imgHeight,imgHeight/5,true),90);
+            views.img_qrcode.setImageBitmap(bitmapQrCodeTemp);
+            if(null!=bitmapLargeShow)
+            {
+                bitmapLargeShow.recycle();
+                bitmapLargeShow=null;
+            }
+            bitmapLargeShow=bitmapQrCodeTemp;
         }
     }
     private void createQrCode()
@@ -279,9 +376,11 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
 
             }
             updateQrTips();
+            createQrCodeLarge();
             return;
         }
-        views.qrtext_qrno.setText(qrNo);
+
+        views.qrtext_qrno.setText(StringMask.getMaskBankNo(qrNo));
         views.qrimg_qrcode.setBackgroundResource(R.color.bg_white);
         Bitmap bitmaoBarCodeTemp= ZxingCreateUtil.creatBarcode(mContext,qrNo,105,20,false);
         Bitmap bitmapQrCodeTemp= ZxingCreateUtil.createQRCode(qrNo,300);
@@ -302,5 +401,6 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
         bitmapBarCode=bitmaoBarCodeTemp;
         bitmapQrCode=bitmapQrCodeTemp;
         updateQrTips();
+        createQrCodeLarge();
     }
 }
