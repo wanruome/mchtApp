@@ -22,6 +22,16 @@ public class PermissionHelper {
     private List<PermissionBean> list=new ArrayList<>();
     private int REQUEST_CODE_START=100;
     private PermissionHelperCallBack permissionHelperCallBack;
+    private boolean isRequestAllInOne=false;
+    private boolean isOnCheck=false;
+
+    public boolean isOnCheck() {
+        return isOnCheck;
+    }
+
+    public void setOnCheck(boolean onCheck) {
+        isOnCheck = onCheck;
+    }
 
     public PermissionHelper(Context mContext, PermissionHelperCallBack permissionHelperCallBack) {
         super();
@@ -56,6 +66,8 @@ public class PermissionHelper {
         }
     }
     public void checkPermissions(){
+        isRequestAllInOne=false;
+        isOnCheck=true;
         if(list.size()>0) {
             PermissionBean permissionBean = list.get(0);
             checkPermission(permissionBean);
@@ -63,6 +75,19 @@ public class PermissionHelper {
         else{
             checkPermission(null);
         }
+    }
+    public void checkPermissionsAllInOne()
+    {
+        isOnCheck=true;
+        isRequestAllInOne=true;
+        String[] permissions=new String[list.size()];
+        for(int i=0;i<permissions.length;i++)
+        {
+            permissions[i]=list.get(i).permission;
+        }
+        // 进行权限请求
+        ActivityCompat.requestPermissions((Activity) mContext, permissions, REQUEST_CODE_START);
+
     }
     private void checkPermission(PermissionBean permissionBean)
     {
@@ -114,26 +139,49 @@ public class PermissionHelper {
         }
     }
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        int index=requestCode-REQUEST_CODE_START;
-        if(index>=list.size())
-        {
-            checkPermission(null);
+        if(!isRequestAllInOne) {
+            int index = requestCode - REQUEST_CODE_START;
+            if (index >= list.size()) {
+                checkPermission(null);
+            }
+            PermissionBean permissionBean = list.get(index);
+            if (grantResults[0] >= 0) {
+                permissionBean.granted = true;
+            } else {
+                permissionBean.granted = false;
+            }
+            int nextIndex = index + 1;
+            if (nextIndex >= list.size()) {
+                checkPermission(null);
+            } else {
+                checkPermission(list.get(nextIndex));
+            }
         }
-        PermissionBean permissionBean=list.get(index);
-        if(grantResults[0]>=0)
-        {
-            permissionBean.granted=true;
-        }
-        else{
-            permissionBean.granted=false;
-        }
-        int nextIndex=index+1;
-        if(nextIndex>=list.size())
-        {
-            checkPermission(null);
-        }
-        else{
-            checkPermission(list.get(nextIndex));
+        else {
+            int sizeRequest=list.size();
+            int resultSize=grantResults.length;
+            if(resultSize!=sizeRequest)
+            {
+                return;
+            }
+            int size=sizeRequest<=resultSize?resultSize:resultSize;
+            for(int i=0;i<size;i++)
+            {
+                if (grantResults[i] >= 0) {
+                    list.get(i).granted = true;
+                } else {
+                    list.get(i).granted = false;
+                }
+            }
+            boolean allGranted=checkAllGranted();
+//            if(!allGranted)
+//            {
+//                showMissingPermissionDialog();
+//            }
+            if(null!=permissionHelperCallBack)
+            {
+                permissionHelperCallBack.grantedCallBack(list,getDialogName(),allGranted);
+            }
         }
     }
     private boolean checkAllGranted(){

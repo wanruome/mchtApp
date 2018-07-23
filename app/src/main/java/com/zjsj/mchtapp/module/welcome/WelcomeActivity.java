@@ -60,16 +60,20 @@ public class WelcomeActivity extends AppSimpleActivity {
                 permissionHelper = new PermissionHelper(mContext, permissionHelperCallBack);
                 permissionHelper.setPermissions(new String[][]{
                         {Manifest.permission.READ_EXTERNAL_STORAGE, "存储卡"},
-                        {Manifest.permission.ACCESS_FINE_LOCATION, "定位"}
+                        {Manifest.permission.ACCESS_FINE_LOCATION, "定位"},
 //                        {Manifest.permission.INSTALL_SHORTCUT, "快捷方式"},
 //                        {android.Manifest.permission.READ_PHONE_STATE, "手机状态"},
 //                        {android.Manifest.permission.CAMERA, "相机"},
 //                        {android.Manifest.permission.CALL_PHONE, "拨打电话"}
                 });
-                permissionHelper.checkPermissions();
+//                permissionHelper.checkPermissions();
+                permissionHelper.checkPermissionsAllInOne();
             }
             else{
-                permissionHelper.checkPermissions();
+                if(!permissionHelper.isOnCheck()){
+                    permissionHelper.checkPermissionsAllInOne();
+                }
+
             }
         }
     }
@@ -97,12 +101,20 @@ public class WelcomeActivity extends AppSimpleActivity {
                     @Override
                     public void onDialogItemClick(View v, Object tag) {
                         if(v.getId()==R.id.dialog_confirm){
+                            if(null!=permissionHelper)
+                            {
+                                permissionHelper.setOnCheck(false);
+                            }
                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                             intent.setData(Uri.parse("package:" + mContext.getPackageName()));
                             mContext.startActivity(intent);
                         }
                         else if(v.getId()==R.id.dialog_cancle)
                         {
+                            if(null!=permissionHelper)
+                            {
+                                permissionHelper.setOnCheck(false);
+                            }
                             AppManager.exitApp();
                         }
                     }
