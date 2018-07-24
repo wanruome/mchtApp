@@ -1,5 +1,6 @@
 package com.zjsj.mchtapp.module.userinfo;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -10,13 +11,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.extend.Thread_CanStop;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
 import com.ruomm.base.tools.StringUtils;
+import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.base.tools.ToastUtil;
+import com.ruomm.base.tools.localtion.LocationUtils;
 import com.ruomm.base.tools.regextool.RegexCallBack;
 import com.ruomm.base.tools.regextool.RegexText;
 import com.ruomm.base.tools.regextool.RegexUtil;
@@ -28,6 +32,7 @@ import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.KeyboardSafeImpl;
 import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
 import com.zjsj.mchtapp.dal.event.LoginEvent;
+import com.zjsj.mchtapp.dal.request.TermInfoReqDto;
 import com.zjsj.mchtapp.dal.response.MsgSendDto;
 import com.zjsj.mchtapp.dal.response.UserInfoDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
@@ -76,6 +81,7 @@ public class LoginActivity extends AppMultiActivity {
         views.btn_verifyCode.setOnClickListener(myOnClickListener);
         views.ly_fast_register.setOnClickListener(myOnClickListener);
         views.text_findpwd.setOnClickListener(myOnClickListener);
+        LocationUtils.getInstance(mContext).showLocation();
     }
     private View.OnClickListener myOnClickListener=new View.OnClickListener() {
         @Override
@@ -88,14 +94,20 @@ public class LoginActivity extends AppMultiActivity {
             {
                if(null==verifyCodeThread)
                {
-//                   verifyCodeThread=new VerifyCodeThread();
-//                   verifyCodeThread.start();
                    doSendMsgVerifyCode();
                }
             }
             else if(vID==R.id.text_findpwd)
             {
-                startActivity(IntentFactory.getFindPwdActivity());
+//                startActivity(IntentFactory.getFindPwdActivity());
+                Location location=LocationUtils.getInstance(mContext).showLocation();
+                if(null==location)
+                {
+                    ToastUtil.makeFailToastThr(mContext,"获取定位失败");
+                }
+                else {
+                    ToastUtil.makeOkToastThr(mContext,location.getLatitude()+":"+location.getLongitude());
+                }
             }
             else if(vID==R.id.ly_fast_register)
             {
@@ -169,6 +181,13 @@ public class LoginActivity extends AppMultiActivity {
                 return;
             }
         }
+        Location location=LocationUtils.getInstance(mContext).showLocation();
+        if(null==location)
+        {
+            ToastUtil.makeFailToastThr(mContext,"获取定位失败");
+            return;
+        }
+
         showLoading();
         String pwdLocalEncrypt=keyboardUtil.getEncryptStr();
         String pwdParse=ApiConfig.decryptByApp(pwdLocalEncrypt);
@@ -180,7 +199,15 @@ public class LoginActivity extends AppMultiActivity {
         map.put("pwdEncrypt", ApiConfig.getPassWordEncrypt(true));
         map.put("pwd",  ApiConfig.getPassWord(pwdParse, ApiConfig.getPassWordEncrypt(true)));
         map.put("termType", "1");
+        map.put("lat",location.getLatitude()+"");
+        map.put("lng",location.getLongitude()+"");
         map.put("msgVerifyCode",verifyCode);
+        TermInfoReqDto termInfoReqDto=new TermInfoReqDto();
+        termInfoReqDto.termFactory= TelePhoneUtil.getMobileInfo(mContext);
+        termInfoReqDto.osInfo=TelePhoneUtil.getAndroidSystemName();
+//        termInfoReqDto.termSn=TelePhoneUtil.getDeviceID(mContext);
+        map.put("termInfo", JSON.toJSONString(termInfoReqDto));
+
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doLogin").setRequestBodyText(map).doHttp(UserInfoDto.class, new TextHttpCallBack() {
             @Override
@@ -198,7 +225,12 @@ public class LoginActivity extends AppMultiActivity {
                 else {
                     UserInfoDto userInfoDto = ResultFactory.getResult(resultObject, status);
                     if (null != userInfoDto) {
-                        ToastUtil.makeOkToastThr(mContext, "登录成功");
+                        if(StringUtils.isEmpty(userInfoDto.loginTip)){
+                            ToastUtil.makeOkToastThr(mContext, "登录成功");
+                        }
+                        else {
+                            ToastUtil.makeOkToastThr(mContext,userInfoDto.loginTip);
+                        }
                         LoginUserFactory.doLogin(userInfoDto);
                         finish();
                     } else {
@@ -216,6 +248,7 @@ public class LoginActivity extends AppMultiActivity {
        {
            verifyCodeThread.stopTask();
        }
+        LocationUtils.getInstance( this ).removeLocationUpdatesListener();
     }
     private void doSendMsgVerifyCode()
     {

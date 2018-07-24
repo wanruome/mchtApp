@@ -22,4 +22,7 @@ public class UserInfoDto {
 	public String dCardName;
 	public String idCardNoSet;
 	public String idCardNameSet;
+//	public String lastLoginArea;
+//	public String loginArea;
+	public String loginTip;
 }
