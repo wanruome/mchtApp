@@ -99,15 +99,15 @@ public class LoginActivity extends AppMultiActivity {
             }
             else if(vID==R.id.text_findpwd)
             {
-//                startActivity(IntentFactory.getFindPwdActivity());
-                Location location=LocationUtils.getInstance(mContext).showLocation();
-                if(null==location)
-                {
-                    ToastUtil.makeFailToastThr(mContext,"获取定位失败");
-                }
-                else {
-                    ToastUtil.makeOkToastThr(mContext,location.getLatitude()+":"+location.getLongitude());
-                }
+                startActivity(IntentFactory.getFindPwdActivity());
+//                Location location=LocationUtils.getInstance(mContext).showLocation();
+//                if(null==location)
+//                {
+//                    ToastUtil.makeFailToastThr(mContext,"获取定位失败");
+//                }
+//                else {
+//                    ToastUtil.makeOkToastThr(mContext,location.getLatitude()+":"+location.getLongitude());
+//                }
             }
             else if(vID==R.id.ly_fast_register)
             {

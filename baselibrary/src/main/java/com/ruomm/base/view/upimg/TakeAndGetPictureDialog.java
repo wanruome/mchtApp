@@ -38,6 +38,7 @@ public class TakeAndGetPictureDialog extends BaseDialogUserConfig {
 		setDialogLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		setGravity(Gravity.BOTTOM);
 		setBaseDialogClick(baseDialogClickListener);
+
 		setListener(R.id.upimg_popupwindows_camera);
 		setListener(R.id.upimg_popupwindows_photo);
 		setListenerCancle(R.id.upimg_popupwindows_cancel);
