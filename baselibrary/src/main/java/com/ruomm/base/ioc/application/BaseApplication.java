@@ -16,6 +16,7 @@ import com.ruomm.base.common.greendao.BaseDaoSession;
 import com.ruomm.base.ioc.task.ResumeFormBackGroundTask;
 import com.ruomm.base.ioc.task.StopToBcakGroundTask;
 import com.ruomm.base.ioc.task.TaskUtil;
+import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.baseconfig.BaseConfig;
 import com.ruomm.baseconfig.DebugConfig;
@@ -357,14 +358,15 @@ public class BaseApplication extends Application {
 			// 只重启主界面,若是没有主界面则直接结束应用!
 //			AppManager.finishAllActivityExceptOne(BaseConfig.Crash_KeepActivityName);
 			AppManager.finishAllActivity();
-			AlarmManager mgr = (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
+			if(!StringUtils.isBlank(BaseConfig.Crash_ResartActivity)){
+				AlarmManager mgr = (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
 
-			Intent intent = new Intent(BaseConfig.Crash_ResartActivity);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.putExtra("crash", true);
-			PendingIntent restartIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, restartIntent); // 1秒钟后重启应用
-
+				Intent intent = new Intent(BaseConfig.Crash_ResartActivity);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra("crash", true);
+				PendingIntent restartIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+				mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, restartIntent); // 500毫秒后重启应用
+			}
 
 		}
 		else {
