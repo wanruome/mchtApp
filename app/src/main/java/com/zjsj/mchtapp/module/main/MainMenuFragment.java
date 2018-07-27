@@ -22,6 +22,8 @@ import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.base.view.percentview.RelativeLayout_PercentHeight;
+import com.ruomm.base.view.upimg.TakeAndGetPictureDialog;
+import com.ruomm.base.view.upimg.UpImgHelper;
 import com.ruomm.baseconfig.debug.MLog;
 import com.ruomm.resource.dialog.EditTextDialog;
 import com.ruomm.resource.dialog.MessageDialog;
@@ -136,6 +138,7 @@ public class MainMenuFragment extends AppFragment {
         views.menu_feedback.setOnClickListener(myOnClickListener);
         views.menu_about_us.setOnClickListener(myOnClickListener);
         views.text_name.setOnClickListener(myOnClickListener);
+//        views.img_header.setOnClickListener(myOnClickListener);
 
     }
     private View.OnClickListener myOnClickListener=new View.OnClickListener() {
@@ -183,6 +186,12 @@ public class MainMenuFragment extends AppFragment {
             {
                 startActivity(IntentFactory.getAboutHelpActivity());
             }
+//            else if(vID==R.id.img_header)
+//            {
+//                UpImgHelper.getInstance().initialize(mContext,true,300);
+//                TakeAndGetPictureDialog takeAndGetPictureDialog=new TakeAndGetPictureDialog(MainMenuFragment.this);
+//                takeAndGetPictureDialog.show();
+//            }
         }
     };
     private void showLogoutDialog()

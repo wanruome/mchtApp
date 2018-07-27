@@ -24,7 +24,10 @@ import com.ruomm.baseconfig.http.HttpDiskLruCache;
 import com.ruomm.baseconfig.http.StringDiskLruCache;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -352,16 +355,27 @@ public class BaseApplication extends Application {
 			AppStoreUtil.saveString(app,CrashStoreUtil.Key_CrashTag, "true");
 //			setData(CrashStoreUtil.Key_CrashTag, "true");
 			// 只重启主界面,若是没有主界面则直接结束应用!
-			AppManager.finishAllActivityExceptOne(BaseConfig.Crash_KeepActivityName);
+//			AppManager.finishAllActivityExceptOne(BaseConfig.Crash_KeepActivityName);
+			AppManager.finishAllActivity();
+			AlarmManager mgr = (AlarmManager) this.getSystemService(this.ALARM_SERVICE);
+
+			Intent intent = new Intent(BaseConfig.Crash_ResartActivity);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent.putExtra("crash", true);
+			PendingIntent restartIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, restartIntent); // 1秒钟后重启应用
+
+
 		}
 		else {
 			AppStoreUtil.delString(app,CrashStoreUtil.Key_CrashTag);
 //			delData(CrashStoreUtil.Key_CrashTag);
 			AppManager.finishAllActivity();
 		}
-
+//
 		android.os.Process.killProcess(android.os.Process.myPid());
-		System.exit(10);
+		System.exit(0);
+		System.gc();
 	}
 
 }

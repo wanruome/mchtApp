@@ -16,6 +16,6 @@ public class DebugConfig {
 	 */
 	public static boolean isAppManagerEnable = true;
 	// CRASH时候存储Crash信息
-	// LifePay应用的含义:<0:表示不存储,0:表示在存储到缓存,1:存储到应用的Data目录,>2:存储到存储卡的目录;
-	public static final int CRASH_STORE_TYPE =3;
+	// LifePay应用的含义:<0:表示不存储,0:表示在存储到StringLurcache缓存,1:存储到应用的Data目录,2:存储到应用的外置存储里,3:存储到外置卡里;
+	public static final int CRASH_STORE_TYPE =2;
 }

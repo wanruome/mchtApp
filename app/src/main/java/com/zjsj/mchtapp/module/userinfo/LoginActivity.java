@@ -17,6 +17,8 @@ import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
 import com.ruomm.base.ioc.extend.Thread_CanStop;
 import com.ruomm.base.ioc.iocutil.AppStoreUtil;
+import com.ruomm.base.tools.Base64;
+import com.ruomm.base.tools.RSAUtils;
 import com.ruomm.base.tools.StringUtils;
 import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.base.tools.ToastUtil;
@@ -42,6 +44,7 @@ import com.zjsj.mchtapp.util.keyboard.KeyboardUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.security.KeyPair;
 import java.util.Map;
 
 public class LoginActivity extends AppMultiActivity {
@@ -69,6 +72,7 @@ public class LoginActivity extends AppMultiActivity {
     private KeyboardUtil keyboardUtil;
     private VerifyCodeThread verifyCodeThread=null;
     private LastLoginUserInfo lastLoginUserInfo=null;
+    KeyPair keyPair= null;
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
@@ -189,9 +193,10 @@ public class LoginActivity extends AppMultiActivity {
         }
 
         showLoading();
+        keyPair= RSAUtils.generateRSAKeyPair();
         String pwdLocalEncrypt=keyboardUtil.getEncryptStr();
         String pwdParse=ApiConfig.decryptByApp(pwdLocalEncrypt);
-        String pwd=ApiConfig.getPassWord(pwdParse,ApiConfig.TRANSMIT_KEYTYPE);
+//        String pwd=ApiConfig.getPassWord(pwdParse,ApiConfig.TRANSMIT_KEYTYPE);
         Map<String,String> map=ApiConfig.createRequestMap(false);
         map.put("account", account);
         map.put("accountType", "1");
@@ -207,7 +212,7 @@ public class LoginActivity extends AppMultiActivity {
         termInfoReqDto.osInfo=TelePhoneUtil.getAndroidSystemName();
 //        termInfoReqDto.termSn=TelePhoneUtil.getDeviceID(mContext);
         map.put("termInfo", JSON.toJSONString(termInfoReqDto));
-
+        map.put("rasPublicKey", Base64.encode(keyPair.getPublic().getEncoded()));
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/userAccount/doLogin").setRequestBodyText(map).doHttp(UserInfoDto.class, new TextHttpCallBack() {
             @Override
@@ -231,6 +236,8 @@ public class LoginActivity extends AppMultiActivity {
                         else {
                             ToastUtil.makeOkToastThr(mContext,userInfoDto.loginTip);
                         }
+                        String pubKeyStr=new String(RSAUtils.decryptDataBig(Base64.decode(userInfoDto.token),keyPair.getPrivate()));
+                        userInfoDto.token=pubKeyStr;
                         LoginUserFactory.doLogin(userInfoDto);
                         finish();
                     } else {

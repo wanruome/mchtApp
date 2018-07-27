@@ -19,6 +19,7 @@ public class BaseConfig {
 	public static final String Crash_StorePath = "crashInfo";
 	public static final int Crash_MinResartTime = 30;
 	public static final String Crash_KeepActivityName = "MainActivity";
+	public static final String Crash_ResartActivity = "main.MainActivity";
 	/**
 	 * 设置AsyncHttpClient是否开启Https请求
 	 */

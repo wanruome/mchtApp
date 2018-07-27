@@ -35,7 +35,7 @@ public class CrashStoreUtil {
 	public static void saveCrashInfoToFile(Context mContext, Throwable ex) {
 		ex.printStackTrace();
 		int storeType = DebugConfig.CRASH_STORE_TYPE;
-		if (storeType < 1) {
+		if (storeType < 0) {
 			return;
 		}
 		Properties mDeviceCrashInfo = new Properties();
@@ -49,7 +49,7 @@ public class CrashStoreUtil {
 			mDeviceCrashInfo.put("EXEPTION", ex.getLocalizedMessage());
 		}
 		mDeviceCrashInfo.put("STACK_TRACE", result);
-		if (storeType == 1) {
+		if (storeType == 0) {
 			try {
 				int index = 0;
 				mDeviceCrashInfo.put("CRASH_TIME", TimeUtils.formatTime(System.currentTimeMillis()));
@@ -79,13 +79,17 @@ public class CrashStoreUtil {
 			try {
 				String fileName = FileUtils.getFilenameByTime("Crash_", ".txt");
 				String filePath = null;
-				if (storeType == 2) {
+				//应用
+				if (storeType == 1) {
 					filePath = FileUtils.getPathContext(mContext,
 							BaseConfig.Crash_StorePath + File.separator + fileName);
 				}
+				else if(storeType==2)
+				{
+					filePath=FileUtils.getPathExternalCache(mContext,BaseConfig.Crash_StorePath+ File.separator + fileName);
+				}
 				else {
 					filePath = FileUtils.getPathExternal(BaseConfig.Crash_StorePath + File.separator + fileName);
-
 				}
 				FileUtils.writeFile(filePath, JSON.toJSONString(mDeviceCrashInfo), false);
 
