@@ -1,6 +1,7 @@
 package com.zjsj.mchtapp.module.repayment;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,8 +16,10 @@ import com.ruomm.base.ioc.iocutil.BaseUtil;
 import com.ruomm.base.tools.FileUtils;
 import com.ruomm.base.tools.IDCardUtils;
 import com.ruomm.base.tools.StringUtils;
+import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.base.tools.ToastUtil;
 import com.ruomm.base.tools.ViewUtil;
+import com.ruomm.base.tools.localtion.LocationUtils;
 import com.ruomm.base.tools.regextool.RegexCallBack;
 import com.ruomm.base.tools.regextool.RegexText;
 import com.ruomm.base.tools.regextool.RegexUtil;
@@ -29,6 +32,7 @@ import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.IntentFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
+import com.zjsj.mchtapp.dal.request.TermInfoReqDto;
 import com.zjsj.mchtapp.dal.response.RepaymentAreaDto;
 import com.zjsj.mchtapp.dal.response.RepaymentBindCardDto;
 import com.zjsj.mchtapp.dal.response.base.ResultDto;
@@ -72,9 +76,16 @@ public class BindCardActivity extends AppMultiActivity {
         setMenuTop();
         setViewData();
         getAreaList();
-
+        LocationUtils.getInstance(mContext).showLocation();
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocationUtils.getInstance( this ).removeLocationUpdatesListener();
+    }
+
     private void setMenuTop(){
 
         mymenutop.setCenterText("银行卡绑定");
@@ -155,6 +166,7 @@ public class BindCardActivity extends AppMultiActivity {
             return ;
         }
         showLoading();
+        Location location= LocationUtils.getInstance(mContext).showLocation();
         Map<String,String> map=ApiConfig.createRequestMap(true);
 //        map.put("accountNo",cardNo);
         map.put("mobileNo",mobile);
@@ -163,6 +175,15 @@ public class BindCardActivity extends AppMultiActivity {
         map.put("area",area);
         map.put("dataEncrypt",ApiConfig.getPassWordEncrypt(false));
         map.put("accountNo",ApiConfig.getPassWord(cardNo,ApiConfig.getPassWordEncrypt(false)));
+        if(null!=location){
+            map.put("lat",location.getLatitude()+"");
+            map.put("lng",location.getLongitude()+"");
+        }
+        TermInfoReqDto termInfoReqDto=new TermInfoReqDto();
+        termInfoReqDto.termFactory= TelePhoneUtil.getMobileInfo(mContext);
+        termInfoReqDto.osInfo=TelePhoneUtil.getAndroidSystemName();
+        termInfoReqDto.deviceId=TelePhoneUtil.getUtdid(mContext);
+        map.put("termInfo", JSON.toJSONString(termInfoReqDto));
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"/app/repayment/doBindCard").setRequestBodyText(map).doHttp(RepaymentBindCardDto.class, new TextHttpCallBack() {
             @Override

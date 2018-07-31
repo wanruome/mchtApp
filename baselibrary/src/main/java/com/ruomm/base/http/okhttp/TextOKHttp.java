@@ -444,7 +444,7 @@ public final class TextOKHttp {
 	 */
 	private void parseHttpCallBackSucess(final String responseString) {
 		if (httpCallBackFilter(responseString)) {
-			httpCallBack(null, responseString, HttpConfig.Success_Filter);
+//			httpCallBack(null, responseString, HttpConfig.Success_Filter);
 			return;
 		}
 		else {

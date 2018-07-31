@@ -1,5 +1,6 @@
 package com.zjsj.mchtapp.module.repayment;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -7,6 +8,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.alibaba.fastjson.JSON;
 import com.ruomm.base.http.okhttp.TextOKHttp;
 import com.ruomm.base.ioc.annotation.view.InjectAll;
 import com.ruomm.base.ioc.annotation.view.InjectView;
@@ -14,7 +17,9 @@ import com.ruomm.base.ioc.extend.Thread_CanStop;
 import com.ruomm.base.tools.DisplayUtil;
 import com.ruomm.base.tools.ImageUtils;
 import com.ruomm.base.tools.StringUtils;
+import com.ruomm.base.tools.TelePhoneUtil;
 import com.ruomm.base.tools.ToastUtil;
+import com.ruomm.base.tools.localtion.LocationUtils;
 import com.ruomm.base.tools.picasso.PicassoUtil;
 import com.ruomm.base.view.dialog.BaseDialogClickListener;
 import com.ruomm.base.view.menutopview.MenuTopListener;
@@ -27,6 +32,7 @@ import com.zjsj.mchtapp.R;
 import com.zjsj.mchtapp.config.LoginUserFactory;
 import com.zjsj.mchtapp.config.http.ApiConfig;
 import com.zjsj.mchtapp.config.impl.TextHttpCallBack;
+import com.zjsj.mchtapp.dal.request.TermInfoReqDto;
 import com.zjsj.mchtapp.dal.response.RepaymentBankCard;
 import com.zjsj.mchtapp.dal.response.RepaymentBindCardDto;
 import com.zjsj.mchtapp.dal.response.RepaymentQrCodeDto;
@@ -92,11 +98,13 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
         views.qrly_qrcode.setHeightPercent(qrcode_width*1.0f/dispalyWidth);
         setDataForViews();
         createQrCodeLarge();
+        LocationUtils.getInstance(mContext).showLocation();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LocationUtils.getInstance( this ).removeLocationUpdatesListener();
         queryQrcodeThread.stopTask();
         queryQrcodeThread=null;
     }
@@ -205,8 +213,20 @@ public class RepaymentQrCodeActivity extends AppMultiActivity {
         showLoading();
         qrNo=null;
         createQrCode();
+        Location location=LocationUtils.getInstance(mContext).showLocation();
+
         Map<String,String> map= ApiConfig.createRequestMap(true);
         map.put("cardIndex",bankCardForQrCode.cardIndex);
+        if(null!=location){
+            map.put("lat",location.getLatitude()+"");
+            map.put("lng",location.getLongitude()+"");
+        }
+        TermInfoReqDto termInfoReqDto=new TermInfoReqDto();
+        termInfoReqDto.termFactory= TelePhoneUtil.getMobileInfo(mContext);
+        termInfoReqDto.osInfo=TelePhoneUtil.getAndroidSystemName();
+        termInfoReqDto.deviceId=TelePhoneUtil.getUtdid(mContext);
+        map.put("termInfo", JSON.toJSONString(termInfoReqDto));
+
         ApiConfig.signRequestMap(map);
         new TextOKHttp().setUrl(ApiConfig.BASE_URL+"app/repayment/doCallQrcode").setRequestBodyText(map).doHttp(RepaymentQrCodeDto.class, new TextHttpCallBack() {
             @Override

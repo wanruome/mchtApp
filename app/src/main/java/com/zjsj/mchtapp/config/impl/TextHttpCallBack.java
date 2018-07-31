@@ -33,11 +33,17 @@ public abstract class TextHttpCallBack implements TextHttpListener{
             e.printStackTrace();
             code=null;
         }
-        if(null!=code&& ResultFactory.ERR_TOKEN_INVALID.equals(code)) {
-            LoginUserFactory.doLogout();
+        if(null!=code&& (ResultFactory.ERR_TOKEN_INVALID.equals(code)|| ResultFactory.ERR_LOCATION_CHANGE.equals(code))) {
+//            LoginUserFactory.doLogout();
             AppManager.finishAllActivityExceptOne(MainActivity.class);
             TokenEvent tokenInValidEvent=new TokenEvent();
             tokenInValidEvent.isInValid=true;
+            if(ResultFactory.ERR_TOKEN_INVALID.equals(code)){
+                tokenInValidEvent.msg="登录已经失效，请重新登录";
+            }
+            else{
+                tokenInValidEvent.msg="业务区域变换城市，请重新登录";
+            }
             EventBus.getDefault().post(tokenInValidEvent);
 
             return true;

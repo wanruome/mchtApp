@@ -94,6 +94,13 @@ public class LoginUserFactory {
         loginEvent.loninStatus=false;
         EventBus.getDefault().post(loginEvent);
     }
+    public static void doLogoutNoSendEvent()
+    {
+        mLoginUserInfo=null;
+        mPayInfoDto=null;
+        AppStoreUtil.safeDelBean(BaseApplication.getApplication(), null, UserInfoDto.class);
+        savePayInfoDto(null);
+    }
     public static void savePayInfoDto(PayInfoDto payInfoDto)
     {
         BaseApplication app=BaseApplication.getApplication();

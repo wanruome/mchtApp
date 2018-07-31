@@ -121,6 +121,8 @@ public class MainActivity extends AppSimpleActivity{
     public void onEventMainThrend(TokenEvent event){
         if(event.isInValid)
         {
+            ToastUtil.makeFailToastThr(mContext,event.msg);
+            LoginUserFactory.doLogoutNoSendEvent();
             updateUiByUserInfo();
             startActivity(IntentFactory.getLoinActivity());
         }

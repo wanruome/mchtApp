@@ -210,6 +210,7 @@ public class LoginActivity extends AppMultiActivity {
         TermInfoReqDto termInfoReqDto=new TermInfoReqDto();
         termInfoReqDto.termFactory= TelePhoneUtil.getMobileInfo(mContext);
         termInfoReqDto.osInfo=TelePhoneUtil.getAndroidSystemName();
+        termInfoReqDto.deviceId=TelePhoneUtil.getUtdid(mContext);
 //        termInfoReqDto.termSn=TelePhoneUtil.getDeviceID(mContext);
         map.put("termInfo", JSON.toJSONString(termInfoReqDto));
         map.put("rasPublicKey", Base64.encode(keyPair.getPublic().getEncoded()));
